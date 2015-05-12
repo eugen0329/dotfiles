@@ -200,7 +200,7 @@ if &t_Co > 2 || has("gui_running") | syntax on | endif
 
 augroup FiletypeAutocommands
   au!
-  au FileType eruby setlocal filetype=eruby iskeyword+=-  "commentstring=<!--%s-->
+  au FileType eruby setlocal iskeyword+=-  "commentstring=<!--%s-->
   au BufRead,BufNewFile *.cmake,CMakeLists.txt,*.cmake.in runtime! indent/cmake.vim
   au BufRead,BufNewFile *.cmake,CMakeLists.txt,*.cmake.in setf cmake
   au BufRead,BufNewFile *.ctest,*.ctest.in setf cmake
@@ -211,7 +211,6 @@ augroup FiletypeAutocommands
   au Filetype lex,yacc setlocal cindent ts=4 sw=4 sts=4
   au Filetype html,css setlocal expandtab foldmethod=syntax ts=2 sw=2 sts=2
   au Filetype html,css setlocal autoindent
-  au Filetype eruby let g:AutoPairs['%'] = '%' " | setlocal foldmethod=indent  iskeyword-=.
   au Filetype ruby,eruby setlocal foldmethod=indent  iskeyword-=.
   au BufNewFile,BufRead *.slim set iskeyword-=. foldmethod=indent
   au BufRead,BufNewFile *.scss set filetype=scss.css
