@@ -367,6 +367,8 @@ let g:syntastic_stl_format = '%E{ line %fe; E %e}%B{,}%W{ W %w}]'
 let max_autocheck_lines = 300
 let g:syntastic_check_on_wq = 0
 let g:syntastic_mode_map = { 'mode': 'passive' }
+
+let g:max_err_len = 30
 " }}}
 
 " #OverCommandLine {{{
@@ -814,8 +816,8 @@ fu! SyntasticStatuslineCustom()
   let errLine = ''
   for e in getloclist(bufnr('%')) | if e.type == 'E' | let errLine = e.text | break | endif | endfor
   if !empty(errLine)
-    let shortErr = substitute(errLine, '\<.', '\u&', '')[:g:errLen-2]
-    if strlen(errLine) > g:errLen-1 | let shortErr .= '..' | endif
+    let shortErr = substitute(errLine, '\<.', '\u&', '')[:g:max_err_len-2]
+    if strlen(errLine) > g:max_err_len-1 | let shortErr .= '..' | endif
     return '['.shortErr.','.sflag
   endif
   return '[Synt:'.sflag
