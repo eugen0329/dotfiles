@@ -2,9 +2,9 @@
 if has('vim_starting') | set nocompatible | set runtimepath+=~/.vim/bundle/neobundle.vim/ | endif
 call neobundle#begin(expand('~/.vim/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
-NeoBundle 'Shougo/vimproc.vim', { 'build' : { 'unix' : 'gmake' } }
+NeoBundle 'Shougo/vimproc.vim', { 'build' : { 'unix' : 'gmake', 'linux': 'make' } }
 
-" NeoBundle 'skammer/vim-css-color'
+NeoBundle 'skammer/vim-css-color'
 NeoBundle 'gorodinskiy/vim-coloresque'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'SirVer/ultisnips'
@@ -20,7 +20,7 @@ NeoBundle 'tpope/vim-commentary'
 NeoBundleLazy 'Yggdroot/indentLine'
 NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'nelstrom/vim-qargs'
-NeoBundle 'abolish.vim'
+
 NeoBundle 'cakebaker/scss-syntax.vim'
 NeoBundle 'christoomey/vim-tmux-navigator'
 NeoBundle 'cmdline-completion'
@@ -39,12 +39,15 @@ NeoBundle 'nelstrom/vim-visual-star-search'
 NeoBundle 'osyo-manga/vim-over'
 NeoBundle 'ruby-matchit'
 NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'jistr/vim-nerdtree-tabs'
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'slim-template/vim-slim.git'
 NeoBundle 'surround.vim'
 NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'kana/vim-textobj-user'
 NeoBundle 'whatyouhide/vim-textobj-xmlattr'
+NeoBundle 'kana/vim-textobj-line'
+NeoBundle 'kana/vim-textobj-line'
 NeoBundle 'textobj-rubyblock'
 NeoBundle 'tpope/vim-rake'
 NeoBundle 'tpope/vim-endwise'
@@ -60,6 +63,11 @@ NeoBundleLazy 'L9'
 NeoBundleLazy 'Tabular'
 " NeoBundleLazy 'Valloric/MatchTagAlways' , {'autoload':{'filetypes':['html', 'eruby', 'slim', 'css', 'sass', 'scss']}}
 NeoBundleLazy 'gregsexton/MatchTag' , {'autoload':{'filetypes':['html', 'eruby', 'slim', 'css', 'sass', 'scss']}}
+
+NeoBundleLazy 'othree/html5.vim' " , {'autoload': {'filetypes': ['html', 'eruby']  } }
+NeoBundle 'kablamo/vim-git-log'
+
+
 NeoBundleLazy 'abra/vim-abra'
 NeoBundleLazy 'airblade/vim-gitgutter'
 NeoBundleLazy 'ajh17/Spacegray.vim'
@@ -76,23 +84,54 @@ NeoBundleLazy 'kien/rainbow_parentheses.vim'
 NeoBundleLazy 'mattn/emmet-vim', {'autoload': { 'filetypes': ['html', 'eruby', 'slim', 'css', 'sass', 'scss'] } }
 NeoBundleLazy 'mbbill/desertEx'
 NeoBundleLazy 'rhysd/vim-clang-format'
-"NeoBundleLazy 'rking/ag.vim'
+NeoBundleLazy 'rking/ag.vim'
+
 NeoBundle     'mileszs/ack.vim'
+
 NeoBundleLazy 'terryma/vim-smooth-scroll'
 NeoBundleLazy 'vim-scripts/FuzzyFinder'
 NeoBundleLazy 'vim-scripts/Hints-for-C-Library-Functions'
 NeoBundleLazy 'vim-scripts/lilypink'
-NeoBundle 'Shougo/neomru.vim' " 1.0.1 Insert or delete brackets, parens, quotes in pair.
+
+NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'ecomba/vim-ruby-refactoring'
 NeoBundle 'sickill/vim-pasta'
 NeoBundle 'osyo-manga/vim-monster'
 NeoBundle 'chrisbra/unicode.vim'
 NeoBundle 'terryma/vim-expand-region'
 "NeoBundle 'wesQ3/vim-windowswap'
+NeoBundle 'kchmck/vim-coffee-script'
 
 NeoBundle 'asins/vim-dict'
 NeoBundle 'tracyone/dict'
 NeoBundle 'guileen/vim-node-dict'
+
+NeoBundle 'tpope/vim-markdown'
+NeoBundle 'gavinbeatty/dragvisuals.vim'
+
+
+NeoBundle 'AndrewRadev/linediff.vim'
+NeoBundle 'AndrewRadev/switch.vim'
+NeoBundle 'AndrewRadev/undoquit.vim'
+
+
+NeoBundle 'ryanoasis/vim-webdevicons'
+NeoBundle 'jordwalke/VimCleanColors'
+NeoBundle 'tpope/vim-speeddating'
+
+" NeoBundle 'chrisbra/unicode.vim'
+NeoBundleLazy 'chrisbra/vim-diff-enhanced'
+
+NeoBundleLazy 'altercation/vim-colors-solarized'
+
+NeoBundle 'danro/rename.vim'
+NeoBundleLazy 'c9s/colorselector.vim'
+
+
+
+NeoBundle 'abolish.vim'
+" bkad/CamelCaseMotion
+
 
 NeoBundle 'nanotech/jellybeans.vim'
 NeoBundle 'flazz/vim-colorschemes'
@@ -103,9 +142,9 @@ NeoBundle 'Railscasts-Theme-GUIand256color'
 call neobundle#end()
 filetype plugin indent on
 " }}}
+set runtimepath+=~/.vim/colors/
 
 " #General {{{
-set runtimepath+=~/.vim/colors/
 
 if has("gui_running")
   set guioptions-=m  "remove menu bar
@@ -128,7 +167,7 @@ scriptencoding utf-8
 set encoding=utf-8
 
 set shell=/bin/bash
-set cursorline
+" set cursorline
 
 set textwidth=80
 
@@ -159,6 +198,9 @@ set list
 set listchars=tab:▷ ,trail:·,nbsp:⍽
 " set smartcase
 set smarttab
+set smartindent
+
+set scrolloff=1
 
 "if !isdirectory(backupDirectory) | silent exec '!mkdir -p ' . backupDirectory | endif
 set undodir=~/.vim/tmp/undo//     " undo files
@@ -184,7 +226,7 @@ set noerrorbells         " don't beep
 set clipboard=unnamedplus
 "}}}
 
-" Wild menus {{{
+" WildI menus {{{
 
 set wildmenu
 set wcm=<Tab>
@@ -205,7 +247,7 @@ augroup FiletypeAutocommands
   au BufRead,BufNewFile *.cmake,CMakeLists.txt,*.cmake.in setf cmake
   au BufRead,BufNewFile *.ctest,*.ctest.in setf cmake
   au FileType vimrc setlocal foldmethod=marker ts=2 sw=2 sts=2
-  au Filetype c,cpp set ts=4 sw=4 sts=4 cindent foldmethod=expr
+  au Filetype c,cpp setlocal ts=4 sw=4 sts=4 cindent foldmethod=syntax
   au Filetype ruby setlocal expandtab ts=2 sw=2 sts=2  foldmethod=syntax
   au Filetype ruby let ruby_fold = 1
   au Filetype lex,yacc setlocal cindent ts=4 sw=4 sts=4
@@ -216,6 +258,7 @@ augroup FiletypeAutocommands
   au BufRead,BufNewFile *.scss set filetype=scss.css
   au FileType unite call s:unite_settings()
   au FileType qf call s:SetQuickfixMappings()
+  au FileType qf setlocal nolist
   au FileType ruby compiler ruby
 augroup END
 
@@ -235,23 +278,17 @@ augroup incsearch-keymap
   au VimEnter * call s:incsearch_keymap()
 augroup END
 
-augroup CollumnLimit
-  au!
-  au BufEnter,WinEnter,FileType * highlight CollumnLimit ctermbg=236 guibg=blue
-  au FileType *  call HighlightColLimit(79, 'CollumnLimit', ['help', 'nofile'])
-augroup END
-
 augroup CursorLine
   au!
   au VimEnter,WinEnter,BufWinEnter * setlocal cursorline
   au WinLeave * setlocal nocursorline
 augroup END
 
+au VimEnter * call SetGrepCommand()
 augroup InitAutocommands
   au!
   " au BufWinLeave *.* mkview
   " au BufWinEnter *.* silent loadview
-  au VimEnter * call SetSearcher()
   au BufDelete * let g:deleted_buffer = bufname('%')
   au BufEnter  * call KeepTree()
   au VimEnter  * if argc() == 0  | NERDTree | end
@@ -266,12 +303,21 @@ augroup InitAutocommands
     \   exe "normal! g`\"" |
     \ endif
 
-  if executable('gconftool-2')
-    au InsertEnter * call system("gconftool-2 -s -t int /apps/guake/style/cursor_shape 1")
-    au InsertLeave * call system("gconftool-2 -s -t int /apps/guake/style/cursor_shape 0")
-  endif
 augroup END
 
+augroup ChangeCurosrShape
+  au!
+  if 0 && executable('gconftool-2')
+    au InsertEnter * call system("gconftool-2 -s -t int /apps/guake/style/cursor_shape 1")
+    au InsertLeave * call system("gconftool-2 -s -t int /apps/guake/style/cursor_shape 0")
+    au WinLeave,FocusLost * call system("gconftool-2 -s -t int /apps/guake/style/cursor_shape 0")
+    au VimEnter,WinEnter,BufWinEnter * if mode() == 'i' | 
+          \ call system("gconftool-2 -s -t int /apps/guake/style/cursor_shape 1") |
+          \ else |
+          \ call system("gconftool-2 -s -t int /apps/guake/style/cursor_shape 0") |
+          \ endif
+  endif
+augroup END
 " augroup NoSimultaneousEdit
 "   au!
 "   au SwapExists * let v:swapchoice = 'o'
@@ -286,8 +332,51 @@ fu! MakeLazyCommand(plug, cmd)
   exe 'command! -nargs=* '.a:cmd.' call LazyPlugRun("'.a:plug.'","'.a:cmd.'", <f-args>)'
 endfunction
 
+
+" #webdev icons {{{
+let g:webdevicons_enable = 1
+let g:webdevicons_enable_nerdtree = 1
+let g:webdevicons_enable_airline_tabline = 0
+let g:webdevicons_enable_airline_statusline = 0
+let g:WebDevIconsNerdTreeAfterGlyphPadding = ''
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols = {}
+let g:WebDevIconsUnicodeDecorateFileNodesExactSymbols = {}
+let g:WebDevIconsUnicodeDecorateFileNodesExactSymbols['Gemfile'] = ''
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['rb'] = ''
+let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['erb'] = ''
+let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+let g:WebDevIconsUnicodeDecorateFolderNodeDefaultSymbol = ''
+
+let g:WebDevIconsUnicodeDecorateFolderNodesDefaultSymbol = 'd'
+hi YellowFG ctermfg=3
+" match YellowFG //
+match YellowFG /[\ue739]/
+
+" }}}
+
+" #sitch {{{
+let g:switch_mapping = ',ss'
+" }}}
+
+" #undoquit {{{
+nnoremap <c-w>c :call undoquit#SaveWindowQuitHistory()<cr><c-w>c
+" }}}
+
 " #multicursor {{{
 let g:multi_cursor_exit_from_insert_mode=0
+
+function! Multiple_cursors_before()
+  if exists(':NeoCompleteLock')==2
+    exe 'NeoCompleteLock'
+  endif
+endfunction
+
+" Called once only when the multiple selection is canceled (default <Esc>)
+function! Multiple_cursors_after()
+  if exists(':NeoCompleteUnlock')==2
+    exe 'NeoCompleteUnlock'
+  endif
+endfunction
 " }}}
 
 " #rails {{{
@@ -414,8 +503,11 @@ set laststatus=2
 set noshowmode
 "set clipboard=unnamed
 let g:Powerline_symbols = 'fancy'
+
+
+" \ 'colorscheme': 'wombat',
 let g:lightline = {
-      \ 'colorscheme': 'wombat',
+      \ 'colorscheme': 'mycolorsheme',
       \ 'component': {
       \   'readonly': '%{&readonly?"  |":""}',
       \   'unite'   : '%{&filetype == "unite" ? unite#get_status_string() : ""}'
@@ -424,11 +516,16 @@ let g:lightline = {
       \   'left': [ [ 'mode', 'paste' ], [ 'unite', 'readonly', 'filename', 'modified'] ],
       \   'right': [ ['percent', 'lineinfo'], ['relativepath', 'filetype'], ['rvm', 'syntastic'] ]
       \ },
+      \ 'tabline': {
+      \ 'left': [ [ 'tabs' ] ],
+      \ 'right': []
+      \ },
       \ 'inactive': {
       \   'right': [ [], ['relativepath', 'filetype'] ]
       \ },
       \ 'component_function': {
-      \   'rvm': 'rvm#statusline',
+      \   'filetype': 'MyFiletype',
+      \   'rvm': 'rvm#statusline'
       \ },
       \ 'component_expand': {
       \   'syntastic': 'SyntasticStatuslineCustom',
@@ -436,11 +533,41 @@ let g:lightline = {
       \ 'component_type': {
       \   'syntastic': 'error',
       \ },
-      \ 'separator': { 'left': '', 'right': '' },
-      \ 'subseparator': { 'left': '', 'right': '' }
+      \ 'separator':    { 'left': '', 'right': '' },
+      \ 'subseparator': { 'left': '', 'right': '' },
+      \ 'tabline_separator':    { 'left': '', 'right': '' },
+      \ 'tabline_subseparator': { 'left': '|', 'right': '|' }
       \ }
+""\   'right': [ ['percent', 'lineinfo'], ['relativepath', 'filetype'], ['rvm', 'syntastic'] ]
       "\ 'component_expand': {
       "\   'syntastic': 'SyntasticStatuslineFlag',
+      " \ 'tabline_subseparator': { 'left': '|', 'right': '|' }
+let g:lightline.tab = {
+      \ 'active': [ 'tabnum', 'ftgliph', 'filename', 'modified' ],
+      \ 'inactive': [ 'tabnum', 'filename', 'modified' ]
+      \ }
+
+" \ 'active': [ 'tabnum', 'ft', 'filename', 'modified' ],
+let g:lightline.tab_component_function = {
+      \ 'ftgliph': 'FtGliph'
+      \ }
+
+let g:lightline.enable = {
+    \ 'statusline': 1,
+    \ 'tabline': 1
+    \ }
+
+fu! FtGliph(tabnum)
+  let ftgliph = WebDevIconsGetFileTypeSymbol()
+  " return strlen(&filetype) ? ftgliph : ''
+  return strlen(&filetype) && ftgliph != '' ? ftgliph : ''
+endfu
+fu! MyFiletype()
+  return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
+endfu
+
+" let g:lightline.tabline_separator = g:lightline.separator
+" let g:lightline.tabline_subseparator = g:lightline.subseparator
 " }}} <- lightline
 
 " #Match tag {{{
@@ -487,18 +614,40 @@ let g:UltiSnipsJumpBackwardTrigger="<c-p>"
 " #Ctrl-p {{{
 let g:ctrlp_reuse_window = 'netrw\|help\|quickfix\|NERD_tree_2\|NERD_tree_3'
 "let g:ctrlp_lazy_update = 0
-let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-"let g:ctrlp_use_caching = 0
+
 let g:ctrlp_use_caching = 0
+let g:ctrlp_user_command = {
+  \ 'types': {
+    \ 1: ['.git', 'git -C %s ls-files'],
+    \ 2: ['.hg', 'hg --cwd %s locate -I .'],
+    \ },
+  \ 'fallback': 'ag %s -l --nocolor -g ""'
+  \ }
 "}}}
 
 " #Ack {{{
-fu! SetSearcher()
+"
+let s:use_grep_breaks = 1
+if executable('ag')
+  let g:ackprg = 'ag --nogroup --nocolor --column '
+  if s:use_grep_breaks | let g:ackprg .= ' --break' | endif
+  let g:ackprg .= ' %s'
+endif
+
+fu! SetGrepCommand()
   if !empty(fugitive#extract_git_dir('%'))
-    let g:ackprg = 'agprg.sh'
-    "let g:grepformat='%f:%l:%m'
-  elseif executable('ag')
-      let g:ackprg = 'ag --nogroup --nocolor --column'
+    let cmd = 'git --no-pager grep '
+    let grep_args = ' --no-color -n -I '
+    if s:use_grep_breaks | let grep_args .= ' --break' | endif
+
+    let pat = join(readfile('/home/eugen/.agignore'), '|')
+    let pat = substitute(pat, '\.', '\\.', 'g')
+    let pat = substitute(pat, '\*', '.*', 'g')
+    " let sources = ' -- $(git ls-files | ag -v "'.pat.'")'
+    let sources = ' -- $(git ls-files --exclude-standard --exclude-from="$HOME/.agignore")'
+")'
+
+    " let g:ackprg = cmd . grep_args . ' "%s" ' . sources
   endif
 endfu
 
@@ -571,6 +720,8 @@ endf
 
 " #Gitv {{{
 call MakeLazyCommand('gitv', 'Gitv')
+
+let g:Gitv_DoNotMapCtrlKey = 1
 " }}}
 
 " RainbowParentheses {{{
@@ -634,6 +785,7 @@ if executable('ag')
 endif
 
 function! s:unite_settings()
+  " au! ChangeCurosrShape <buffer>
   resize 10
   nmap      <buffer> Q <plug>(unite_exit)
   nmap      <buffer> <esc> <plug>(unite_exit)
@@ -736,10 +888,32 @@ endfu
 command! -nargs=* -complete=command Exe call RunFugitiveInNewWindow(<f-args>)
 command! -nargs=* -complete=command TExe call RunFugitiveInNewTab(<f-args>)
 
-fu! HighlightColLimit(collumnLimit, matchName, ignoreBuffers)
-  for l:buf in a:ignoreBuffers
-    if &buftype =~ buf | return | endif
-  endfor
+
+
+augroup collumnLimit
+  autocmd!
+  " autocmd BufEnter,WinEnter,FileType scala,java,ruby highlight CollumnLimit ctermbg=237 guibg=DarkGrey
+  " autocmd BufEnter,WinEnter,FileType scala,java,ruby 
+  "       \ call HighlightColLimit(79, 'CollumnLimit')
+  au VimEnter * call SetColumnLimit(79, ['ruby', 'c', 'cpp'], 'ctermbg=237 guibg=DarkGrey')
+augroup END
+
+
+
+
+fu! SetColumnLimit(col, filetypes, style)
+  let filetypes = join(a:filetypes, ',')
+  let l:pattern = '\%<' . (a:col+1) . 'v.\%>' . a:col . 'v'
+  let match_name = 'ColLim'
+  exe 'au BufEnter,WinEnter,FileType '.filetypes.' hi '.match_name.' '. a:style
+  " au BufEnter,WinEnter,FileType scala,java,ruby   let w:m = matchadd(match_name, pattern, -1)
+  " exe 'au BufEnter,WinEnter,FileType '.filetypes.' let w:colLimHl = matchadd("ColLim","'.l:pattern.'", -1)'
+  exe 'au BufEnter,WinEnter,FileType '.filetypes.' let w:colLimHl = matchadd("ColLim","\%<80v.\%>79v", -1)'
+  " echo 'au BufEnter,WinEnter,FileType '.filetypes.' let w:colLimHl = matchadd("' .match_name. '","'.pattern.'", -1)'
+endfu
+
+
+fu! HighlightColLimit(collumnLimit, matchName)
   let pattern = '\%<' . (a:collumnLimit+1) . 'v.\%>' . a:collumnLimit . 'v'
   let w:colLimHl = matchadd(a:matchName, pattern, -1)
 endf
@@ -846,16 +1020,16 @@ endfu
 "endfu
 
 fu! ClearQuickFix()
-  exe 'cclose'
-  let qfix = getqflist()
-  let bufs = []
-  for b in qfix | call add(bufs, b.bufnr) | endfor
-  call uniq(bufs)
-  for bnr in bufs
-    if bufexists(bnr) && bnr != 0 | exe 'bw '. bnr | endif
-  endfor
-  redraw!
-  call setqflist([])
+  " exe 'cclose'
+  " let qfix = getqflist()
+  " let bufs = []
+  " for b in qfix | call add(bufs, b.bufnr) | endfor
+  " call uniq(bufs)
+  " for bnr in bufs
+  "   if bufexists(bnr) && bnr != 0 | exe 'bw '. bnr | endif
+  " endfor
+  " redraw!
+  " call setqflist([])
 endfu
 
 " vp doesn't replace paste buffer
@@ -886,12 +1060,16 @@ map Ю >
 
 let mapleader = ","
 
+command! ReloadVimrc ro
+
 nnoremap <silent> <leader>fc :call ToggleFoldColumn()<CR>
 
 " Fugitive
 nnoremap <leader>gs :TExe Gstatus<CR>
 nnoremap <leader>gd :call GdiffInTab()<CR>
 nnoremap <leader>gc :TExe Gcommit<CR>
+nnoremap <leader>gl :Glog<CR>
+nnoremap <leader>gb :Gblame<CR>
 nnoremap <leader>gv :Gitv<CR>
 cabbrev ga Git add
 
@@ -923,9 +1101,15 @@ vnoremap <leader>ree :Rextract<space>
 
 nnorem ap <leader>ig IndenGuidesToggle
 nnoremap <silent> <leader>e :NERDTreeToggle<CR>
+" nnoremap <silent> <leader>e <plug>NERDTreeTabsToggle<CR>
 
+" ,easymotion
 map <C-g> <Plug>(easymotion-prefix)
 nmap <C-g>/ <Plug>(easymotion-sn)
+nmap <C-g>l <Plug>(easymotion-iskeyword-w)
+nmap <C-g>h <Plug>(easymotion-iskeyword-b)
+" nmap <C-g>l <Plug>(easymotion-fl)
+" nmap <C-g>h <Plug>(easymotion-Fl)
 
 cabbrev plu NeoBundleUpdate
 cabbrev pli NeoBundleCheck
@@ -941,6 +1125,7 @@ map <C-h> <C-W>h
 map <C-l> <C-W>l
 
 nmap <leader>rc :call OpenMyVimrc()<CR>
+nmap <leader>rrc :source $MYVIMRC<CR>
 
 cmap <C-N> <Plug>CmdlineCompletionBackward
 cmap <C-P> <Plug>CmdlineCompletionForward
@@ -952,6 +1137,19 @@ cnoremap <C-h> <Left>
 cnoremap <C-l> <Right>
 cnoremap <C-k> <Up>
 cnoremap <C-j> <down>
+
+cnoremap <C-a>  <Home>
+cnoremap <C-b>  <Left>
+cnoremap <C-f>  <Right>
+cnoremap <C-d>  <Delete>
+cnoremap <M-b>  <S-Left>
+cnoremap <M-f>  <S-Right>
+cnoremap <M-d>  <S-right><Delete>
+cnoremap <Esc>b <S-Left>
+cnoremap <Esc>f <S-Right>
+cnoremap <Esc>d <S-right><Delete>
+cnoremap <C-g>  <C-c>
+
 " cnoremap <M-b> <S-Left>
 " cnoremap <M-f> <S-Right>
 "cmap <C-N> <Plug>CmdlineCompletionBackward
@@ -959,8 +1157,14 @@ cnoremap <C-j> <down>
 
 nnoremap <F3> n
 
+"<S-F2>
+nmap <Esc>[1;2Q :Rename<Space>
+
 " unmap ex mode: 'Type visual to go into Normal mode.'
 nnoremap Q <nop>
+
+nnoremap gl gt
+nnoremap gh g<S-t>
 
 "command q call ExitFugitive('q')
 "command qq call ExitFugitive('q!')
@@ -987,13 +1191,24 @@ command! -bang -nargs=0 Q call ExitFugitive('q<bang>')
 
 cabbrev Tab Tabularize
 
-if exists(":Tabularize")
+" if exists(":Tabularize")
   vnoremap <leader>t, :Tabularize/,\zs<CR>
   vnoremap <leader>t: :Tabularize/:\zs<CR>
   vnoremap <leader>t= :Tabularize/=<CR>
-endif
+" endif
 
 
+" fu! SwitchPane(dir)
+"   let winnr = winnr()
+
+"   exe 'wincmd' . a:dir
+
+"   if winnr == winnr()
+"     if a:dir == 'l'
+"       exe 'gT'
+"     endif
+"   endif
+" endfu
 
 nnoremap <silent> z<S-m> :call s:IndentAll()<CR>
 
@@ -1004,16 +1219,17 @@ vnoremap <S-y> ygv
 "vnoremap // y/<C-R>"<CR>
 
 " Subvert(smart substitute) with highlight
-" nnoremap <silent> <Leader>fs :OverCommandLine<CR>%s/
-" vnoremap <silent> <Leader>fs :OverCommandLine<CR>s/
+nnoremap <silent> <Leader>fs :OverCommandLine<CR>%s/
+vnoremap <silent> <Leader>fs :OverCommandLine<CR>s/
 " nnoremap <silent> <Leader>f<S-s> :OverCommandLine<CR>%S/
 " vnoremap <silent> <Leader>f<S-s> :OverCommandLine<CR>S/
 
 " Mnemonics (f)ind and (s)ubstitute
-nnoremap <Leader>fs :%s/
-vnoremap <Leader>fs :s/
+" nnoremap <Leader>fs :%s/
+" vnoremap <Leader>fs :s/
 nnoremap <Leader>f<S-s> :%S/
 vnoremap <Leader>f<S-s> :S/
+
 nnoremap <leader>fl :Unite -buffer-name=search\ line -start-insert line<CR>
 nnoremap <leader>fm :Unite -winheight=10 -buffer-name=mru buffer file_mru<CR>
 nnoremap <leader>fb :CtrlPLine<CR>
@@ -1055,11 +1271,12 @@ fu! s:FixColors()
     hi clear SignColumn
     hi Directory    ctermfg=2 cterm=bold
     hi SignColumn   ctermbg=236
-    hi VertSplit    ctermbg=236 ctermfg=238
+    " hi VertSplit    ctermbg=236 ctermfg=238
+    hi VertSplit    ctermbg=236 ctermfg=236
     hi ColorColumn  ctermbg=237
     hi LineNr       ctermbg=236 ctermfg=240
-    hi CursorLineNr ctermbg=236 ctermfg=240
-    hi CursorLine   ctermbg=236
+    hi CursorLineNr ctermbg=236 ctermfg=240 cterm=bold
+    hi CursorLine   ctermbg=237
     hi StatusLineNC ctermbg=238 ctermfg=0
     hi StatusLine   ctermbg=240 ctermfg=12
     hi Visual       ctermbg=239
@@ -1074,6 +1291,20 @@ fu! s:FixColors()
     hi SyntasticStyleWarningSign ctermbg=236
     hi MatchParen     ctermbg=none ctermfg=blue
     hi FoldColumn     ctermfg=14 ctermbg=236
+
+    hi DiffChange cterm=bold ctermfg=white ctermbg=4
+    hi DiffText   cterm=bold ctermfg=white ctermbg=27
+
+    hi DiffAdd      cterm=bold ctermbg=64  ctermfg=white
+    " hi DiffDelete   cterm=bold ctermbg=9   ctermfg=white
+    hi DiffDelete   cterm=bold ctermbg=203   ctermfg=white
+    " hi DiffChange   cterm=bold ctermbg=178 ctermfg=white
+
+    " hi DiffText     cterm=bold ctermbg=178 ctermfg=white
+    hi clear Search
+    hi clear IncSearch
+    hi Search       ctermbg=241
+    hi IncSearch       ctermbg=241
   elseif g:colors_name =~ 'base16-rails'
     hi clear SignColumn
     hi Directory    ctermfg=2 cterm=bold
@@ -1097,6 +1328,8 @@ fu! s:FixColors()
     au ColorScheme * hi SyntasticStyleWarningSign ctermbg=236
     hi MatchParen     ctermbg=none ctermfg=blue
   endif
+
+  hi htmlBold cterm=bold
 endfu
 
 " au ColorScheme * hi SignColumn ctermbg=8
@@ -1107,15 +1340,33 @@ augroup SyntasticColors
   au ColorScheme * hi SyntasticStyleWarningSign ctermfg=27
 augroup END
 
-hi! DiffAdd      cterm=bold ctermbg=64  ctermfg=white
-hi! DiffDelete   cterm=bold ctermbg=9   ctermfg=white
-hi! DiffChange   cterm=bold ctermbg=178 ctermfg=white
-hi! DiffText     cterm=bold ctermbg=178 ctermfg=white
 hi WarnMsg       term=standout ctermfg=15 ctermbg=27 guifg=White guibg=Blue
 
 set background=dark
+let g:solarized_termcolors=256
+let g:solarized_visibility="high"
+let g:solarized_contrast="high"
+let g:solarized_underline=0
 "let base16colorspace=256
 " colorscheme base16-railscasts
+
 colorscheme base16-eighties
 
 "}}}
+"
+
+
+" function QfMakeConv()
+"    let qflist = getqflist()
+"    for i in qflist
+"      if i.text == ' ' | let i.text = '' | endif " = substitute(i.text, '||', '', '')
+"    endfor
+"    call setqflist(qflist)
+" endfunction
+
+" au QuickfixCmdPost * call QfMakeConv()
+"
+
+
+
+
