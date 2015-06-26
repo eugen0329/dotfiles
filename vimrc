@@ -507,7 +507,7 @@ let g:Powerline_symbols = 'fancy'
 
 " \ 'colorscheme': 'wombat',
 let g:lightline = {
-      \ 'colorscheme': 'mycolorsheme',
+      \ 'colorscheme': 'mycolorscheme',
       \ 'component': {
       \   'readonly': '%{&readonly?"  |":""}',
       \   'unite'   : '%{&filetype == "unite" ? unite#get_status_string() : ""}'
