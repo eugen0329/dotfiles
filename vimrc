@@ -21,7 +21,7 @@ NeoBundle 'guileen/vim-node-dict'
 
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'ryanoasis/vim-webdevicons'
-NeoBundle 'junegunn/vim-emoji'
+NeoBundle 'mattn/emoji-vim'
 
 " Navigation
 NeoBundle 'scrooloose/nerdtree'
@@ -85,6 +85,7 @@ NeoBundle     'osyo-manga/unite-quickfix'
 NeoBundle        'ujihisa/unite-colorscheme'
 NeoBundle         'Shougo/unite-build'
 NeoBundle         'Shougo/neomru.vim'
+NeoBundle          'rhysd/unite-ruby-require.vim'
 NeoBundleLazy 'majkinetor/unite-cmdmatch', { 'depends':  'Shougo/unite.vim', 'mappings' : [['c', '<Plug>(unite_cmdmatch_complete)']] }
 
 NeoBundleLazy 'Shougo/vimfiler.vim'
@@ -100,7 +101,7 @@ NeoBundle     'hail2u/vim-css3-syntax'
 NeoBundle     'jelera/vim-javascript-syntax'
 NeoBundle     'jonathanfilip/vim-lucius'
 NeoBundle     'KabbAmine/vCoolor.vim' " 'Rykka/colorv.vim'
-NeoBundle     'skammer/vim-css-color' " 'gorodinskiy/vim-coloresque'
+" NeoBundle     'skammer/vim-css-color' " 'gorodinskiy/vim-coloresque'
 NeoBundleLazy 'gregsexton/MatchTag' , {'autoload':{'filetypes':['html', 'eruby', 'slim', 'css', 'sass', 'scss']}}
 
 NeoBundle     'chrisbra/unicode.vim'
@@ -429,7 +430,7 @@ let g:lightline = {
       \ 'colorscheme': 'mycolorscheme',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'unite', 'readonly', 'filename', 'modified'],  [ ] ],
-      \   'right': [ ['percent', 'lineinfo'], ['relativepath', 'filetype', 'ftgliph'], ['gbranchicon', 'gbranch','rubyicon', 'rubyv', 'syntastic'] ]
+      \   'right': [ ['percent', 'lineinfo'], [ 'relativepath', 'filetype', 'ftgliph'], ['gbranchicon', 'gbranch','rubyicon', 'rubyv', 'syntastic'] ]
       \ },
       \ 'inactive': {
       \   'left': [ [], [ 'filename', 'modified'],  [ ] ],
@@ -510,6 +511,7 @@ endfunction
 
 
 fu! MyRelativePath()
+" substitute(expand("%"),  getcwd(). "/" , "", "")
   let fname = expand('%:t')
   return &ft =~ 'help' || fname =~ '__Gundo\|NERD_tree\|__Tagbar__'  ? '' : expand('%f')
 endfu
@@ -581,6 +583,11 @@ endfu
 
 " ,instantmarkdown
 let g:instant_markdown_autostart = 0
+
+
+" ,clever-f
+let g:clever_f_smart_case = 1
+let g:clever_f_fix_key_direction = 1
 
 " ,notes
 let g:notes_suffix = '.txt'
@@ -921,35 +928,8 @@ let g:unite_source_menu_menus = {}
 " }}} <- plugins
 
 " ,helpers {{{
-
-function! FullBuffersList()
-  let all = range(0, bufnr('$'))
-  let res = []
-  for b in all
-    "if buflisted(b)
-      call add(res, bufname(b))
-    "endif
-  endfor
-  return res
-endfunction
-
-function! IndentWithI()
-  if getline('.') =~ '^\s*$'
-    " return "\"_cc"
-    return "cc"
-  else
-    return "i"
-  endif
-endfunction
-nnoremap <expr> i IndentWithI()
-map <F10> :call GetSyn()<CR>
-
-fu! GetSyn()
-  echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . "> trans<"
-        \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
-        \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"
-endfu
-
+"
+"
 let g:rails_commands = {
       \ 'h': [ 'Ehelper', 'app/helpers' ],
       \ 'm': {
@@ -969,7 +949,6 @@ let g:rails_edit_mappings = {
       \}
 
 let g:rails_edit_default = 'S'
-nnoremap <leader>e :call RailsCommands(g:rails_commands, g:rails_edit_mappings, 'CtrlP %s')<CR>
 
 fu! RailsCommands(commands, mappings, runner)
   let commands = a:commands
@@ -1020,6 +999,38 @@ fu! RailsCommands(commands, mappings, runner)
     endif
   endtry
 endfu
+
+
+" nnoremap <leader>e :call RailsCommands(g:rails_commands, g:rails_edit_mappings, 'CtrlP %s')<CR>
+
+function! FullBuffersList()
+  let all = range(0, bufnr('$'))
+  let res = []
+  for b in all
+    "if buflisted(b)
+      call add(res, bufname(b))
+    "endif
+  endfor
+  return res
+endfunction
+
+function! IndentWithI()
+  if getline('.') =~ '^\s*$'
+    " return "\"_cc"
+    return "cc"
+  else
+    return "i"
+  endif
+endfunction
+nnoremap <expr> i IndentWithI()
+map <F10> :call GetSyn()<CR>
+
+fu! GetSyn()
+  echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . "> trans<"
+        \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+        \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"
+endfu
+
 
 inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
 function! s:align()
@@ -1290,9 +1301,11 @@ nnoremap <silent> <leader>gc :Gcommit<CR>
 nnoremap <silent> <leader>gl :Glog<CR>
 nnoremap <silent> <leader>gb :Gblame<CR>
 nnoremap <silent> <leader>gv :Gitv<CR>
-cabbrev ga Git add
-cabbrev gcm Git commit -m
-cabbrev gcam Git commit --amend -m
+
+cnoreabbrev ga Git add
+cnoreabbrev gcm Git commit -m
+cnoreabbrev gcam Git commit --amend -m
+cnoreabbrev gco  Git checkout
 
 
 
@@ -1362,12 +1375,6 @@ let NERDTreeMapJumpNextSibling = "\<C-w>j"
 let NERDTreeMapJumpPrevSibling = "\<C-w>k"
 " nnoremap <silent> <leader>e <plug>NERDTreeTabsToggle<CR>
 
-
-
-
-
-nnoremap <Tab>   gt
-nnoremap <S-Tab> gT
 " nnoremap <leader>tc :tabclose<CR>
 
 nnoremap <silent> <S-q>     :call Quit()<CR>
@@ -1383,7 +1390,8 @@ nmap <C-g><C-l> <Plug>(easymotion-iskeyword-w)
 nmap <C-g><C-h> <Plug>(easymotion-iskeyword-b)
 nmap gh <Plug>(easymotion-iskeyword-b)
 nmap gl <Plug>(easymotion-iskeyword-w)
-
+nmap gj <Plug>(easymotion-j)
+nmap gk <Plug>(easymotion-k)
 " nnoremap <leader>ff :exe 'Ack! "' . FilterAckString(input('pattern >>> ', '', "custom,BufCompl")) . '"'<CR>
 nnoremap <leader>fw :exe 'silent Find! '.expand('<cword>')<cr>
 nnoremap <leader>ff :call Grep()<CR>
@@ -1411,8 +1419,9 @@ nmap <leader>rrc :source $MYVIMRC<CR>
 " command line
 cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
-cnoremap <C-p> <Up>
-cnoremap <C-n> <down>
+cnoremap <C-k> <Up>
+cnoremap <C-j> <down>
+
 cnoremap <C-a>  <Home>
 cnoremap <C-b>  <Left>
 cnoremap <C-f>  <Right>
@@ -1462,6 +1471,8 @@ endif
 
 nnoremap <silent> <C-i> <C-i>zz
 nnoremap <silent> <C-o> <C-o>zz
+nnoremap <Tab>   gt
+nnoremap <S-Tab> gT
 
 nnoremap <silent><C-w>o     :res<CR>
 nnoremap <silent><C-w><C-o> :res<CR>
@@ -1502,6 +1513,9 @@ nmap <leader>/ :call <SID>ClearHlSearch()<CR>
 nnoremap <C-y> 2<C-y>
 nnoremap <C-e> 2<C-e>
 nnoremap z<S-e> <nop>
+
+
+nnoremap <leader>e :call RailsCommands(g:rails_commands, g:rails_edit_mappings, 'CtrlP %s')<CR>
 
 if &clipboard != 'unnamedplus'
   if executable('xclip')
@@ -1623,8 +1637,12 @@ augroup SyntasticColors
 augroup END
 hi WarnMsg       ctermfg=15 ctermbg=27 guifg=White guibg=Blue
 
+au ColorScheme * hi CleverFChar  cterm=bold ctermfg=196
+
 
 set background=dark
 colorscheme base16-eighties
 
 "}}}
+"
+"
