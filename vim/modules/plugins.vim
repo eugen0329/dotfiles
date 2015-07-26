@@ -211,7 +211,7 @@ let g:Gitv_DoNotMapCtrlKey = 1
 " ,scratch
 let g:scratch_no_mappings = 1
 
-" ,rainbowParentheses
+" #Highlight
 let g:rbpt_colorpairs = [
     \ ['brown',       'RoyalBlue3'],
     \ ['Darkblue',    'SeaGreen3'],
@@ -230,5 +230,6 @@ let g:rbpt_colorpairs = [
     \ ['darkred',     'DarkOrchid3'],
     \ ['red',         'firebrick3'],
     \ ]
+
 let g:rbpt_max = 16
 let g:rbpt_loadcmd_toggle = 0

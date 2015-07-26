@@ -21,7 +21,6 @@ let g:lightline = {
       \   'inactive': [ 'tabnum', 'filename', 'modified' ]
       \ },
       \ 'component': {
-      \   'unite'   : '%{&filetype == "unite" ? unite#get_status_string() : ""}',
       \   'modified': '%{"" != MyModified() ? MyModified() : ""}',
       \   'gbranch': '%{ShowBranch()?fugitive#head():""}',
       \   'gbranchicon': '%#LightLineLeft_active_0_tabsel#%{ShowBranch()?"":""}%#lightlineright_active_2#',
@@ -36,7 +35,7 @@ let g:lightline = {
       \   'filename': 'MyFilename',
       \   'mode': 'MyMode',
       \ },
-      \   'tab_component_function': {
+      \ 'tab_component_function': {
       \   'ftgliph': 'FtGliph'
       \ },
       \ 'component_expand': {
@@ -52,12 +51,7 @@ let g:lightline = {
       \   'tabline_separator':    { 'left': '', 'right': '' },
       \   'tabline_subseparator': { 'left': '⋮', 'right': '⋮' }
       \ }
-" \ 'component_visible_condition': {
-" \   'relativepath': 'IsNotSpecialBuffer()',
-" \   'filetype': 'IsNotSpecialBuffer()',
-" \ },
 
-"   %{(1)*((1))?(''):''}%(  %)
 fu! MyPercent()
   return  IsNotSpecialBuffer() ? '%3p%%' : ''
 endfu

@@ -173,12 +173,12 @@ cabbrev plu NeoBundleUpdate
 cabbrev pli NeoBundleCheck
 cabbrev pls Unite neobundle/search
 
-if has('gui')
+if has('gui_running')
   inoremap <C-v> <C-r><C-o>*
   cnoremap <C-v> <C-r><C-o>*
 else
   inoremap <C-v> <C-r><C-o>0
-  cnoremap <C-v> <C-r><C-o>0
+  " cnoremap <C-v> <C-r><C-o>0
   augroup GuiPasteMappings
     au!
     au GUIEnter * inoremap <C-v> <C-r><C-o>* | cnoremap <C-v> <C-r><C-o>*
