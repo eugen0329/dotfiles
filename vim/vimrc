@@ -1,0 +1,227 @@
+fu! s:load(module)
+  exec 'source ' fnameescape(expand('~/.vim/modules/' . a:module . '.vim'))
+endfu
+
+if has('vim_starting') | set nocompatible | set runtimepath+=~/.vim/bundle/neobundle.vim/ | endif
+
+call neobundle#begin(expand('~/.vim/bundle/'))
+" Let NeoBundle manage itself
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+NeoBundle 'itchyny/lightline.vim'
+NeoBundle 'ryanoasis/vim-webdevicons'
+
+" #Completion
+NeoBundleLazy 'Shougo/neocomplete.vim', {'autoload':{'insert':1}}
+NeoBundleLazy 'Shougo/neoinclude.vim', {'autoload': {'on_source': ['neocomplete.vim']}}
+NeoBundle 'osyo-manga/vim-marching', {'autoload': {'filetypes': ['c', 'cpp']}}
+NeoBundle 'osyo-manga/vim-monster', {'autoload': {'filetypes': ['ruby', 'eruby', 'slim', 'yaml']}}
+NeoBundle 'cmdline-completion'
+NeoBundle 'asins/vim-dict'
+NeoBundle 'tracyone/dict'
+NeoBundle 'guileen/vim-node-dict'
+
+" #Navigation
+  " ,tree
+  NeoBundle 'scrooloose/nerdtree'
+  NeoBundle 'jistr/vim-nerdtree-tabs'
+  NeoBundle 'eugen0329/vim-nerdtree-smart-open'
+  NeoBundle 'voronkovich/ctrlp-nerdtree.vim'
+  NeoBundle 'tyok/nerdtree-ack'
+
+  " ,code
+  NeoBundleLazy 'majutushi/tagbar', {'autoload':{'commands':'TagbarToggle'}}
+  NeoBundle 'Shougo/unite-outline'
+  NeoBundle 'tsukkee/unite-tag'
+  NeoBundle 'ruby-matchit'
+  NeoBundle 'tmhedberg/matchit'
+
+  " ,search
+  NeoBundle 'ctrlpvim/ctrlp.vim'
+  NeoBundle 'haya14busa/incsearch.vim'          " Incrementally highlight all pattern matches
+  NeoBundle 'haya14busa/incsearch-fuzzy.vim'    " Fuzzy search in 
+  NeoBundle 'haya14busa/vim-asterisk'           " *-improved
+  NeoBundle 'osyo-manga/vim-anzu'               " Search position info
+  NeoBundle 'eugen0329/vim-easy-search'         " Project-wide search
+
+  " ,motion
+  NeoBundle 'Lokaltog/vim-easymotion'           " highlight jumb target
+  NeoBundle 'rhysd/clever-f.vim'                " f{char} improved
+  NeoBundle 'kana/vim-smartword'
+  NeoBundle 'bkad/CamelCaseMotion'
+
+  NeoBundle     'christoomey/vim-tmux-navigator'
+  NeoBundleLazy 't9md/vim-choosewin'            " easymotion-like choosing window
+  NeoBundle     'kopischke/vim-fetch'           " gf with lnum:col included
+
+  " ,Project management
+  NeoBundle 'derekwyatt/vim-protodef'
+  NeoBundle 'tpope/vim-rails'
+  NeoBundle 'derekwyatt/vim-fswitch'
+
+  " ,unused
+  NeoBundleLazy 'mileszs/ack.vim'
+  NeoBundleLazy 'thinca/vim-qfreplace'
+  NeoBundleLazy 'nelstrom/vim-qargs'
+
+
+" #Git
+NeoBundle     'tpope/vim-fugitive'
+NeoBundle     'tommcdo/vim-fugitive-blame-ext'
+NeoBundleLazy 'gregsexton/gitv', { 'commands': 'Gitv', 'depends' : 'fugitive.vim'}
+NeoBundle     'kablamo/vim-git-log' " Interactive git log
+NeoBundleLazy 'airblade/vim-gitgutter'
+
+" #Ruby
+NeoBundleLazy 'tpope/vim-rvm'
+NeoBundle     'tpope/vim-rbenv'
+NeoBundle     'tpope/vim-rake'
+NeoBundle     'tpope/vim-bundler'
+NeoBundle     'vim-ruby/vim-ruby'
+NeoBundle     'ecomba/vim-ruby-refactoring'
+NeoBundle     'p0deje/vim-ruby-interpolation'
+NeoBundle     'rhysd/unite-ruby-require.vim'
+
+
+" #Highlight
+NeoBundle     'nathanaelkane/vim-indent-guides' " 'Yggdroot/indentLine'
+NeoBundleLazy 'kien/rainbow_parentheses.vim',  { 'lazy': 1, 'commands': ['RainbowParenthesesToggle'] }
+NeoBundle     'kshenoy/vim-signature'       " Set line marks
+NeoBundleLazy 'gregsexton/MatchTag' , {'autoload':{'filetypes':['html', 'eruby', 'slim', 'css', 'sass', 'scss']}}
+
+" #Snippets
+NeoBundle 'SirVer/ultisnips'
+NeoBundle 'honza/vim-snippets'
+NeoBundleLazy 'mattn/emmet-vim', {'autoload': { 'filetypes': ['html', 'eruby', 'slim', 'css', 'sass', 'scss'] } }
+
+" #Webdev
+NeoBundle     'jonathanfilip/vim-lucius'
+NeoBundle     'Ioannis-Kapoulas/vim-autoprefixer'
+NeoBundle     'KabbAmine/vCoolor.vim'
+NeoBundleLazy 'atweiden/vim-betterdigraphs'
+NeoBundle     'plasticboy/vim-markdown', { 'depends' : 'godlygeek/tabular'}
+NeoBundle     'suan/vim-instant-markdown'  " Markdown live preview
+NeoBundle     'jaxbot/browserlink.vim'
+
+" Command line wrappers
+NeoBundle     'osyo-manga/vim-over'
+NeoBundleLazy 'junegunn/vim-pseudocl'
+
+" Textobjects
+NeoBundle 'terryma/vim-expand-region'     " Easier way to select textobjects
+NeoBundle 'kana/vim-textobj-user'         " User defined textobjects
+NeoBundle 'whatyouhide/vim-textobj-xmlattr'
+NeoBundle 'kana/vim-textobj-line'
+NeoBundle 'kana/vim-textobj-line'
+NeoBundle 'textobj-rubyblock'
+NeoBundle 'mattn/vim-textobj-url'
+NeoBundle 'henrik/vim-open-url'
+
+NeoBundle 'Julian/vim-textobj-variable-segment'
+
+" #Editing
+NeoBundle 'tpope/vim-abolish'             " Working with word cases
+NeoBundle 'tpope/vim-commentary'          " Comment/uncomment code
+NeoBundle 'tpope/vim-surround'            " Manage code surroundings(quotes, parenthesis, brackets, *ml-tags etc.)
+NeoBundle 'tpope/vim-speeddating'         " CTRL-A/CTRL-X to increment dates, times, and more
+NeoBundle 'sickill/vim-pasta'             " Smart paste
+NeoBundle 't9md/vim-textmanip'            " Drag visual text blocks
+NeoBundle 'AndrewRadev/splitjoin.vim'
+NeoBundle 'AndrewRadev/switch.vim'        " Switch segments of text with predefined replacements
+NeoBundle 'AndrewRadev/sideways.vim'      " Move an item in a delimiter-separated list left or right
+NeoBundle 'tommcdo/vim-exchange'          " Swap two pieces of code
+NeoBundle 'Tabular'                       " Text align by regexp
+NeoBundle 'tpope/vim-endwise'             " Automatic closing code blocks
+NeoBundle 'Raimondi/delimitMate'          " Automatic closing of quotes, parenthesis, brackets
+
+" #Format
+NeoBundle     'vim-cleanup'
+NeoBundleLazy 'Chiel92/vim-autoformat', { 'lazy': 1, 'commands': 'Autoformat'  }
+NeoBundleLazy 'rhysd/vim-clang-format', { 'lazy': 1, 'commands': 'ClangFormat' }
+NeoBundle     'maksimr/vim-jsbeautify'
+
+" #Note taking
+NeoBundle 'xolox/vim-misc'
+NeoBundle 'xolox/vim-notes', { 'depends': 'xolox/vim-misc' }
+" NeoBundle 'jceb/vim-orgmode'
+
+" #Syntax
+NeoBundle     'slim-template/vim-slim.git'
+NeoBundle     'kchmck/vim-coffee-script'
+NeoBundle     'cakebaker/scss-syntax.vim'
+NeoBundle     'hail2u/vim-css3-syntax'
+NeoBundle     'jelera/vim-javascript-syntax'
+NeoBundle     'scrooloose/syntastic'
+NeoBundleLazy 'justinmk/vim-syntax-extra', {'autoload':{'filetypes':['flex', 'lex', 'bison']}}
+
+" #Operating plugins
+NeoBundle     'Shougo/vimproc.vim', { 'build' : { 'unix' : 'gmake', 'linux': 'make' } }
+NeoBundle     'Shougo/unite.vim'
+NeoBundle     'Shougo/neomru.vim'         " Most recently used files/buffers
+NeoBundleLazy 'majkinetor/unite-cmdmatch', { 'depends':  'Shougo/unite.vim', 'mappings' : [['c', '<Plug>(unite_cmdmatch_complete)']] }
+NeoBundle     'mtth/scratch.vim'          " qf-like window
+NeoBundle     'AndrewRadev/undoquit.vim'
+NeoBundle     'danro/rename.vim'          " Rename current file
+NeoBundle     'vim-scripts/LargeFile'
+NeoBundle     'tpope/vim-dispatch'
+NeoBundleLazy 'p0deje/vim-dispatch-vimshell'
+NeoBundle     'tpope/vim-scriptease'
+NeoBundle     'thinca/vim-quickrun'
+NeoBundleLazy 'vim-scripts/Hints-for-C-Library-Functions'
+NeoBundle     'AndrewRadev/linediff.vim'
+NeoBundleLazy 'chrisbra/vim-diff-enhanced'
+
+" #Unused plugins
+NeoBundleLazy 'ervandew/supertab'
+NeoBundleLazy 'itchyny/thumbnail.vim'
+NeoBundleLazy 'yssl/autocwd.vim'
+NeoBundleLazy 'sheerun/vim-polyglot'
+NeoBundleLazy 'Shougo/vimfiler.vim'
+NeoBundleLazy 'Shougo/vimshell.vim', { 'commands': 'VimShell' }
+" neobundle 'milkypostman/vim-togglelist'
+" NeoBundle 'wesQ3/vim-windowswap'
+" NeoBundle     'skammer/vim-css-color' " 'gorodinskiy/vim-coloresque'
+" NeoBundle     'ap/vim-css-color'
+" NeoBundle     'chrisbra/unicode.vim'
+" NeoBundle     'greyblake/vim-preview'
+
+" #Colors
+NeoBundleLazy 'vim-scripts/lilypink'
+NeoBundle     'gmoe/vim-espresso'
+NeoBundle 'zeis/vim-kolor'
+NeoBundle 'nanotech/jellybeans.vim'
+NeoBundle 'flazz/vim-colorschemes'
+NeoBundleLazy 'altercation/vim-colors-solarized'
+NeoBundleLazy 'xterm-color-table.vim', { 'commands': 'XtermColorTable' }
+NeoBundle 'jordwalke/VimCleanColors'
+NeoBundle 'cschlueter/vim-wombat'
+NeoBundleLazy 'vim-scripts/Mustang2'
+NeoBundleLazy 'croaker/mustang-vim'
+NeoBundle 'Railscasts-Theme-GUIand256color'
+NeoBundle 'desertink.vim'
+NeoBundle 'joedicastro/vim-molokai256'
+NeoBundle 'jordwalke/flatlandia'
+NeoBundle 'vivkin/flatland.vim'
+NeoBundleLazy 'abra/vim-abra'
+NeoBundleLazy 'ajh17/Spacegray.vim'
+NeoBundleLazy 'cdmedia/itg_flat_vim'
+NeoBundleLazy 'chriskempson/base16-vim'
+NeoBundleLazy 'desert-warm-256'
+NeoBundleLazy 'edkolev/tmuxline.vim'
+NeoBundleLazy 'gosukiwi/vim-atom-dark'
+NeoBundleLazy 'mbbill/desertEx'
+
+call neobundle#end()
+filetype plugin indent on
+
+call s:load('options')
+call s:load('autocmds')
+call s:load('statusline')
+call s:load('unite')
+call s:load('completion')
+call s:load('plugins')
+call s:load('mappings')
+
+call s:load('helpers')
+call s:load('misc')
+call s:load('colors')
