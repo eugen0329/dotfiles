@@ -7,12 +7,12 @@ let g:Powerline_symbols = 'fancy'
 let $GEM_HOME = system('env -i PATH="'.$PATH.'" ruby -rubygems -e "print Gem.dir"')
 let s:SID = s:SID()
 
-" \   'right': [['percent', 'lineinfo'], [ 'relpath', 'filetype', 'fticon'], ['rbver', 'gicon', 'gbranch', 'rbicon', 'syntastic']]
 let g:lightline = {
       \ 'colorscheme': 'spacegray',
       \ 'active': {
       \   'left': [[ 'mode', 'paste' ], [ 'filename', 'modified'], [ 'search_stat' ]],
-      \   'right': [['percent', 'lineinfo'], [ 'relpath', 'filetype', 'fticon'], ['rbver', 'rbicon', 'gicon', 'gbranch', 'syntastic']]
+      \   'right': [['percent', 'lineinfo'], [ 'relpath', 'filetype', 'fticon'], 
+                  \ ['rbver', 'rbicon', 'warn_count', 'gicon', 'gbranch', 'warn_icon', 'err_count', 'err_icon', 'first_err']]
       \ },
       \ 'inactive': {
       \   'left': [[], ['filename', 'modified'], []],
@@ -43,21 +43,70 @@ let g:lightline = {
       \   'fticon': s:SID.'fticon'
       \ },
       \ 'component_expand': {
-      \   'syntastic': 'SyntasticStatuslineCustom',
-      \   'percent':   s:SID.'percent',
-      \   'lineinfo':  s:SID.'lineinfo',
-      \   'gicon':     s:SID.'gicon',
-      \   'rbicon':    s:SID.'rbicon',
+      \   'percent':    s:SID.'percent',
+      \   'lineinfo':   s:SID.'lineinfo',
+      \   'gicon':      s:SID.'gicon',
+      \   'rbicon':     s:SID.'rbicon',
+      \   'err_icon':   s:SID.'err_icon',
+      \   'warn_icon':  s:SID.'warn_icon',
+      \   'err_count':  s:SID.'err_count',
+      \   'first_err':  s:SID.'first_err',
+      \   'warn_count': s:SID.'warn_count',
       \ },
       \ 'component_type': {
-      \   'syntastic': 'error',
+      \   'warn_icon': 'warnicon',
+      \   'err_icon':  'erricon',
       \   'rbicon':    'rbicon',
+      \   'err_count': 'middle',
       \ },
       \   'separator':            { 'left': '', 'right': '' },
       \   'subseparator':         { 'left': '', 'right': '' },
       \   'tabline_separator':    { 'left': '', 'right': '' },
       \   'tabline_subseparator': { 'left': '⋮', 'right': '⋮' }
       \ }
+
+" \   'erricon':   s:SID.'SyntasticStatuslineCustom',
+" \   'warnicon':  s:SID.'SyntasticStatuslineCustom',
+
+fu! s:first_err()
+  if get(w:, 's_err_count', 0) == 0
+    return ''
+  endif
+  let err_text = w:s_errors[0].text
+  let short_err_text = substitute(err_text, '\<.', '\u&', '')[:g:max_err_len]
+  " if strlen(err_text) > g:max_err_len+1 
+  if strlen(err_text) > strlen(short_err_text)
+    let short_err_text .= '…'
+  endif
+  return '['.short_err_text.']'
+endfu
+
+fu! s:err_count()
+  return get(w:, 's_err_count', '')
+endfu
+fu! s:warn_count()
+  return get(w:, 's_warn_count', '')
+endfu
+
+fu! s:warn()
+  let wc = get(w:, 's_warn_count', '')
+  if wc > 0
+    return '%#LightLineRight_active_2_warnicon#'
+          \.'•'.'%#LightLineRight_active_2#'.wc
+  endif
+  return ''
+endfu
+
+fu! s:err_icon()
+  return get(w:, 's_err_count', 0) == 0 ? '' : '•'
+endfu
+
+fu! s:warn_icon()
+  " return  s:regularbuf() ? '%3l◦%-2v' : ''
+  return get(w:, 's_warn_count', 0) == 0 ? '' : '▪'
+endfu
+
+
 
 let g:lightline.mode_map = {
     \ 'n' : 'N',
@@ -81,7 +130,6 @@ fu! s:search_stat()
 endfu
 
 fu! s:lineinfo()
-  " return  s:regularbuf() ? '•%3l◦%-2v' : ''
   return  s:regularbuf() ? '%3l:%-2v' : ''
 endfu
 
