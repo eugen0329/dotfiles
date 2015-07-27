@@ -15,7 +15,7 @@ augroup FiletypeAutocommands
   au Filetype html,css setlocal expandtab foldmethod=syntax ts=2 sw=2 sts=2
   au Filetype html,css setlocal autoindent
   au Filetype ruby,eruby setlocal foldmethod=indent  iskeyword-=.
-  au Filetype eruby let b:delimitMate_matchpairs = '(:),[:],{:},<:>,%:%'
+  au Filetype eruby let b:delimitMate_matchpairs = '(:),[:],{:},<:>'
   au BufNewFile,BufRead *.slim set iskeyword-=. foldmethod=indent
   au BufRead,BufNewFile *.scss set filetype=scss.css
   au FileType qf setlocal nolist

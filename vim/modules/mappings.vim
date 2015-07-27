@@ -147,6 +147,10 @@ nmap <Leader>rrc :source $MYVIMRC<CR>
 cabbrev trw :call TrimWhiteSpace()
 nmap <silent> [shftf2] :call feedkeys(':Rename '.expand('%:t'), 'n')<CR>
 
+
+" #insert mode motions
+inoremap <C-d> <C-o><Delete>
+
 " #Commandline
 cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
