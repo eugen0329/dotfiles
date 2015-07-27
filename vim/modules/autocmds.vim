@@ -18,16 +18,13 @@ augroup FiletypeAutocommands
   au Filetype eruby let b:delimitMate_matchpairs = '(:),[:],{:},<:>,%:%'
   au BufNewFile,BufRead *.slim set iskeyword-=. foldmethod=indent
   au BufRead,BufNewFile *.scss set filetype=scss.css
-  au FileType qf call s:SetQuickfixMappings()
   au FileType qf setlocal nolist
   au FileType notes setlocal foldmethod=indent
-  autocmd BufEnter * let b:url_hl = matchadd('UrlColor', '\m\c\%(\%(h\?ttps\?\|ftp\|file\|ssh\|git\):\/\/\|[a-z]\+@[a-z]\+.[a-z]\+:\)
+  au BufEnter * let b:url_hl = matchadd('UrlBody', '\m\c\%(\%(h\?ttps\?\|ftp\|file\|ssh\|git\):\/\/\|[a-z]\+@[a-z]\+.[a-z]\+:\)
           \\%(\%([&:#*@~%_\-=?!+;/.0-9A-Za-z]*\%(\%([.,][&:#*@~%_\-=?!+;/0-9A-Za-z]\+\)\+\|\%(:\d\+\)\?\)\)\?
           \\%(([&:#*@~%_\-=?!+;/.0-9A-Za-z]*)\)\?
           \\%({\%([&:#*@~%_\-=?!+;/.0-9A-Za-z]*\|{[&:#*@~%_\-=?!+;/.0-9A-Za-z]*}\)}\)\?
           \\%(\[[&:#*@~%_\-=?!+;/.0-9A-Za-z]*\]\)\?\)*[-/0-9A-Za-z]*')
-
-  " au FileType ruby compiler ruby
 augroup END
 
 

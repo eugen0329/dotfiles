@@ -107,7 +107,7 @@ hi WarnMsg       ctermfg=15 ctermbg=27 guifg=White guibg=Blue
 " au ColorScheme * hi CleverFChar  cterm=bold ctermfg=196
 au Colorscheme * hi Error           ctermbg=9   ctermfg=255     guibg=NONE     guifg=#AF5F5F
 
-hi UrlColor cterm=underline ctermfg=39
+hi UrlBody cterm=underline ctermfg=39
 " au ColorScheme * call <SID>FixColors()
 
 colorscheme spacegray-cterm

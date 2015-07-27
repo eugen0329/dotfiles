@@ -3,7 +3,6 @@ fu! s:load(module)
 endfu
 
 if has('vim_starting') | set nocompatible | set runtimepath+=~/.vim/bundle/neobundle.vim/ | endif
-
 call neobundle#begin(expand('~/.vim/bundle/'))
 " Let NeoBundle manage itself
 NeoBundleFetch 'Shougo/neobundle.vim'
