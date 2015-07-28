@@ -7,12 +7,23 @@ let g:Powerline_symbols = 'fancy'
 let $GEM_HOME = system('env -i PATH="'.$PATH.'" ruby -rubygems -e "print Gem.dir"')
 let s:SID = s:SID()
 
+let s:p =  g:lightline#colorscheme#spacegray#palette
+let s:rbicon   = [['', '', 203]]
+let s:erricon  = [['', '', 1  ]]
+let s:warnicon = [['', '', 3  ]]
+let s:middle   = get(s:p.normal, 'middle', [['', '', 248, 8]])
+
+exe 'hi RbIconM   ctermfg='.get(s:p.normal, 'rbicon'  , s:rbicon  )[0][2].' ctermbg='.s:middle[0][3]
+exe 'hi ErrIconM  ctermfg='.get(s:p.normal, 'erricon' , s:erricon )[0][2].' ctermbg='.s:middle[0][3]
+exe 'hi WarnIconM ctermfg='.get(s:p.normal, 'warnicon', s:warnicon)[0][2].' ctermbg='.s:middle[0][3]
+exe 'hi StatLnM   ctermfg='.s:middle[0][2]                               .' ctermbg='.s:middle[0][3]
+
 let g:lightline = {
       \ 'colorscheme': 'spacegray',
       \ 'active': {
       \   'left': [[ 'mode', 'paste' ], [ 'filename', 'modified'], [ 'search_stat' ]],
       \   'right': [['percent', 'lineinfo'], [ 'relpath', 'filetype', 'fticon'], 
-                  \ ['rbver', 'rbicon', 'warn_count', 'gicon', 'gbranch', 'warn_icon', 'err_count', 'err_icon', 'first_err']]
+                  \ ['first_err', 'err', 'warn', 'git', 'rbver']]
       \ },
       \ 'inactive': {
       \   'left': [[], ['filename', 'modified'], []],
@@ -34,10 +45,8 @@ let g:lightline = {
       \   'rvm':          s:SID.'rvmrbver',
       \   'filename':     s:SID.'fname',
       \   'mode':         s:SID.'mode',
-      \   'rbver':        s:SID.'rbver',
-      \   'gbranch':      s:SID.'gbranch',
-      \   'modified':     s:SID.'modified',
       \   'search_stat':  s:SID.'search_stat',
+      \   'modified':     s:SID.'modified',
       \ },
       \ 'tab_component_function': {
       \   'fticon': s:SID.'fticon'
@@ -45,81 +54,79 @@ let g:lightline = {
       \ 'component_expand': {
       \   'percent':    s:SID.'percent',
       \   'lineinfo':   s:SID.'lineinfo',
-      \   'gicon':      s:SID.'gicon',
-      \   'rbicon':     s:SID.'rbicon',
-      \   'err_icon':   s:SID.'err_icon',
-      \   'warn_icon':  s:SID.'warn_icon',
-      \   'err_count':  s:SID.'err_count',
       \   'first_err':  s:SID.'first_err',
-      \   'warn_count': s:SID.'warn_count',
+      \   'warn':       s:SID.'warn',
+      \   'err':        s:SID.'err',
+      \   'rbver':        s:SID.'rbver',
+      \   'git':        s:SID.'git',
       \ },
       \ 'component_type': {
-      \   'warn_icon': 'warnicon',
-      \   'err_icon':  'erricon',
-      \   'rbicon':    'rbicon',
-      \   'err_count': 'middle',
       \ },
-      \   'separator':            { 'left': '', 'right': '' },
-      \   'subseparator':         { 'left': '', 'right': '' },
-      \   'tabline_separator':    { 'left': '', 'right': '' },
-      \   'tabline_subseparator': { 'left': '⋮', 'right': '⋮' }
+      \ 'separator':            { 'left': '', 'right': '' },
+      \ 'subseparator':         { 'left': '', 'right': '' },
+      \ 'tabline_separator':    { 'left': '', 'right': '' },
+      \ 'tabline_subseparator': { 'left': '⋮', 'right': '⋮' },
+      \ 'mode_map': {
+      \   'n' : 'N',
+      \   'i' : 'I',
+      \   'R' : 'R',
+      \   'v' : 'V',
+      \   'V' : 'VL',
+      \   'c' : 'C',
+      \   "\<C-v>": 'VB',
+      \   's' : 'S',
+      \   'S' : 'SL',
+      \   "\<C-s>": 'SB',
+      \   '?': ' ',
+      \ }
       \ }
 
-" \   'erricon':   s:SID.'SyntasticStatuslineCustom',
-" \   'warnicon':  s:SID.'SyntasticStatuslineCustom',
-
+" \   'warn':  'warnicon',
+" \   'err':   'erricon',
+" \   'git':   'middle',
+" \   'rbver': 'rbicon',
 fu! s:first_err()
-  if get(w:, 's_err_count', 0) == 0
-    return ''
-  endif
+  if get(w:, 's_err_count', 0) == 0 | return '' | endif
   let err_text = w:s_errors[0].text
-  let short_err_text = substitute(err_text, '\<.', '\u&', '')[:g:max_err_len]
-  " if strlen(err_text) > g:max_err_len+1 
-  if strlen(err_text) > strlen(short_err_text)
-    let short_err_text .= '…'
+  if strlen(err_text) > g:max_err_len
+    let err_text = substitute(err_text, '\<.', '\u&', '')[:g:max_err_len-2]
+    let err_text .= '…'
   endif
-  return '['.short_err_text.']'
+  return '['.err_text.']'
 endfu
 
-fu! s:err_count()
-  return get(w:, 's_err_count', '')
+fu! s:git()
+  if s:regularbuf() && exists("*fugitive#head") && fugitive#head() != ''
+    let head = fugitive#head()
+    let head = strlen(head) > 0 ?head :"[Empty]"
+    return '%#StatLnM#%{" "}%#StatLnM#%{"'.head.'"}'
+  endif
+  return ''
 endfu
-fu! s:warn_count()
-  return get(w:, 's_warn_count', '')
+
+fu! s:rbver()
+  if s:regularbuf() && (RailsDetect() || &ft==#"ruby")
+    let rbver = substitute(matchstr($GEM_HOME,'[^/]*$'),'^\[\]$','','')
+    return '%#RbIconM#%{" "}%#StatLnM#%{"'.rbver.'"}'
+  endif
+  return ''
+endfu
+
+fu! s:err()
+  let ec = get(w:, 's_err_count', '')
+  if ec > 0
+    return '%#ErrIconM#%{"• "}%#StatLnM#%{"'.ec.'"}'
+  endif
+  return ''
 endfu
 
 fu! s:warn()
   let wc = get(w:, 's_warn_count', '')
   if wc > 0
-    return '%#LightLineRight_active_2_warnicon#'
-          \.'•'.'%#LightLineRight_active_2#'.wc
+    return '%#WarnIconM#%{"• "}%#StatLnM#%{"'.wc.'"}'
   endif
   return ''
 endfu
-
-fu! s:err_icon()
-  return get(w:, 's_err_count', 0) == 0 ? '' : '•'
-endfu
-
-fu! s:warn_icon()
-  " return  s:regularbuf() ? '%3l◦%-2v' : ''
-  return get(w:, 's_warn_count', 0) == 0 ? '' : '▪'
-endfu
-
-
-
-let g:lightline.mode_map = {
-    \ 'n' : 'N',
-    \ 'i' : 'I',
-    \ 'R' : 'R',
-    \ 'v' : 'V',
-    \ 'V' : 'VL',
-    \ 'c' : 'C',
-    \ "\<C-v>": 'VB',
-    \ 's' : 'S',
-    \ 'S' : 'SL',
-    \ "\<C-s>": 'SB',
-    \ '?': ' ' }
 
 fu! s:percent()
   return s:regularbuf() ? '%3p%%' : ''
@@ -137,21 +144,6 @@ fu! s:regularbuf()
   return expand('%:t') !~? '__Gundo\|NERD_tree\|__Tagbar__\|ControlP'
 endfu
 
-fu! s:gbranch()
-  return s:regularbuf() && exists("*fugitive#head") ? fugitive#head() : ''
-endfu
-
-fu! s:gicon()
-  return s:regularbuf() && exists("*fugitive#head") && !empty(fugitive#head()) ? '' : ''
-endfu
-
-fu! s:rbicon()
-  return s:regularbuf() && (RailsDetect() || &ft==#"ruby")? '' : ''
-endfu
-fu! s:rbver()
-  return s:regularbuf() && (RailsDetect() || &ft==#"ruby") ?
-        \ substitute(matchstr($GEM_HOME,'[^/]*$'),'^\[\]$','','') : ''
-endfu
 fu! s:modified()
   return &ft =~ 'help' || !s:regularbuf() ? '' : &modified ? '+' : &modifiable ? '' : '-'
 endfu

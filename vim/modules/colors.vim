@@ -97,10 +97,10 @@ endfu
 
 " au ColorScheme * hi SignColumn ctermbg=8
 augroup SyntasticColors
-  au ColorScheme * hi SyntasticErrorSign        ctermfg=203
-  au ColorScheme * hi SyntasticWarningSign      ctermfg=227
-  au ColorScheme * hi SyntasticStyleErrorSign   ctermfg=27
-  au ColorScheme * hi SyntasticStyleWarningSign ctermfg=27
+  au ColorScheme * hi SyntasticErrorSign        ctermfg=203 ctermbg=8
+  au ColorScheme * hi SyntasticWarningSign      ctermfg=227 ctermbg=8
+  au ColorScheme * hi SyntasticStyleErrorSign   ctermfg=27  ctermbg=8
+  au ColorScheme * hi SyntasticStyleWarningSign ctermfg=27  ctermbg=8
 augroup END
 hi WarnMsg       ctermfg=15 ctermbg=27 guifg=White guibg=Blue
 

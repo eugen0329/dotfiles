@@ -33,20 +33,6 @@ fu! KeepTree()
   let g:deleted_buffer = -1
 endfu
 
-" Try to parse error names from the loclist
-fu! SyntasticStatuslineCustom()
-  let sflag = SyntasticStatuslineFlag()
-  if sflag == '' | return '' | endif
-  let errLine = ''
-  for e in getloclist(bufnr('%')) | if e.type == 'E' | let errLine = e.text | break | endif | endfor
-  if !empty(errLine)
-    let shortErr = substitute(errLine, '\<.', '\u&', '')[:g:max_err_len-2]
-    if strlen(errLine) > g:max_err_len-1 | let shortErr .= '..' | endif
-    return '['.shortErr.','.sflag
-  endif
-  return '[Synt:'.sflag
-endfu
-
 fu! ExitFugitive(cmd) abort
   try
     if !exists(':Gedit') | exe 'silent ' . a:cmd | return | endif

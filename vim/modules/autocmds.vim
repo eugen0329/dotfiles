@@ -52,15 +52,19 @@ augroup InitAutocommands
   au BufEnter *  if !exists('b:created') | call fugitive#detect(getcwd()) | endif
   au BufEnter *  let b:created = 1
   au VimEnter  * if argc() == 0  | NERDTree | end
-  au BufWritePost * if line('$') < max_autocheck_lines | exe 'SyntasticCheck' | call lightline#update() | endif
   au WinEnter     * if &buftype == 'quickfix' && winheight(0) < 10 | resize 10 | endif
   au BufWinEnter * let &numberwidth=(float2nr(log10(line('$'))) + 3)
   " au BufNewFile,BufRead fugitive://* set bufhidden=delete
   " Restore cursor position
+  au BufWritePost * if line('$') < max_autocheck_lines |
+        \ call CheckSyntax() |
+        \ call lightline#update() |
+        \ endif
   au BufReadPost *
     \ if line("'\"") > 1 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |
     \ endif
+  " \ exe 'SyntasticCheck' |
 
 augroup END
 

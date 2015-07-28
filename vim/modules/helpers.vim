@@ -123,3 +123,12 @@ function! s:align()
     call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
   endif
 endfunction
+
+fu! CheckSyntax()
+  exe 'SyntasticCheck'
+  let loclist = g:SyntasticLoclist.current()
+  let w:s_errors     = loclist.errors()
+  let w:s_warnings   = loclist.warnings()
+  let w:s_err_count  = len(w:s_errors)
+  let w:s_warn_count = len(w:s_warnings)
+endfu
