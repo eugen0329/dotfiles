@@ -95,6 +95,6 @@ let g:unite_source_menu_menus.conf.command_candidates = [
       \ [ 'plugins', 'split ~/.vim/modules/plugins.vim' ],
       \ [ 'statusline', 'split ~/.vim/modules/statusline.vim' ],
       \ [ 'mappings', 'split ~/.vim/modules/mappings.vim' ],
-      \ [ 'ninit', 'split ~/.vim/modules/ninit.vim' ],
+      \ [ 'bundles', 'split ~/.vim/modules/bundles.vim' ],
       \ ]
 
