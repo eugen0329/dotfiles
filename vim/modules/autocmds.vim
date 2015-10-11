@@ -16,10 +16,17 @@ augroup FiletypeAutocommands
   au Filetype html,css setlocal autoindent
   au Filetype ruby,eruby setlocal foldmethod=indent  iskeyword-=.
   au Filetype eruby let b:delimitMate_matchpairs = '(:),[:],{:},<:>'
+  " Disable automatical wrap
+  au FileType html,eruby setlocal formatoptions-=t
   au BufNewFile,BufRead *.slim set iskeyword-=. foldmethod=indent
   au BufRead,BufNewFile *.scss set filetype=scss.css
   au FileType qf setlocal nolist
   au FileType notes setlocal foldmethod=indent
+  au filetype qf nnoremap <buffer>o <CR>
+augroup END
+
+augroup UrlBodyHighlight
+  au!
   au BufEnter * let b:url_hl = matchadd('UrlBody', '\m\c\%(\%(h\?ttps\?\|ftp\|file\|ssh\|git\):\/\/\|[a-z]\+@[a-z]\+.[a-z]\+:\)
           \\%(\%([&:#*@~%_\-=?!+;/.0-9A-Za-z]*\%(\%([.,][&:#*@~%_\-=?!+;/0-9A-Za-z]\+\)\+\|\%(:\d\+\)\?\)\)\?
           \\%(([&:#*@~%_\-=?!+;/.0-9A-Za-z]*)\)\?
@@ -28,14 +35,10 @@ augroup FiletypeAutocommands
 augroup END
 
 
-
 augroup collumnLimit
   autocmd!
   au FileType vim,ruby,c,cpp,eruby,html  exe 'setlocal colorcolumn='.colLim
   au VimEnter * hi ColorColumn cterm=bold ctermfg=161 ctermbg=none
-  " au BufEnter,WinEnter,FileType vim,ruby,c,cpp,eruby,html hi ColLim cterm=bold ctermfg=160 guibg=red
-  " au BufEnter,WinEnter,FileType vim,ruby,c,cpp,eruby,html
-  "       \ let w:colLimHl = matchadd('ColLim', '\%'.colLim.'v.', -1)
 augroup END
 
 augroup CursorLine
@@ -52,22 +55,24 @@ augroup InitAutocommands
   au BufEnter *  if !exists('b:created') | call fugitive#detect(getcwd()) | endif
   au BufEnter *  let b:created = 1
   au VimEnter  * if argc() == 0  | NERDTree | end
+  au BufReadCmd  index{,.lock} xnoremap <buffer> <silent> d :<C-U>exe RemoveFugitiveIndexFiles(line("'<"),line("'>"))<CR>
+
   au WinEnter     * if &buftype == 'quickfix' && winheight(0) < 10 | resize 10 | endif
-  au BufWinEnter * let &numberwidth=(float2nr(log10(line('$'))) + 3)
-  " au BufNewFile,BufRead fugitive://* set bufhidden=delete
+  au BufWinEnter,BufWritePost * let &numberwidth=(float2nr(log10(line('$'))) + 3)
   " Restore cursor position
-  au BufWritePost * if line('$') < max_autocheck_lines |
-        \ call CheckSyntax() |
-        \ call lightline#update() |
-        \ endif
   au BufReadPost *
     \ if line("'\"") > 1 && line("'\"") <= line("$") |
     \   exe "normal! g`\"" |
     \ endif
-  " \ exe 'SyntasticCheck' |
-
+  if has('nvim')
+    au BufWritePost * call CheckSyntax() | call lightline#update()
+  else
+    au BufWritePost * if line('$') < max_autocheck_lines |
+          \ call CheckSyntax() |
+          \ call lightline#update() |
+          \ endif
+  endif
 augroup END
-
 
 augroup ChangeCurosrShape
   au!
@@ -82,7 +87,6 @@ augroup ChangeCurosrShape
           \ endif
   endif
 augroup END
-
 
 " augroup NoSimultaneousEdit
 "   au!

@@ -55,9 +55,9 @@ augroup END
 
 
 
-if !exists('g:neocomplete#sources')
-  let g:neocomplete#sources = {}
-endif
+" if !exists('g:neocomplete#sources')
+"   let g:neocomplete#sources = {}
+" endif
 " let g:neocomplete#sources._ = ['buffer']
 " let g:neocomplete#sources.cpp = ['buffer', 'dictionary']
 

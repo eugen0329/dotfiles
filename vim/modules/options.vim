@@ -9,6 +9,10 @@ if executable('ag')
   set grepformat=%f:%l:%c:%m
 endif
 
+set mouse=
+
+set autoread
+
 set nocompatible
 set expandtab
 set autoindent

@@ -111,3 +111,7 @@ hi UrlBody cterm=underline ctermfg=39
 " au ColorScheme * call <SID>FixColors()
 
 colorscheme spacegray-cterm
+
+hi GitGutterChangeDelete ctermfg=39 ctermbg=8
+
+au VimEnter * redraw!

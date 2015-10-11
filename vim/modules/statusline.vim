@@ -81,20 +81,6 @@ let g:lightline = {
       \ }
       \ }
 
-" \   'warn':  'warnicon',
-" \   'err':   'erricon',
-" \   'git':   'middle',
-" \   'rbver': 'rbicon',
-fu! s:first_err()
-  if get(w:, 's_err_count', 0) == 0 | return '' | endif
-  let err_text = w:s_errors[0].text
-  if strlen(err_text) > g:max_err_len
-    let err_text = substitute(err_text, '\<.', '\u&', '')[:g:max_err_len-2]
-    let err_text .= '…'
-  endif
-  return '['.err_text.']'
-endfu
-
 fu! s:git()
   if s:regularbuf() && exists("*fugitive#head") && fugitive#head() != ''
     let head = fugitive#head()
@@ -110,6 +96,16 @@ fu! s:rbver()
     return '%#RbIconM#%{" "}%#StatLnM#%{"'.rbver.'"}'
   endif
   return ''
+endfu
+
+fu! s:first_err()
+  if get(w:, 's_err_count', 0) == 0 || !exists('w:s_errors') | return '' | endif
+  let err_text = w:s_errors[0].text
+  if strlen(err_text) > g:max_err_len
+    let err_text = substitute(err_text, '\<.', '\u&', '')[:g:max_err_len-2]
+    let err_text .= '…'
+  endif
+  return '['.err_text.']'
 endfu
 
 fu! s:err()
@@ -137,7 +133,7 @@ fu! s:search_stat()
 endfu
 
 fu! s:lineinfo()
-  return  s:regularbuf() ? '%3l:%-2v' : ''
+  return  s:regularbuf() ? '%3l:%-3v' : ''
 endfu
 
 fu! s:regularbuf()

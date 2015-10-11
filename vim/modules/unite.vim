@@ -66,4 +66,35 @@ call unite#define_filter({'name': 'mru_filter', 'filter': function('s:UniteMRUFi
 call unite#custom#source('buffer', 'converters', 'buff_filter')
 call unite#custom#source('file_mru', 'converters', 'mru_filter')
 let g:unite_force_overwrite_statusline = 0
+
+
+
+let my_tabopen = {
+\ 'is_selectable' : 1,
+\ }
+function! my_tabopen.func(candidates)
+  call unite#take_action('tabopen', a:candidates)
+
+  let dir = isdirectory(a:candidate.word) ?
+  \    a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
+  execute g:unite_kind_openable_lcd_command fnameescape(dir)
+endfunction
+call unite#custom#action('file,buffer', 'tabopen', my_tabopen)
+unlet my_tabopen
+
 let g:unite_source_menu_menus = {}
+let g:unite_source_menu_menus.conf = {
+    \ 'description' : 'Config modules'
+    \}
+let g:unite_source_menu_menus.conf.command_candidates = [
+      \ [ 'unite', 'split ~/.vim/modules/unite.vim' ],
+      \ [ 'colors', 'split ~/.vim/modules/colors.vim' ],
+      \ [ 'helpers', 'split ~/.vim/modules/helpers.vim' ],
+      \ [ 'complete', 'split ~/.vim/modules/complete.vim' ],
+      \ [ 'optins', 'split ~/.vim/modules/options.vim' ],
+      \ [ 'plugins', 'split ~/.vim/modules/plugins.vim' ],
+      \ [ 'statusline', 'split ~/.vim/modules/statusline.vim' ],
+      \ [ 'mappings', 'split ~/.vim/modules/mappings.vim' ],
+      \ [ 'ninit', 'split ~/.vim/modules/ninit.vim' ],
+      \ ]
+

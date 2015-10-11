@@ -1,3 +1,7 @@
+fu! s:extend_makers()
+  let g:neomake_ruby_mri_maker = neomake#makers#ft#ruby#mri()
+  call extend(g:neomake_ruby_mri_maker, {'postprocess': function('PostMake')})
+endfu
 
 let g:rails_commands = {
       \ 'h': [ 'Ehelper', 'app/helpers' ],
@@ -124,11 +128,59 @@ function! s:align()
   endif
 endfunction
 
-fu! CheckSyntax()
-  exe 'SyntasticCheck'
-  let loclist = g:SyntasticLoclist.current()
-  let w:s_errors     = loclist.errors()
-  let w:s_warnings   = loclist.warnings()
-  let w:s_err_count  = len(w:s_errors)
-  let w:s_warn_count = len(w:s_warnings)
+if has('nvim')
+  fu! CheckSyntax()
+    exe 'Neomake'
+    " if exists('w:s_err_count')
+    "   unlet w:s_err_count
+    " endif
+    " if exists('w:s_err_count')
+    "   unlet w:s_warn_count
+    " endif
+  endfu
+  fu! PostMake(...)
+    " let loclist = extend(neomake#statusline#LoclistCounts(), {'E':0, 'W':0})
+    " let w:s_err_count  = l:loclist.E
+    " let w:s_warn_count = l:loclist.W
+    let loclist = neomake#statusline#LoclistCounts()
+    let w:s_err_count  = get(l:loclist, 'E', 0)
+    let w:s_warn_count = get(l:loclist, 'W', 0)
+    call lightline#update()
+  endfu
+  " call s:extend_makers()
+else
+  fu! CheckSyntax()
+    exe 'SyntasticCheck'
+    let loclist = g:SyntasticLoclist.current()
+    let w:s_errors     = loclist.errors()
+    let w:s_warnings   = loclist.warnings()
+    let w:s_err_count  = len(w:s_errors)
+    let w:s_warn_count = len(w:s_warnings)
+  endfu
+endif
+
+fu! RmSwp()
+  let swp_path = &directory . substitute(expand('%:p'), '\/', '%', 'g') . '.swp'
+  if filereadable(swp_path)
+    let rm_cmd = 'rm '.shellescape(swp_path)
+    call system(rm_cmd)
+    echo rm_cmd
+  else
+    echo '.swp file not found'
+  endif
+endfu
+
+fu! RemoveFugitiveIndexFiles(l1, l2)
+  for l in range(a:l1, a:l2)
+    let filename = matchstr(getline(l),'^#\t\zs.\+\ze$')
+    " let filename = matchstr(getline(l),'^#\t\zs.\{-\}\ze\%( ([^()[:digit:]]\+)\)\=$')
+    if empty(filename) | continue | endif
+
+    let choice = input('Remove file "' . filename . '"? (y/N) ')
+    if choice[0] == 'y'
+      call delete(filename)
+      edit
+    end
+  endfor
+  return 'redraw!'
 endfu

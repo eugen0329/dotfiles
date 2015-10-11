@@ -3,12 +3,6 @@ let g:vcoolor_disable_mappings = 1
 let g:vcoolor_lowercase = 1
 let g:vcoolor_custom_picker = 'zenity --title "Vim colorsel" --color-selection --show-palette --color '
 
-" let g:vcoolor_map = '<leader>pp'
-" let g:vcool_ins_rgb_map = '<leader>pr'
-let g:vcoolor_map = '<F4>'
-let g:vcool_ins_rgb_map = '<F4>'
-
-
 " ,instantmarkdown
 let g:instant_markdown_autostart = 0
 
@@ -19,6 +13,15 @@ let g:clever_f_fix_key_direction = 1
 " ,sideways
 nnoremap <S-h> :SidewaysLeft<CR>
 nnoremap <S-l> :SidewaysRight<CR>
+
+" ,Bookmarks
+call unite#custom#profile('source/vim_bookmarks', 'context', {
+  \   'winheight': 13,
+  \   'direction': 'botright',
+  \   'start_insert': 1,
+  \   'keep_focus': 0,
+  \   'no_quit': 0,
+  \ })
 
 " ,notes
 let g:notes_suffix = '.txt'
@@ -46,6 +49,7 @@ let g:WebDevIconsUnicodeDecorateFolderNodeDefaultSymbol = ''
 " let g:WebDevIconsUnicodeDecorateFolderNodesDefaultSymbol = 'd'
 let g:WebDevIconsUnicodeDecorateFileNodesDefaultSymbol = '🗋'
 hi YellowFG ctermfg=3
+
 
 
 " ,indexed-search
@@ -107,17 +111,32 @@ let g:syntastic_ruby_checkers =  ['mri']
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_loc_list_height = 5
 let g:syntastic_enable_signs = 1
-let g:syntastic_error_symbol   = ' ●'
-let g:syntastic_warning_symbol = ' ●'
-let g:syntastic_style_error_symbol   = ' ◉'
-let g:syntastic_style_warning_symbol = ' ○'
-"let g:syntastic_stl_format = '[%E{Err at line %fe,  E: #%e}%B{, }%W{W: #%w}]'
-" let g:syntastic_stl_format = '%E{ line %fe; E %e}%B{,}%W{ W %w}]'
-" let g:syntastic_stl_format = 'e:%e,e:%w'
 let max_autocheck_lines = 300
 let g:syntastic_check_on_wq = 0
 let g:syntastic_mode_map = { 'mode': 'passive' }
 let g:max_err_len = 30
+
+
+
+let g:syntastic_error_symbol   = ' ●'
+let g:syntastic_warning_symbol = ' ●'
+let g:syntastic_style_error_symbol   = ' ◉'
+let g:syntastic_style_warning_symbol = ' ○'
+
+let g:neomake_error_sign   = { 'text': ' ●', 'texthl': 'SyntasticErrorSign', }
+let g:neomake_warning_sign = { 'text': ' ●', 'texthl': 'SyntasticWarningSign', }
+
+" ,gitgutter
+" let g:gitgutter_sign_added = ' ➕'
+" let g:gitgutter_sign_removed = ' ➖'
+" let g:gitgutter_sign_modified = ' ∆'
+" let g:gitgutter_sign_modified_removed = ' ≁'
+let g:gitgutter_sign_added =    ' ˖'
+let g:gitgutter_sign_removed =  ' -'
+" let g:gitgutter_sign_modified = ' ∼'
+" let g:gitgutter_sign_modified_removed = ' ≁'
+let g:gitgutter_sign_modified = ' ∆'
+let g:gitgutter_sign_modified_removed = ' ∆'
 
 " ,OverCommandLine
 let g:over_command_line_prompt = ':'
@@ -166,7 +185,8 @@ let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 let g:ctrlp_reuse_window = 'netrw\|help\|quickfix\|NERD_tree_2\|NERD_tree_3'
 let g:ctrlp_switch_buffer = 'Et'
 let g:ctrlp_use_caching = 0
-let g:ctrlp_user_command = { 'fallback': 'ag %s -l --nocolor -g ""' }
+let g:ctrlp_user_command = 'ag %s -U -l --nocolor -g ""'
+" let g:ctrlp_user_command = { 'fallback': 'ag %s -l --nocolor -g ""' }
 let g:ctrlp_root_markers = ['Gemfile', '.git', '.meteor', 'Rakefile', 'package.json', 'bower.json']
 
 
@@ -174,6 +194,9 @@ let g:ctrlp_root_markers = ['Gemfile', '.git', '.meteor', 'Rakefile', 'package.j
 " nnoremap <silent> <C-p> :call fuf#givenfile#launch('', 0, '>>>', split(system('ag -l --nocolor -g ""'), "\n"))<CR>
 
 " ,ack
+
+
+"
 fu! SetGrepCommand()
   if !empty(fugitive#extract_git_dir('%'))
     let cmd = 'git --no-pager grep '
@@ -189,9 +212,9 @@ fu! SetGrepCommand()
   endif
 endfu
 
-let g:ackhighlight = 0
-let g:ack_use_dispatch = 1
-let g:ack_qhandler = ''
+" let g:ackhighlight = 0
+" let g:ack_use_dispatch = 1
+" let g:ack_qhandler = ''
 command! -bang -complete=file -nargs=* Find exe 'call ClearQuickFix()' | Ack<bang> <args>
 
 " ,javascript
@@ -231,6 +254,5 @@ let g:rbpt_colorpairs = [
     \ ['darkred',     'DarkOrchid3'],
     \ ['red',         'firebrick3'],
     \ ]
-
 let g:rbpt_max = 16
 let g:rbpt_loadcmd_toggle = 0

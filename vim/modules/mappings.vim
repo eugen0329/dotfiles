@@ -11,8 +11,13 @@ function! s:incsearch_fuzzy(...) abort
   \ }), get(a:, 1, {}))
 endfunction
 
-call s:alias('[shftf2]', '<Esc>[1;2Q')
-call s:alias('[shftf3]', '<Esc>[1;2R')
+if has('nvim')
+  call s:alias('[shftf2]', '<S-F2>')
+  call s:alias('[shftf3]', '<S-F3>')
+else
+  call s:alias('[shftf2]', '<Esc>[1;2Q')
+  call s:alias('[shftf3]', '<Esc>[1;2R')
+endif
 
 let g:mapleader = ','
 let g:user_emmet_leader_key = '<Leader>'
@@ -53,6 +58,8 @@ imap     <C-k>  <Plug>(neocomplete_start_unite_complete)
   noremap <silent><expr> z/           incsearch#go(<SID>incsearch_fuzzy())
   noremap <silent><expr> z?           incsearch#go(<SID>incsearch_fuzzy({'command': '?'}))
   noremap <silent><expr> zg?          incsearch#go(<SID>incsearch_fuzzy({'is_stay': 1}))
+  " nnoremap               /            :<C-U>if get(v:, 'hlsearch', 0)<Bar>call feedkeys("/\<C-R>/")<Bar>else<Bar>call feedkeys('/')<CR>
+  vmap                   /            *
   augroup IncsearchAu
     au!
     au User IncSearchLeave  AnzuUpdateSearchStatus
@@ -103,6 +110,13 @@ imap     <C-k>  <Plug>(neocomplete_start_unite_complete)
   nnoremap <C-f>m     :Unite -winheight=10 -buffer-name=recent buffer file_mru<CR>
   nnoremap <C-f><C-m> :Unite -winheight=10 -buffer-name=recent buffer file_mru<CR>
 
+  " ,Bookmarks
+  nmap <Space><Space> <Plug>BookmarkToggle
+  nmap <Space>i <Plug>BookmarkAnnotate
+  nmap <Space>a <Plug>BookmarkShowAll
+  nmap <Space>j <Plug>BookmarkNext
+  nmap <Space>k <Plug>BookmarkPrev
+
 " #Git
 nnoremap          <Leader>gg :Git<space>
 nnoremap <silent> <Leader>gs :Gtabedit :<CR>
@@ -118,6 +132,7 @@ cnoreabbrev ga   Git add
 cnoreabbrev gcm  Git commit -m
 cnoreabbrev gcam Git commit --amend -m
 cnoreabbrev gco  Git checkout
+cnoreabbrev gcof Git checkout "%:p:h"
 
 " #Editing
 vnoremap <Leader>ree :Rextract<space>
@@ -128,12 +143,22 @@ call expand_region#custom_text_objects({'iv':0, 'av':0, })
 vnoremap <Leader>t, :Tabularize/,\zs<CR>
 vnoremap <Leader>t: :Tabularize/:\zs<CR>
 vnoremap <Leader>t= :Tabularize/=<CR>
+nnoremap > >>
+nnoremap < <<
 vnoremap < <gv
 vnoremap > >gv
 vnoremap = =gv
+nnoremap = ==
 vnoremap <S-y> ygv
-vnoremap <c-j> :m '>+1<cr>gv=gv
-vnoremap <c-k> :m '<-2<cr>gv=gv
+
+nmap <M-k> <Plug>(textmanip-move-up)
+nmap <M-j> <Plug>(textmanip-move-down)
+nmap <M-h> <Plug>(textmanip-move-left)
+nmap <M-l> <Plug>(textmanip-move-right)
+vmap <M-k> <Plug>(textmanip-move-up)
+vmap <M-j> <Plug>(textmanip-move-down)
+vmap <M-h> <Plug>(textmanip-move-left)
+vmap <M-l> <Plug>(textmanip-move-right)
 
 cabbrev Tab Tabularize
 nnoremap <Leader>f<S-s> :%S/
@@ -141,15 +166,23 @@ vnoremap <Leader>f<S-s> :S/
 nnoremap <silent> <Leader>fs :OverCommandLine<CR>%s/
 vnoremap <silent> <Leader>fs :OverCommandLine<CR>s/
 
-nmap <Leader>rc  :tabedit $MYVIMRC<CR>
-nmap <Leader>rrc :source $MYVIMRC<CR>
+vnoremap " S"
+vnoremap ' S'
+nnoremap d" ds"
+nnoremap dt dst
+nnoremap d' ds'
 
+nmap <Leader>mc  :Unite -start-insert menu:conf<CR>
+nmap <Leader>rrc :source $MYVIMRC<CR>
 cabbrev trw :call TrimWhiteSpace()
 nmap <silent> [shftf2] :call feedkeys(':Rename '.expand('%:t'), 'n')<CR>
-
+let g:vcoolor_map = '<F4>'
+let g:vcool_ins_rgb_map = '<F4>'
 
 " #insert mode motions
-inoremap <C-d> <C-o><Delete>
+inoremap <C-d> <Delete>
+inoremap <M-b> <S-Left>
+inoremap <M-f> <S-Right>
 
 " #Commandline
 cnoremap <C-a> <Home>
@@ -211,7 +244,7 @@ nnoremap <C-s> :write<CR>
 nnoremap <S-u> :redo<CR>
 nnoremap ; :
 nnoremap <silent> <S-q> :call Quit()<CR>
-noremap <silent>  <C-q> :call CloseSomething()<CR>
+noremap  <silent>  <C-q> :call CloseSomething()<CR>
 nnoremap <silent> z<S-m> :call g:FoldEverything()<CR>
 
 map ё `| map й q| map ц w| map у e| map к r| map е t| map н y| map г u| map ш i| map щ o| map з p| map х [| map ъ ]
