@@ -127,13 +127,6 @@ nnoremap <silent> <leader>gb :Gblame<CR>
 nnoremap <silent> <leader>gb :NERDTreeClose<Bar>Gblame<CR>
 nnoremap <silent> <Leader>gv :Gitv<CR>
 
-command! -bang -nargs=0 Q call ExitFugitive('q<bang>')
-cnoreabbrev ga   Git add
-cnoreabbrev gcm  Git commit -m
-cnoreabbrev gcam Git commit --amend -m
-cnoreabbrev gco  Git checkout
-cnoreabbrev gcof Git checkout "%:p:h"
-
 " #Editing
 vnoremap <Leader>ree :Rextract<space>
 vmap v      <Plug>(expand_region_expand)
@@ -202,9 +195,16 @@ cnoremap <Esc>d <S-right><Delete>
 cnoremap <C-g>  <C-c>
 cnoreabbrev qq q!
 cnoreabbrev qqq qa!
-cnoreabbrev <silent> q Q
-cnoreabbrev <silent> qq Q!
+cnoreabbrev q Q
+cnoreabbrev qq Q!
 cnoreabbrev m Make
+command! -bang -nargs=0 Q call ExitFugitive('q<bang>')
+cnoreabbrev ga   Git add
+cnoreabbrev gcm  Git commit -m
+cnoreabbrev gcam Git commit --amend -m
+cnoreabbrev gco  Git checkout
+cnoreabbrev gcof Git checkout "%:p:h"
+
 
 cabbrev plu NeoBundleUpdate
 cabbrev pli NeoBundleCheck
