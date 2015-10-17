@@ -15,6 +15,11 @@ nnoremap <S-h> :SidewaysLeft<CR>
 nnoremap <S-l> :SidewaysRight<CR>
 
 " ,Bookmarks
+au BufLeave exe 'BookmarkSave ' .$HOME . '/.vim-bookmars'
+let g:bookmark_auto_save = 0
+" let g:bookmark_manage_per_buffer = 1
+let g:bookmark_save_per_working_dir = 0
+let g:bookmark_auto_save_file = $HOME . '/.vim-bookmars'
 call unite#custom#profile('source/vim_bookmarks', 'context', {
   \   'winheight': 13,
   \   'direction': 'botright',

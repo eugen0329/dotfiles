@@ -1,3 +1,4 @@
+let g:a = 0
 fu! s:load(module)
   exec 'source ' fnameescape(expand('~/.vim/modules/' . a:module . '.vim'))
 endfu
@@ -20,8 +21,5 @@ call s:load('mappings')
 
 call s:load('helpers')
 call s:load('misc')
-call s:load('colors')
 
-if has('nvim')
-  tnoremap <Esc><Esc> <C-\><C-n>
-endif
+call s:load('colors')

@@ -145,7 +145,7 @@ fu! s:modified()
 endfu
 
 fu! s:relpath()
-  return &ft =~ 'help' || !s:regularbuf()  ? '' : substitute(expand('%f'), 'fugitive://'.$PWD.'/', '', '')
+  return &ft =~ 'help' || !s:regularbuf()  ? '' : substitute(expand('%f'), '\%(fugitive://\)\?'.$PWD.'/', '', '')
 endfu
 
 fu! s:readonly()

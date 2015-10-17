@@ -205,6 +205,9 @@ cnoreabbrev gcam Git commit --amend -m
 cnoreabbrev gco  Git checkout
 cnoreabbrev gcof Git checkout "%:p:h"
 
+if has('nvim')
+  tnoremap <Esc><Esc> <C-\><C-n>
+endif
 
 cabbrev plu NeoBundleUpdate
 cabbrev pli NeoBundleCheck
