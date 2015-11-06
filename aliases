@@ -1,8 +1,8 @@
 # common
-alias vim=nvim
-alias v="vim"
-alias vi="vim"
-alias sv="sudo vim"
+alias current_vim=nvim
+alias v="current_vim"
+alias vi="current_vim"
+alias sv="sudo current_vim"
 alias f="fg"
 alias cpwd="echo -n $(pwd) | xclip -sel clip"
 alias pingg="ping 8.8.8.8"
@@ -12,6 +12,7 @@ alias ap="touch"
 alias md="mkdir -pv"
 alias ts="tmuxinator start"
 alias tsw="tmux choose-session"
+alias ctg='ctags -R --exclude=.git --exclude=log -f tmp/tags *'
 
 # utils
 alias ya="yaourt"
@@ -34,17 +35,21 @@ alias lskeykodes='sed -n l'
 alias -g G='|& egrep -i --color '
 
 # git
-alias ga="git add"
-alias gc="git commit"
-alias gca="git commit --amend"
-alias agc="git commit --amend"
-alias gp="git push"
-alias gpo="git push origin"
-alias gpom="git push origin master"
-alias gs="git status -s"
-alias gcl="git clone"
-alias gpl="git pull --rebase"
-alias -g om="origin master"
+alias ga='git add'
+alias ga='git add -A'
+alias gc='git commit'
+alias gca='git commit --amend'
+alias agc='git commit --amend'
+alias gp='git push'
+alias gpo='git push origin'
+alias gpom='git push origin master'
+alias gs='git status -s'
+alias gcl='git clone'
+alias gpl='git pull --rebase'
+alias -g om='origin master'
+alias gra='git rebase --abort'
+alias grc='git rebase --continue'
+alias gri='git rebase -i'
 
 alias gl="git log --date-order --date=iso --graph --full-history --all --pretty=format:'%x08%x09%C(red)%h %C(cyan)%ad%x08%x08%x08%x08%x08%x08%x08%x08%x08%x08%x08%x08%x08%x08%x08 %C(bold blue)%<(10)%aN%C(reset) %C(reset)%<(70,trunc)%s%C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset) '"
 
@@ -77,10 +82,12 @@ alias zs="zeus server"
 alias zd="zeus destroy"
 alias zg="zeus generate"
 
-alias ev="vim ~/.vim/vimrc"
-alias evm="vim ~/.vim/modules/mappings.vim"
-alias evi="vim ~/.vim/modules/ninit.vim"
-alias evp="vim ~/.vim/modules/plugins.vim"
-alias evu="vim ~/.vim/modules/unite.vim"
-alias evc="vim ~/.vim/modules/ncompletion.vim"
-alias ez="vim ~/.zshrc"
+alias ev="current_vim ~/.vim/vimrc"
+alias evm="current_vim ~/.vim/modules/mappings.vim"
+alias evi="current_vim ~/.vim/modules/ninit.vim"
+alias evp="current_vim ~/.vim/modules/plugins.vim"
+alias evu="current_vim ~/.vim/modules/unite.vim"
+alias evc="current_vim ~/.vim/modules/ncompletion.vim"
+alias ez="current_vim ~/.zshrc"
+alias ep="current_vim ~/.pryrc"
+alias ea="current_vim ~/aliases"
