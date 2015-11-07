@@ -35,6 +35,9 @@ alias lskeykodes='sed -n l'
 alias -g G='|& egrep -i --color '
 
 # git
+alias gco='git checkout'
+alias gcom='git checkout master'
+alias gcm='git commit -m'
 alias ga='git add'
 alias ga='git add -A'
 alias gc='git commit'
