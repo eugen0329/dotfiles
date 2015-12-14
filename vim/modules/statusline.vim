@@ -4,7 +4,15 @@ endfun
 set laststatus=2
 set noshowmode
 let g:Powerline_symbols = 'fancy'
-let $GEM_HOME = system('env -i PATH="'.$PATH.'" ruby -rubygems -e "print Gem.dir"')
+if has('nvim')
+  fu! s:read_gemhome(_, data)
+    let $GEM_HOME = a:data[0]
+  endfu
+  let $GEM_HOME = ''
+  call jobstart('env -i PATH="'.$PATH.'" ruby -rubygems -e "print Gem.dir"', {'on_stdout': function('s:read_gemhome')})
+else
+  let $GEM_HOME = system('env -i PATH="'.$PATH.'" ruby -rubygems -e "print Gem.dir"')
+endif
 let s:SID = s:SID()
 
 let s:p =  g:lightline#colorscheme#spacegray#palette
@@ -18,6 +26,7 @@ exe 'hi ErrIconM  ctermfg='.get(s:p.normal, 'erricon' , s:erricon )[0][2].' cter
 exe 'hi WarnIconM ctermfg='.get(s:p.normal, 'warnicon', s:warnicon)[0][2].' ctermbg='.s:middle[0][3]
 exe 'hi StatLnM   ctermfg='.s:middle[0][2]                               .' ctermbg='.s:middle[0][3]
 
+" \ 'fname':    '%-010.20t'
 let g:lightline = {
       \ 'colorscheme': 'spacegray',
       \ 'active': {
@@ -26,8 +35,8 @@ let g:lightline = {
                   \ ['first_err', 'err', 'warn', 'git', 'rbver']]
       \ },
       \ 'inactive': {
-      \   'left': [[], ['filename', 'modified'], []],
-      \   'right': [[], ['relpath', 'filetype']]
+      \   'left': [[], [ 'lpadding', 'filename', 'modified'], []],
+      \   'right': [[], ['relpath', 'filetype', 'padding']]
       \ },
       \ 'tabline': {
       \   'left':  [[ 'tabs' ]],
@@ -38,10 +47,14 @@ let g:lightline = {
       \   'inactive': [ 'tabnum', 'filename', 'modified' ]
       \ },
       \ 'component': {
+      \ 'padding': '%{"             "}',
+      \ 'lpadding': '%{" "}',
+      \ 'fname':    '%t'
       \ },
       \ 'component_function': {
       \   'filetype':     s:SID."filetype",
       \   'relpath':      s:SID."relpath",
+      \   'abspath':      s:SID."abspath",
       \   'rvm':          s:SID.'rvmrbver',
       \   'filename':     s:SID.'fname',
       \   'mode':         s:SID.'mode',
@@ -65,7 +78,7 @@ let g:lightline = {
       \ 'separator':            { 'left': '', 'right': '' },
       \ 'subseparator':         { 'left': '', 'right': '' },
       \ 'tabline_separator':    { 'left': '', 'right': '' },
-      \ 'tabline_subseparator': { 'left': '⋮', 'right': '⋮' },
+      \ 'tabline_subseparator': { 'left': '', 'right': '' },
       \ 'mode_map': {
       \   'n' : 'N',
       \   'i' : 'I',
@@ -80,12 +93,18 @@ let g:lightline = {
       \   '?': ' ',
       \ }
       \ }
-
+" ⋮
+"
 fu! s:git()
   if s:regularbuf() && exists("*fugitive#head") && fugitive#head() != ''
     let head = fugitive#head()
-    let head = strlen(head) > 0 ?head :"[Empty]"
-    return '%#StatLnM#%{" "}%#StatLnM#%{"'.head.'"}'
+    let head = strlen(head) > 0 ? head :"[Empty]"
+    " let hunks = GitGutterGetHunkSummary()
+    " let hunks[0] = '˖' . hunks[0]
+    " let hunks[1] = '∼' . hunks[1]
+    " let hunks[2] = '-' . hunks[2]
+    return '%#StatLnM#%{"  "}%#StatLnM#%{"'.head.'"}'
+    " return '%#StatLnM#%{"' . join(hunks, ' ') . '  "}%#StatLnM#%{"'.head.'"}'
   endif
   return ''
 endfu
@@ -145,7 +164,11 @@ fu! s:modified()
 endfu
 
 fu! s:relpath()
-  return &ft =~ 'help' || !s:regularbuf()  ? '' : substitute(expand('%f'), '\%(fugitive://\)\?'.$PWD.'/', '', '')
+  return &ft =~ 'help' || !s:regularbuf()  ? '' : substitute(expand('%:~:.:h'), '\%(fugitive://\)\?'.$PWD.'/', '', '')
+endfu
+
+fu! s:abspath()
+  return &ft =~ 'help' || !s:regularbuf()  ? '' : substitute(expand('%:p:~'), '\%(fugitive://\)\?'.$PWD.'/', '', '')
 endfu
 
 fu! s:readonly()
@@ -177,7 +200,7 @@ let g:ctrlp_status_func = {
   \ 'main': s:SID.'ctrlps1',
   \ }
 fu! s:ctrlps2(str)
-  return lightline#statusline(1)
+  return lightline#statusline(0)
 endfu
 
 fu! s:tagbar(current, sort, fname, ...) abort
@@ -213,5 +236,6 @@ fu! s:fticon(tabnum)
 endfu
 
 fu! s:filetype()
-  return winwidth(0) > 70 && s:regularbuf() ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
+  return winwidth(0) > 70 && s:regularbuf() ? (strlen(&filetype) ? printf('%3s %1s', &ft, WebDevIconsGetFileTypeSymbol()) : 'no ft') : ''
+  " return winwidth(0) > 70 && s:regularbuf() ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
 endfu
