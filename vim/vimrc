@@ -22,3 +22,4 @@ call s:load('helpers')
 call s:load('misc')
 
 call s:load('colors')
+call s:load('smartinput')
