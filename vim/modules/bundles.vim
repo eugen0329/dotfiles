@@ -1,255 +1,300 @@
-if empty(glob("~/.vim/bundle/neobundle.vim")) |
-  exe '!curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | sh'
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall | source $MYVIMRC
 endif
-if has('vim_starting') | set nocompatible | set runtimepath+=~/.vim/bundle/neobundle.vim/ | endif
-call neobundle#begin(expand('~/.vim/bundle/'))
 
-NeoBundle 'itchyny/lightline.vim'
-NeoBundle 'ryanoasis/vim-webdevicons'
+set nocompatible
+call plug#begin('~/.vim/bundle')
 
-" #Completion
-if has('nvim')
-  NeoBundle 'Shougo/deoplete.nvim'
-endif
-" NeoBundle 'Shougo/neobundle.vim'
-NeoBundleLazy 'Shougo/neocomplete.vim', {'autoload': {'commands':[]}}
-NeoBundle 'Shougo/neoinclude.vim'
-NeoBundle 'Shougo/neco-syntax'
-
-NeoBundleLazy 'osyo-manga/vim-marching', {'autoload': {'filetypes':['c', 'cpp']}}
-" NeoBundleLazy 'osyo-manga/vim-monster', {'autoload': {'filetypes':['ruby', 'eruby', 'slim', 'yaml']}}
-NeoBundle 'cmdline-completion'
-NeoBundle 'asins/vim-dict'
-NeoBundle 'tracyone/dict'
-NeoBundle 'guileen/vim-node-dict'
+" #UI
+Plug 'itchyny/lightline.vim'
+Plug 'ryanoasis/vim-webdevicons'
 
 " #Navigation
   " ,tree
-  NeoBundle 'scrooloose/nerdtree'
-  NeoBundle 'jistr/vim-nerdtree-tabs'
-  NeoBundle 'eugen0329/vim-nerdtree-smart-open'
-  NeoBundle 'voronkovich/ctrlp-nerdtree.vim'
-  NeoBundle 'tyok/nerdtree-ack'
-
-  NeoBundle 'chrisbra/NrrwRgn'              " Edit selection in a newly created separate buffer
-  NeoBundle 'kana/vim-narrow'
-  NeoBundle 'mhinz/vim-startify'
-  NeoBundle 'bilalq/lite-dfm'
-  NeoBundle 'dyng/ctrlsf.vim'
-  " NeoBundle 'blueyed/vim-diminactive'
+  Plug 'scrooloose/nerdtree'
+  Plug 'Xuyuanp/nerdtree-git-plugin'
+  Plug 'jistr/vim-nerdtree-tabs'
+  Plug 'eugen0329/vim-nerdtree-smart-open'
+  Plug 'voronkovich/ctrlp-nerdtree.vim'
 
   " ,code
-  NeoBundle 'majutsushi/tagbar' ", {'on':'TagbarToggle'}
-  NeoBundle 'mtscout6/vim-tagbar-css'
-  NeoBundle 'Shougo/unite-outline'
-  NeoBundle 'tsukkee/unite-tag'
-  NeoBundle 'ruby-matchit'
-  NeoBundle 'tmhedberg/matchit'
+  Plug 'majutsushi/tagbar' ", {'on':'TagbarToggle'}
+  Plug 'mtscout6/vim-tagbar-css'
+  Plug 'Shougo/unite-outline'
+  Plug 'tsukkee/unite-tag'
+  Plug 'xolox/vim-easytags'
+  Plug 'ruby-matchit'
+  Plug 'tmhedberg/matchit'
 
   if !has('nvim')
-    NeoBundle 'google/vim-maktaba'
-    NeoBundle 'google/vim-coverage'
-    NeoBundle 'google/vim-glaive'
+    Plug 'google/vim-maktaba'
+    Plug 'google/vim-coverage'
+    Plug 'google/vim-glaive'
   endif
 
   " ,search
-  NeoBundle 'ctrlpvim/ctrlp.vim'
-  NeoBundle 'haya14busa/incsearch.vim'          " Incrementally highlight all pattern matches
-  NeoBundle 'haya14busa/incsearch-fuzzy.vim'    " Fuzzy search in 
-  NeoBundle 'haya14busa/vim-asterisk'           " *-improved
-  NeoBundle 'osyo-manga/vim-anzu'               " Search position info
-  NeoBundle 'eugen0329/vim-easy-search'         " Project-wide search
-
-  NeoBundle 'mhinz/vim-grepper'
+  Plug 'ctrlpvim/ctrlp.vim'
+  Plug 'FelikZ/ctrlp-py-matcher'
+  Plug 'haya14busa/incsearch.vim'          " Incrementally highlight all pattern matches
+  Plug 'haya14busa/incsearch-fuzzy.vim'    " Fuzzy search in 
+  Plug 'haya14busa/vim-asterisk'           " *-improved
+  Plug 'osyo-manga/vim-anzu'               " Search position info
+  Plug 'eugen0329/vim-easy-search'         " Project-wide search
 
   " ,motion
-  NeoBundle 'Lokaltog/vim-easymotion'           " highlight jumb target
-  NeoBundle 'rhysd/clever-f.vim'                " f{char} improved
-  NeoBundle 'kana/vim-smartword'
-  NeoBundle 'bkad/CamelCaseMotion'
+  Plug 'Lokaltog/vim-easymotion'           " highlight jumb target
+  Plug 'rhysd/clever-f.vim'                " f{char} improved
+  Plug 'kana/vim-smartword'
+  Plug 'bkad/CamelCaseMotion'
 
-  NeoBundle     'christoomey/vim-tmux-navigator'
-  NeoBundle 't9md/vim-choosewin'            " easymotion-like choosing window
-  NeoBundle     'kopischke/vim-fetch'           " gf with lnum:col included
+  Plug     'christoomey/vim-tmux-navigator'
+  " Plug 't9md/vim-choosewin'            " easymotion-like choosing window
+  Plug     'kopischke/vim-fetch'           " gf with lnum:col included
 
   " ,Project management
-  NeoBundle 'derekwyatt/vim-protodef'
-  NeoBundle 'tpope/vim-rails'
-  NeoBundle 'derekwyatt/vim-fswitch'
+  " Plug 'derekwyatt/vim-protodef'
+  Plug 'tpope/vim-rails'
+  Plug 'basyura/unite-rails'
+  Plug 'moll/vim-node'
+  Plug 'tpope/vim-projectionist'
+  " Plug 'stefanoverna/vim-i18n'
+  " Plug 'derekwyatt/vim-fswitch'
 
   " ,unused
-  NeoBundle 'mileszs/ack.vim'
-  NeoBundle 'thinca/vim-qfreplace'
-  NeoBundle 'nelstrom/vim-qargs'
+  " Plug 'mileszs/ack.vim'
+  Plug 'thinca/vim-qfreplace'
+  Plug 'nelstrom/vim-qargs'
 
 
 " #Git
-NeoBundle     'tpope/vim-fugitive'
-NeoBundle     'tommcdo/vim-fugitive-blame-ext'
-NeoBundle 'gregsexton/gitv', { 'on': 'Gitv', 'depends' : 'fugitive.vim'}
-
-NeoBundle 'cohama/agit.vim'
-NeoBundle     'kablamo/vim-git-log' " Interactive git log
-NeoBundle 'airblade/vim-gitgutter'
-" NeoBundle 'mhinz/vim-signify'
+Plug     'tpope/vim-fugitive'
+Plug     'tpope/vim-git'
+Plug     'tommcdo/vim-fugitive-blame-ext'
+Plug     'airblade/vim-gitgutter'
+" Plug 'mhinz/vim-signify'
 
 " #Ruby
-NeoBundle     'tpope/vim-rvm'
-NeoBundle     'tpope/vim-rbenv'
-NeoBundle     'tpope/vim-rake'
-NeoBundle     'thoughtbot/vim-rspec'
-NeoBundle     'tpope/vim-bundler'
-NeoBundle     'vim-ruby/vim-ruby'
-NeoBundle     'ecomba/vim-ruby-refactoring'
-NeoBundle     'p0deje/vim-ruby-interpolation'
-NeoBundle     'rhysd/unite-ruby-require.vim'
-
-" #Yaml
-NeoBundle 'roalddevries/yaml.vim'
-NeoBundle 'lmeijvogel/vim-yaml-helper'
-
+Plug     'vim-ruby/vim-ruby'
+Plug     'tpope/vim-rbenv'
+Plug     'tpope/vim-rake'
+Plug     'thoughtbot/vim-rspec'
+Plug     'tpope/vim-bundler'
+" Plug     'ecomba/vim-ruby-refactoring'
+Plug     'sandeepravi/refactor-rails.vim'
+Plug     'p0deje/vim-ruby-interpolation'
+" Plug     'rhysd/unite-ruby-require.vim'
+" Plug     'tpope/vim-rvm'
 
 " #Highlight
-NeoBundle     'nathanaelkane/vim-indent-guides' " 'Yggdroot/indentLine'
-NeoBundle 'kien/rainbow_parentheses.vim',  { 'on': ['RainbowParenthesesToggle'] }
-NeoBundle 'gregsexton/MatchTag' , {'autoload':{'for':['html', 'eruby', 'slim', 'css', 'sass', 'scss']}}
+" Plug     'nathanaelkane/vim-indent-guides' " 'Yggdroot/indentLine'
+Plug     'Yggdroot/indentLine' " 'Yggdroot/indentLine'
 
-" NeoBundle     'kshenoy/vim-signature'       " Set line marks
-NeoBundle 'MattesGroeger/vim-bookmarks'
+Plug 'kien/rainbow_parentheses.vim',  { 'on': ['RainbowParenthesesToggle'] }
+" Plug 'gregsexton/MatchTag' ", {'autoload':{'for':['html', 'eruby', 'slim', 'css', 'sass', 'scss']}}
+Plug 'Valloric/MatchTagAlways'
+
+" Plug     'kshenoy/vim-signature'       " Set line marks
+Plug 'MattesGroeger/vim-bookmarks'
+Plug 'jceb/vim-orgmode'
 
 " #Snippets
-NeoBundle 'SirVer/ultisnips'
-NeoBundle 'honza/vim-snippets'
-NeoBundle 'mattn/emmet-vim', {'autoload': { 'for': ['html', 'eruby', 'slim', 'css', 'sass', 'scss'] } }
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'mattn/emmet-vim', {'for': ['html', 'eruby', 'slim', 'css', 'sass', 'scss']}
+Plug 'vim-rails-snips'
 
-" #Webdev
-NeoBundle     'jonathanfilip/vim-lucius'
-NeoBundle     'Ioannis-Kapoulas/vim-autoprefixer'
-NeoBundle     'KabbAmine/vCoolor.vim'
-NeoBundle 'atweiden/vim-betterdigraphs'
-NeoBundle     'plasticboy/vim-markdown', { 'depends' : 'godlygeek/tabular'}
-NeoBundle     'suan/vim-instant-markdown'  " Markdown live preview
-NeoBundle     'jaxbot/browserlink.vim'
-
-" Command line wrappers
-NeoBundle     'osyo-manga/vim-over'
-NeoBundle     'osyo-manga/vital-over'
-NeoBundle 'junegunn/vim-pseudocl'
-
+" #Cmdline
+Plug     'osyo-manga/vim-over'
+Plug     'osyo-manga/vital-over'
+Plug     'cmdline-completion'
+Plug     'thinca/vim-prettyprint'
+" Plug 'majkinetor/unite-cmdmatch', { 'depends':  'Shougo/unite.vim', 'mappings' : [['c', '<Plug>(unite_cmdmatch_complete)']] }
+" Plug 'junegunn/vim-pseudocl'
 
 " Textobjects
-NeoBundle 'terryma/vim-expand-region'     " Easier way to select textobjects
-NeoBundle 'kana/vim-textobj-user'         " User defined textobjects
-NeoBundle 'whatyouhide/vim-textobj-xmlattr'
-NeoBundle 'kana/vim-textobj-line'
-NeoBundle 'kana/vim-textobj-line'
-NeoBundle 'textobj-rubyblock'
-NeoBundle 'mattn/vim-textobj-url'
-NeoBundle 'glts/vim-textobj-comment'
+Plug 'terryma/vim-expand-region'     " Easier way to select textobjects
+Plug 'kana/vim-textobj-user'         " User defined textobjects
+Plug 'whatyouhide/vim-textobj-xmlattr'
+Plug 'kana/vim-textobj-line'
+Plug 'kana/vim-textobj-line'
+Plug 'nelstrom/vim-textobj-rubyblock'
+Plug 'mattn/vim-textobj-url'
+Plug 'glts/vim-textobj-comment'
+Plug 'reedes/vim-textobj-quote'
+Plug 'thinca/vim-textobj-between'
+Plug 'lucapette/vim-textobj-underscore'
+Plug 'Julian/vim-textobj-variable-segment'
 
-NeoBundle 'Julian/vim-textobj-variable-segment'
-
-" #Editing
-NeoBundle 'tpope/vim-abolish'             " Working with word cases
-NeoBundle 'tpope/vim-commentary'          " Comment/uncomment code
-NeoBundle 'tpope/vim-surround'            " Manage code surroundings(quotes, parenthesis, brackets, *ml-tags etc.)
-NeoBundle 'tpope/vim-speeddating'         " CTRL-A/CTRL-X to increment dates, times, and more
-NeoBundle 'sickill/vim-pasta'             " Smart paste
-NeoBundle 't9md/vim-textmanip'            " Drag visual text blocks
-NeoBundle 'AndrewRadev/splitjoin.vim'
-NeoBundle 'AndrewRadev/switch.vim'        " Switch segments of text with predefined replacements
-NeoBundle 'AndrewRadev/sideways.vim'      " Move an item in a delimiter-separated list left or right
-NeoBundle 'tommcdo/vim-exchange'          " Swap two pieces of code
-NeoBundle 'Tabular'                       " Text align by regexp
-NeoBundle 'tpope/vim-endwise'             " Automatic closing code blocks
-NeoBundle 'Raimondi/delimitMate'          " Automatic closing of quotes, parenthesis, brackets
+" #Editing assistants
+Plug 'tpope/vim-abolish'             " Working with word cases
+Plug 'tpope/vim-commentary'          " Comment/uncomment code
+Plug 'tpope/vim-surround'            " Manage code surroundings(quotes, parenthesis, brackets, *ml-tags etc.)
+Plug 'tpope/vim-speeddating'         " CTRL-A/CTRL-X to increment dates, times, and more
+Plug 'sickill/vim-pasta'             " Smart paste
+" Plug 'svermeulen/vim-easyclip'
+Plug 'tpope/vim-repeat'
+Plug 'AndrewRadev/splitjoin.vim'
+Plug 'AndrewRadev/switch.vim'        " Switch segments of text with predefined replacements
+Plug 'AndrewRadev/sideways.vim'      " Move an item in a delimiter-separated list left or right
+Plug 'godlygeek/tabular'             " Text align by regexp
+Plug 'tommcdo/vim-exchange'          " Swap two pieces of code
+Plug 't9md/vim-textmanip'            " Drag visual text blocks
+" Plug 'tpope/vim-endwise'             " Automatic closing code blocks
+Plug 'kana/vim-smartinput'          " Automatic closing of quotes, parenthesis, brackets
+Plug 'kana/vim-smartchr'          " Automatic closing of quotes, parenthesis, brackets
+Plug 'chrisbra/NrrwRgn'              " Edit selection in a newly created separate buffer
+" Plug 'Raimondi/delimitMate'          " Automatic closing of quotes, parenthesis, brackets
 
 " #Format
-NeoBundle 'Chiel92/vim-autoformat', {'on': 'Autoformat'  }
-NeoBundle 'rhysd/vim-clang-format', {'on': 'ClangFormat' }
-NeoBundle     'maksimr/vim-jsbeautify'
+Plug 'Chiel92/vim-autoformat', {'on': 'Autoformat'  }
+Plug 'rhysd/vim-clang-format', {'on': 'ClangFormat' }
+" Plug 'maksimr/vim-jsbeautify'
 
 " #Note taking
-NeoBundle 'xolox/vim-misc'
-NeoBundle 'xolox/vim-notes', { 'depends': 'xolox/vim-misc' }
-" NeoBundle 'jceb/vim-orgmode'
+Plug 'xolox/vim-notes', { 'depends': 'xolox/vim-misc' }
+" Plug 'jceb/vim-orgmode'
+
+
+" #Languages support
+  " ,backends
+  if has('nvim')
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'Shougo/context_filetype.vim'
+
+    Plug 'Shougo/echodoc'
+  else
+    Plug 'Shougo/neocomplete.vim'
+  endif
+  Plug 'Shougo/neoinclude.vim'
+  Plug 'Shougo/neco-syntax'
+  Plug 'ujihisa/neco-look'
+  Plug 'vim-scripts/LanguageTool'
+
+  " Plug 'Valloric/YouCompleteMe'
+
+  " ,Intellisence completion
+  Plug 'Shougo/neco-vim'                     " vimscript completion
+  Plug 'marijnh/tern_for_vim', {
+        \ 'build' : {'linux': 'npm install'}}     " js completion
+  " Plug 'myhere/vim-nodejs-complete'
+
+  " Plug 'Rip-Rip/clang_complete'
+  Plug 'osyo-manga/vim-marching', { 'for': ['c', 'cpp']} " clang async completion
+  Plug 'fatih/vim-go'
+  " dictionaries
+  Plug 'asins/vim-dict'
+  Plug 'tracyone/dict'
+  Plug 'guileen/vim-node-dict'
+
+  Plug     'othree/html5.vim'
+  Plug     'octol/vim-cpp-enhanced-highlight'
+  Plug     'slim-template/vim-slim'
+  Plug     'kchmck/vim-coffee-script'
+  Plug     'cakebaker/scss-syntax.vim'
+  Plug     'hail2u/vim-css3-syntax'
+
+  Plug     'jelera/vim-javascript-syntax'
+  " Plug     'pangloss/vim-javascript'
+  Plug 'justinmk/vim-syntax-extra', {'for': ['flex', 'lex', 'bison']}
+  Plug     'lmeijvogel/vim-yaml-helper'
+
 
 " #Syntax
 if has('nvim')
-  NeoBundle     'https://github.com/benekastah/neomake.git'
+  Plug     'benekastah/neomake'
+else
+  Plug     'scrooloose/syntastic'
 endif
-NeoBundle     'scrooloose/syntastic'
-
-NeoBundle     'slim-template/vim-slim'
-NeoBundle     'kchmck/vim-coffee-script'
-NeoBundle     'cakebaker/scss-syntax.vim'
-NeoBundle     'hail2u/vim-css3-syntax'
-NeoBundle     'jelera/vim-javascript-syntax'
-NeoBundleLazy 'justinmk/vim-syntax-extra', {'autoload': {'filetypes':['flex', 'lex', 'bison']}}
 
 " #Operating plugins
-NeoBundle     'kana/vim-submode'
-NeoBundle     'Shougo/vimproc.vim', {'do': 'make'}
-NeoBundle     'Shougo/unite.vim'
-NeoBundle     'Shougo/neomru.vim'         " Most recently used files/buffers
-NeoBundle 'majkinetor/unite-cmdmatch', { 'depends':  'Shougo/unite.vim', 'mappings' : [['c', '<Plug>(unite_cmdmatch_complete)']] }
-NeoBundle     'mtth/scratch.vim'          " qf-like window
-NeoBundle     'AndrewRadev/undoquit.vim'
-" NeoBundle     'danro/rename.vim'          " Rename current file
-NeoBundle 'tpope/vim-eunuch'                " *nix bash-like utils
-NeoBundle     'vim-scripts/LargeFile'
-NeoBundle     'tpope/vim-dispatch'
-NeoBundle 'p0deje/vim-dispatch-vimshell'
-NeoBundle     'tpope/vim-scriptease'
-NeoBundle     'thinca/vim-quickrun'
-NeoBundle 'vim-scripts/Hints-for-C-Library-Functions'
-NeoBundle     'AndrewRadev/linediff.vim'
-NeoBundle 'chrisbra/vim-diff-enhanced'
+Plug     'kana/vim-submode'
+Plug     'xolox/vim-misc'
+Plug     'Shougo/vimproc.vim', { 'do': 'make' }
+Plug     'Shougo/unite.vim'
+Plug     'Shougo/neomru.vim'         " Most recently used files/buffers
+" Plug     'mtth/scratch.vim'          " qf-like window
+Plug     'AndrewRadev/undoquit.vim'
+Plug     'tpope/vim-eunuch'                " *nix bash-like utils
+Plug     'vim-scripts/LargeFile'
+Plug     'tpope/vim-dispatch'
+" Plug 'p0deje/vim-dispatch-vimshell'
+" Plug     'tpope/vim-scriptease'
+Plug     'thinca/vim-quickrun'
+Plug     'dyng/ctrlsf.vim'
+
+" Plug 'vim-scripts/Hints-for-C-Library-Functions'
+Plug     'AndrewRadev/linediff.vim'
+" Plug 'chrisbra/vim-diff-enhanced'
 
 " #Unused plugins
-NeoBundle 'taq/vim-git-branch-info'
-NeoBundle 'thinca/vim-prettyprint'
-" NeoBundle 'ervandew/supertab'
-NeoBundle 'itchyny/thumbnail.vim'
-NeoBundle 'sheerun/vim-polyglot'
-NeoBundle 'Shougo/vimfiler.vim'
-NeoBundle 'Shougo/vimshell.vim', { 'on': 'VimShell' }
-" NeoBundle 'milkypostman/vim-togglelist'
-" NeoBundle 'wesQ3/vim-windowswap'
-" NeoBundle     'skammer/vim-css-color' " 'gorodinskiy/vim-coloresque'
-" NeoBundle     'ap/vim-css-color'
-" NeoBundle     'chrisbra/unicode.vim'
-NeoBundle     'greyblake/vim-preview'
+" Plug 'taq/vim-git-branch-info'
+" Plug 'ervandew/supertab'
+" Plug 'itchyny/thumbnail.vim'
+" Plug 'sheerun/vim-polyglot'
+" Plug 'Shougo/vimfiler.vim'
+" Plug 'Shougo/vimshell.vim', { 'on': 'VimShell' }
+" Plug 'milkypostman/vim-togglelist'
+" Plug 'wesQ3/vim-windowswap'
+" Plug     'skammer/vim-css-color' " 'gorodinskiy/vim-coloresque'
+" Plug     'ap/vim-css-color'
+" Plug     'chrisbra/unicode.vim'
+" Plug     'greyblake/vim-preview'
 
-" NeoBundle 'kassio/neoterm'
+" Plug     'Ioannis-Kapoulas/vim-autoprefixer'
+Plug     'KabbAmine/vCoolor.vim'
+" Plug 'atweiden/vim-betterdigraphs'
+" Plug     'plasticboy/vim-markdown', { 'depends' : 'godlygeek/tabular'}
+Plug     'tpope/vim-markdown'
+" Plug     'suan/vim-instant-markdown'  " Markdown live preview
+Plug     'jaxbot/browserlink.vim'       " live preview
+
+" Plug 'kassio/neoterm'
 
 " #Colors
-NeoBundle 'voronianski/oceanic-next-color-scheme'
-NeoBundle 'vim-scripts/lilypink'
-NeoBundle     'gmoe/vim-espresso'
-NeoBundle 'zeis/vim-kolor'
-NeoBundle 'nanotech/jellybeans.vim'
-NeoBundle 'flazz/vim-colorschemes'
-NeoBundle 'altercation/vim-colors-solarized'
-NeoBundle 'xterm-color-table.vim', { 'on': 'XtermColorTable' }
-NeoBundle 'jordwalke/VimCleanColors'
-NeoBundle 'cschlueter/vim-wombat'
-NeoBundle 'vim-scripts/Mustang2'
-NeoBundle 'croaker/mustang-vim'
-NeoBundle 'Railscasts-Theme-GUIand256color'
-NeoBundle 'desertink.vim'
-NeoBundle 'joedicastro/vim-molokai256'
-NeoBundle 'jordwalke/flatlandia'
-NeoBundle 'vivkin/flatland.vim'
-NeoBundle 'abra/vim-abra'
-NeoBundle 'ajh17/Spacegray.vim'
-NeoBundle 'cdmedia/itg_flat_vim'
-NeoBundle 'chriskempson/base16-vim'
-NeoBundle 'desert-warm-256'
-NeoBundle 'edkolev/tmuxline.vim'
-NeoBundle 'gosukiwi/vim-atom-dark'
-NeoBundle 'mbbill/desertEx'
-NeoBundle 'trusktr/seti.vim'
+" Plug 'KabbAmine/yowish.vim'
+" Plug     'jonathanfilip/vim-lucius'
+" Plug 'voronianski/oceanic-next-color-scheme'
+" Plug 'vim-scripts/lilypink'
+" Plug     'gmoe/vim-espresso'
+" Plug 'zeis/vim-kolor'
+" Plug 'nanotech/jellybeans.vim'
+Plug 'flazz/vim-colorschemes'
+Plug 'wesgibbs/vim-irblack'
+" Plug 'altercation/vim-colors-solarized'
+Plug 'xterm-color-table.vim'
+" Plug 'jordwalke/VimCleanColors'
+" Plug 'cschlueter/vim-wombat'
+" Plug 'vim-scripts/Mustang2'
+" Plug 'croaker/mustang-vim'
+" Plug 'Railscasts-Theme-GUIand256color'
+" Plug 'desertink.vim'
+" Plug 'joedicastro/vim-molokai256'
+Plug 'jordwalke/flatlandia'
+" Plug 'vivkin/flatland.vim'
+" Plug 'abra/vim-abra'
+" Plug 'ajh17/Spacegray.vim'
+" Plug 'cdmedia/itg_flat_vim'
+" Plug 'chriskempson/base16-vim'
+" Plug 'desert-warm-256'
+" Plug 'edkolev/tmuxline.vim'
+" Plug 'gosukiwi/vim-atom-dark'
+" Plug 'mbbill/desertEx'
+" Plug 'trusktr/seti.vim'
 
-call neobundle#end()
+Plug 'thinca/vim-ref'
+Plug 'lucapette/vim-ruby-doc'
+Plug 'tyru/open-browser.vim'
+" Plug 'ap/vim-css-color'
+" Plug 'lornix/vim-scrollbar'
+" Plug 'severin-lemaignan/vim-minimap'
+
+Plug 'maksimr/vim-jsbeautify'
+Plug 'mattn/googletranslate-vim'
+Plug 'maksimr/vim-translator'
+
+Plug 'kopischke/vim-stay'
+Plug 'tclem/vim-arduino'
+call plug#end()
 filetype plugin indent on
