@@ -1,8 +1,8 @@
 # common
-alias current_vim=nvim
-alias v="current_vim"
-alias vi="current_vim"
-alias sv="sudo current_vim"
+alias v=nvim
+alias v="nvim"
+alias vi="v"
+alias sv="sudo v"
 alias f="fg"
 alias cpwd="echo -n $(pwd) | xclip -sel clip"
 alias pingg="ping 8.8.8.8"
@@ -43,6 +43,7 @@ alias ga='git add -A'
 alias gc='git commit'
 alias gca='git commit --amend'
 alias agc='git commit --amend'
+alias agcm='git commit --amend -m'
 alias gp='git push'
 alias gpo='git push origin'
 alias gpom='git push origin master'
@@ -85,12 +86,15 @@ alias zs="zeus server"
 alias zd="zeus destroy"
 alias zg="zeus generate"
 
-alias ev="current_vim ~/.vim/vimrc"
-alias evm="current_vim ~/.vim/modules/mappings.vim"
-alias evi="current_vim ~/.vim/modules/ninit.vim"
-alias evp="current_vim ~/.vim/modules/plugins.vim"
-alias evu="current_vim ~/.vim/modules/unite.vim"
-alias evc="current_vim ~/.vim/modules/ncompletion.vim"
-alias ez="current_vim ~/.zshrc"
-alias ep="current_vim ~/.pryrc"
-alias ea="current_vim ~/aliases"
+alias ev="v ~/.vim/vimrc"
+alias evm="v ~/.vim/modules/mappings.vim"
+alias evi="v ~/.vim/modules/ninit.vim"
+alias evp="v ~/.vim/modules/plugins.vim"
+alias evu="v ~/.vim/modules/unite.vim"
+alias evc="v ~/.vim/modules/ncompletion.vim"
+alias ez="v ~/.zshrc"
+alias ep="v ~/.pryrc"
+alias ea="v ~/aliases"
+
+# list of the builtin compiler macros for gcc, llvm-gcc, and clang using
+alias clangdefines='echo | clang -dM -E -'
