@@ -2,27 +2,16 @@ call unite#filters#matcher_default#use(['matcher_fuzzy'])
 call unite#filters#sorter_default#use(['sorter_rank'])
 call unite#custom#source('file,file/new,mru,buffer,file_rec,line,grep,outline', 'matchers', 'matcher_fuzzy')
 
-call unite#custom#profile('default', 'context', {
-  \ 'winheight': 10,
-  \ 'prompt_direction': 'below',
-  \ 'direction': 'botright'
-  \ })
+" \ 'marked_icon': '» ',
+" \ 'candidate_icon': '› ',
+" \ 'prompt': '❯: ',
+
 let g:unite_prompt = '>>> '
 let g:unite_marked_icon = '✓'
 let g:unite_split_rule = 'botright'
 let g:unite_data_directory='~/.vim/tmp/cache/unite'
-if executable('ag')
-  let g:unite_source_grep_command = 'ag'
-  " let g:unite_source_grep_default_opts = '-Q --nogroup --nocolor --column'
-  let g:unite_source_grep_default_opts = '--nocolor --nogroup --column'
-  let g:unite_source_grep_recursive_opt = ' '
-  " let g:unite_source_grep_max_candidates = 80000
-endif
+let g:unite_force_overwrite_statusline = 0
 
-let s:use_grep_breaks = 1
-if executable('ag')
-  let g:ackprg = 'ag --nogroup --nocolor --column '
-endif
 
 augroup UniteSettings
   au!
@@ -31,70 +20,89 @@ augroup END
 
 function! s:unite_settings()
   resize 10
+  setlocal winfixwidth
   nmap      <buffer> Q <plug>(unite_exit)
   nmap      <buffer> <esc> <plug>(unite_exit)
   imap      <buffer> <esc> <plug>(unite_exit)
   imap      <buffer> <C-j>   <Plug>(unite_select_next_line)
   imap      <buffer> <C-k>   <Plug>(unite_select_previous_line)
-  imap <C-c> <Esc>
+  imap      <buffer> <C-c>   <Esc>
   inoremap  <silent><buffer><expr> <C-x>     unite#do_action('split')
-endfunction
+  inoremap  <silent><buffer><expr> <C-f>     unite#do_action('preview')
+endfu
 
 function! s:UniteBuffFilter(candidates, context)
+  call filter(a:candidates, "!empty(bufname(v:val.action__buffer_nr))")
   let a:context.source.name =  a:context.source.name[0]
   for candidate in a:candidates
-    let bufname = bufname(candidate.action__buffer_nr)
-    let filename = bufname == '' ? '[ Empty ]' : substitute(fnamemodify(bufname, ':p'), $PWD, '.', '')
-    let candidate.abbr = printf("%s", filename)
+    let candidate.abbr = fnamemodify(bufname(candidate.action__buffer_nr), ':~:.')
+    let candidate.word = candidate.abbr
   endfor
   return a:candidates
-endfunction
+endfu
 
 function! s:UniteMRUFilter(candidates, context)
-  let a:context.source.name =  a:context.source.name[0]
-  let first = 0
+  let a:context.source.name = 'f'
   for candidate in a:candidates
-    if match(candidate.word, $PWD) != -1
-      let candidate.word = substitute(candidate.word, $PWD, '.', '')
-    endif
+    let candidate.word = fnamemodify(candidate.word, ':~:.')
   endfor
   return a:candidates
-endfunction
+endfu
+
+fu! s:UniqByWord(candidates,...)
+  call Db(len(a:candidates), len(unite#util#uniq_by(a:candidates, 'v:val.word')) )
+  return unite#util#uniq_by(a:candidates, 'v:val.word')
+endfu
+
+call unite#define_filter({'name': 'uniq_by_word', 'filter': function('s:UniqByWord')})
+call unite#custom#profile('files', 'filters', 'uniq_by_word')
+call unite#custom#profile('default', 'context', {
+      \ 'winheight': 10,
+      \ 'prompt_direction': 'below',
+      \ 'direction': 'botright'
+  \ })
 
 call unite#define_filter({'name': 'buff_filter', 'filter': function('s:UniteBuffFilter')})
 call unite#define_filter({'name': 'mru_filter', 'filter': function('s:UniteMRUFilter')})
 call unite#custom#source('buffer', 'converters', 'buff_filter')
-call unite#custom#source('file_mru', 'converters', 'mru_filter')
-let g:unite_force_overwrite_statusline = 0
+call unite#custom#source('neomru/file', 'converters', 'mru_filter')
+" call unite#custom#source('neomru/file', 'sorters', ['sorter_ftime', 'sorter_reverse'])
 
-
-
-let my_tabopen = {
-\ 'is_selectable' : 1,
-\ }
-function! my_tabopen.func(candidates)
-  call unite#take_action('tabopen', a:candidates)
-
-  let dir = isdirectory(a:candidate.word) ?
-  \    a:candidate.word : fnamemodify(a:candidate.word, ':p:h')
-  execute g:unite_kind_openable_lcd_command fnameescape(dir)
-endfunction
-call unite#custom#action('file,buffer', 'tabopen', my_tabopen)
-unlet my_tabopen
+let my_open = { 'is_selectable' : 1 }
+function! my_open.func(candidates)
+  let nr = -1
+  for winnr in range(1, tabpagewinnr(tabpagenr(), '$'))
+    let bnr = winbufnr(winnr)
+    if bufname(bnr) !~# 'NERD' && getbufvar(bnr, '&modified') == 0
+      let nr = winnr
+      break
+    endif
+  endfor
+  exe (nr >= 0 ? (nr.'wincmd w') : (tabpagewinnr(tabpagenr(), '$').'wincmd w | split'))
+  call unite#take_action('open', a:candidates)
+endfu
+" call unite#custom#action('file,buffer,conf', 'open', my_open)
+call unite#custom#action('outline,common,openable,cdable,file_base,file_vimfiler_base,file,buffer,tab,directory,word,jump_list,command,window,completion,source,uri,guicmd', 'open', my_open)
+" common,openable,cdable,file_base,file_vimfiler_base,file,buffer,tab,directory,word,jump_list,command,window,completion,source,uri,guicmd
+" call unite#custom#action('common,openable', 'open', my_open)
+unlet my_open
 
 let g:unite_source_menu_menus = {}
 let g:unite_source_menu_menus.conf = {
     \ 'description' : 'Config modules'
     \}
 let g:unite_source_menu_menus.conf.command_candidates = [
-      \ [ 'unite', 'split ~/.vim/modules/unite.vim' ],
-      \ [ 'colors', 'split ~/.vim/modules/colors.vim' ],
-      \ [ 'helpers', 'split ~/.vim/modules/helpers.vim' ],
-      \ [ 'complete', 'split ~/.vim/modules/complete.vim' ],
-      \ [ 'optins', 'split ~/.vim/modules/options.vim' ],
-      \ [ 'plugins', 'split ~/.vim/modules/plugins.vim' ],
-      \ [ 'statusline', 'split ~/.vim/modules/statusline.vim' ],
-      \ [ 'mappings', 'split ~/.vim/modules/mappings.vim' ],
-      \ [ 'bundles', 'split ~/.vim/modules/bundles.vim' ],
+        \ [ 'unite', 'split ~/.vim/modules/unite.vim' ],
+        \ [ 'colors', 'split ~/.vim/modules/colors.vim' ],
+        \ [ 'helpers', 'split ~/.vim/modules/helpers.vim' ],
+        \ [ 'optins', 'split ~/.vim/modules/options.vim' ],
+        \ [ 'plugins', 'split ~/.vim/modules/plugins.vim' ],
+        \ [ 'statusline', 'split ~/.vim/modules/statusline.vim' ],
+        \ [ 'mappings', 'split ~/.vim/modules/mappings.vim' ],
+        \ [ 'bundles', 'split ~/.vim/modules/bundles.vim' ],
+        \ [ 'autocmds', 'split ~/.vim/modules/autocmds.vim' ],
+        \ [ 'completion', 'split ~/.vim/modules/completion.vim' ],
+        \ [ 'ncompletion', 'split ~/.vim/modules/ncompletion.vim' ],
+        \ [ 'smartinput', 'split ~/.vim/modules/smartinput.vim' ],
       \ ]
 
