@@ -1,10 +1,9 @@
-let g:a = 0
 fu! s:load(module)
   exec 'source ' fnameescape(expand('~/.vim/modules/' . a:module . '.vim'))
 endfu
 
-" call s:load('init')
 call s:load('bundles')
+
 if has('nvim')
   call s:load('ncompletion')
 else
