@@ -170,6 +170,24 @@ fu! RmSwp()
   endif
 endfu
 
+fu! GenerateCtags()
+  let p = 'tmp/tags'
+  if RailsDetect()
+    if !isdirectory(fnamemodify(p, ':h'))
+      call mkdir('tmp')
+    endif
+  endif
+  let tpath = fnameescape(p)
+  let tpath =  filereadable(p) ? '-f ' . tpath : '-a ' . tpath
+  exe 'silent Dispatch! ctags -R --tag-relative=yes --languages=Ruby --append=yes --exclude=.git --exclude=log '.tpath .' *'
+endfu
+
+au BufWritePost * if &ft ==# 'ruby' | call GenerateCtags() |endif
+
+fu! SetCtags()
+
+endfu
+
 fu! RemoveFugitiveIndexFiles(l1, l2)
   for l in range(a:l1, a:l2)
     let filename = matchstr(getline(l),'^#\t\zs.\+\ze$')
@@ -183,4 +201,14 @@ fu! RemoveFugitiveIndexFiles(l1, l2)
     end
   endfor
   return 'redraw!'
+endfu
+
+fu! Exists(files)
+  let r = []
+  for f in a:files
+    if filereadable(f)
+      call add(r, f)
+    endif
+  endfor
+  return r
 endfu
