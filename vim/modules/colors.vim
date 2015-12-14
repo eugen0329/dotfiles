@@ -112,6 +112,15 @@ hi UrlBody cterm=underline ctermfg=39
 
 colorscheme spacegray-cterm
 
-hi GitGutterChangeDelete ctermfg=39 ctermbg=8
+au ColorScheme * exe 'hi GitGutterChangeDelete ctermfg=39' .
+      \ "ctermbg=".synIDattr(synIDtrans(hlID("StatusLineNC")), "bg", "cterm")
 
 au VimEnter * redraw!
+hi link uniteCandidateSourceName  Label
+hi link uniteInputLine Normal
+
+hi link uniteCandidateInputKeyword Identifier
+hi link CtrlPMatch Identifier
+
+hi EndOfBuffer ctermbg=0 ctermfg=0
+" let g:easytags_python_enabled = 1
