@@ -17,7 +17,7 @@ set nocompatible
 set expandtab
 set autoindent
 
-set history=200
+set history=10000
 set ignorecase
 set hls
 set incsearch
@@ -54,6 +54,10 @@ set foldminlines=2
 set lazyredraw
 set ttyfast
 
+
+" scroll and goto more naturally
+set nostartofline
+
 set number      " line numbers
 "au BufWinEnter * setlocal numberwidth=2
 set ts=2 sw=2 sts=2
@@ -70,16 +74,18 @@ set smartindent
 set scrolloff=1
 
 "if !isdirectory(backupDirectory) | silent exec '!mkdir -p ' . backupDirectory | endif
-set undodir=~/.vim/tmp/undo//     " undo files
+set noundofile
 set backupdir=~/.vim/tmp/backup// " backups
 set directory=~/.vim/tmp/swap//   " swapfiles
 set backup
 "set swapfile
-if has("persistent_undo")
-  set hidden
-  set undodir='~/.vim/tmp/undo'
-  set undofile
-endif
+" if has("persistent_undo")
+"   set hidden
+"   set undodir='~/.vim/tmp/undo'
+"   set undofile
+" endif
+
+set nohidden
 
 set wildignore+=.git,.svn
 set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg
@@ -88,7 +94,7 @@ set wildignore+=vendor/*
 set wildignore+=*.sw?
 
 
-if v:version > 703 || v:version == 703 && has("patch541")
+if v:version > 703 || v:version == 703 && has('patch541')
 " Delete comment character when joining commented lines
   set formatoptions+=j
 endif
@@ -102,6 +108,7 @@ set novisualbell           " don't beep
 set noerrorbells         " don't beep
 
 set clipboard=unnamedplus
+" set clipboard=unnamed
 let colLim = 80
 
 "}}}
@@ -114,3 +121,9 @@ menu Settings.paste-toggle       :call toggle_paster_mode()<CR>
 menu Settings.mouse-toggle       :call ToggleMouseMode()<CR>
 map <F12> :emenu Settings.<Tab>
 "}}}
+
+set virtualedit=onemore
+set conceallevel=1
+
+set notagbsearch
+set viewoptions=cursor
