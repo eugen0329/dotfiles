@@ -110,8 +110,13 @@ fu! s:git()
 endfu
 
 fu! s:rbver()
-  if s:regularbuf() && (RailsDetect() || &ft==#"ruby")
-    let rbver = substitute(matchstr($GEM_HOME,'[^/]*$'),'^\[\]$','','')
+  if s:regularbuf() && (RailsDetect() || &ft==#"ruby") && exists('$GEM_HOME')
+    if $GEM_HOME =~# 'gemsets'
+      let rbver = fnamemodify($GEM_HOME, ':h:h:t')
+    else
+      let rbver = fnamemodify($GEM_HOME, ':t')
+    endif
+
     return '%#RbIconM#%{" "}%#StatLnM#%{"'.rbver.'"}'
   endif
   return ''
