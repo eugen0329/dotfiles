@@ -26,17 +26,17 @@ exe 'hi ErrIconM  ctermfg='.get(s:p.normal, 'erricon' , s:erricon )[0][2].' cter
 exe 'hi WarnIconM ctermfg='.get(s:p.normal, 'warnicon', s:warnicon)[0][2].' ctermbg='.s:middle[0][3]
 exe 'hi StatLnM   ctermfg='.s:middle[0][2]                               .' ctermbg='.s:middle[0][3]
 
-" \ 'fname':    '%-010.20t'
+" \ 'fname':    '%-010.20t' 'relpath', 
 let g:lightline = {
       \ 'colorscheme': 'spacegray',
       \ 'active': {
-      \   'left': [[ 'mode', 'paste' ], [ 'filename', 'modified'], [ 'search_stat' ]],
-      \   'right': [['percent', 'lineinfo'], [ 'relpath', 'filetype', 'fticon'], 
+      \   'left': [[ 'mode', 'paste' ], [ 'fnameactive', 'modified'], [ 'search_stat' ]],
+      \   'right': [['percent', 'lineinfo'], [ 'filetype', 'fticon'], 
                   \ ['first_err', 'err', 'warn', 'git', 'rbver']]
       \ },
       \ 'inactive': {
       \   'left': [[], [ 'lpadding', 'filename', 'modified'], []],
-      \   'right': [[], ['relpath', 'filetype', 'padding']]
+      \   'right': [[], ['filetype', 'padding']]
       \ },
       \ 'tabline': {
       \   'left':  [[ 'tabs' ]],
@@ -49,14 +49,13 @@ let g:lightline = {
       \ 'component': {
       \ 'padding': '%{"             "}',
       \ 'lpadding': '%{" "}',
-      \ 'fname':    '%t'
       \ },
       \ 'component_function': {
+      \   'filename':     s:SID.'fname',
       \   'filetype':     s:SID."filetype",
       \   'relpath':      s:SID."relpath",
       \   'abspath':      s:SID."abspath",
       \   'rvm':          s:SID.'rvmrbver',
-      \   'filename':     s:SID.'fname',
       \   'mode':         s:SID.'mode',
       \   'search_stat':  s:SID.'search_stat',
       \   'modified':     s:SID.'modified',
@@ -65,12 +64,13 @@ let g:lightline = {
       \   'fticon': s:SID.'fticon'
       \ },
       \ 'component_expand': {
+      \   'fnameactive':     s:SID.'fnameactive',
       \   'percent':    s:SID.'percent',
       \   'lineinfo':   s:SID.'lineinfo',
       \   'first_err':  s:SID.'first_err',
       \   'warn':       s:SID.'warn',
       \   'err':        s:SID.'err',
-      \   'rbver':        s:SID.'rbver',
+      \   'rbver':      s:SID.'rbver',
       \   'git':        s:SID.'git',
       \ },
       \ 'component_type': {
@@ -175,16 +175,25 @@ fu! s:readonly()
   return &ft !~? 'help' && &readonly ? '' : ''
 endfu
 
-fu! s:fname()
+fu! s:fname(...)
+  let name = a:0 ? a:1 : expand('%')
   let fname = expand('%:t')
-  return fname == 'ControlP' ? g:lightline.ctrlp_item :
+  return fname == 'ControlP' ? get(g:lightline, 'ctrlp_item', '_') :
         \ fname == '__Tagbar__' ? g:lightline.fname :
         \ fname =~ '__Gundo\|NERD_tree' ? '' :
         \ &ft == 'vimfiler' ? vimfiler#get_status_string() :
         \ &ft == 'unite' ? unite#get_status_string() :
         \ &ft == 'vimshell' ? vimshell#get_status_string() :
         \ ('' != s:readonly() ? s:readonly() . ' ' : '') .
-        \ ('' != fname ? fname : '[No Name]')
+        \ ('' != fname ? name : '[No Name]')
+endfu
+
+fu! s:fnameactive()
+  let rel = substitute(expand('%:h'), '\%(fugitive://\)\?'.$PWD.'/', '', '')
+  let rel = '.' ==# rel ? '': rel.'/'
+  " TODO improve hightlights (filename - bright, relpath - pale)
+  let name = '%#LightLineRight_active_1#%{"'.rel.'"}%#LightLineLeft_active_1#%{"'.expand('%:t').'"}'
+  return s:fname(name)
 endfu
 
 fu! s:ctrlps1(focus, byfname, regex, prev, item, next, marked)
