@@ -2,11 +2,10 @@
 alias v=nvim
 alias v="nvim"
 alias vi="v"
-alias sv="sudo v"
+alias sv="sudo vim"
 alias f="fg"
 alias cpwd="echo -n $(pwd) | xclip -sel clip"
 alias pingg="ping 8.8.8.8"
-alias t="tmux"
 alias x="exit"
 alias ap="touch"
 alias md="mkdir -pv"
@@ -37,13 +36,11 @@ alias -g G='|& egrep -i --color '
 # git
 alias gco='git checkout'
 alias gcom='git checkout master'
-alias gcm='git commit -m'
 alias ga='git add'
 alias ga='git add -A'
 alias gc='git commit'
 alias gca='git commit --amend'
 alias agc='git commit --amend'
-alias agcm='git commit --amend -m'
 alias gp='git push'
 alias gpo='git push origin'
 alias gpom='git push origin master'
@@ -54,6 +51,12 @@ alias -g om='origin master'
 alias gra='git rebase --abort'
 alias grc='git rebase --continue'
 alias gri='git rebase -i'
+alias gcm='git commit -m'
+alias agcm='git commit --amend -m'
+alias gcmi='git commit -m "Initial commit"'
+alias gcmm='git commit -m "Minor fix"'
+alias gcmms='git commit -m "Minor fixes"'
+
 
 alias gl="git log --date-order --date=iso --graph --full-history --all --pretty=format:'%x08%x09%C(red)%h %C(cyan)%ad%x08%x08%x08%x08%x08%x08%x08%x08%x08%x08%x08%x08%x08%x08%x08 %C(bold blue)%<(10)%aN%C(reset) %C(reset)%<(70,trunc)%s%C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset) '"
 
@@ -77,6 +80,11 @@ alias rdc="bundle exec rake db:create"
 alias rdr="bundle exec rake db:rollback"
 alias rn="bundle exec rails new"
 
+alias rgrm='bundle exec rails g rspec:model'
+alias rgrc='bundle exec rails g rspec:controller'
+alias rgrh='bundle exec rails g rspec:helper'
+alias rgrv='bundle exec rails g rspec:helper'
+
 alias zr="zeus rake"
 alias zrr="zeus rake routes"
 alias zrdm="zeus rake db:migrate"
@@ -98,3 +106,26 @@ alias ea="v ~/aliases"
 
 # list of the builtin compiler macros for gcc, llvm-gcc, and clang using
 alias clangdefines='echo | clang -dM -E -'
+
+alias sshpubcpy='xclip -sel clip < ~/.ssh/id_rsa.pub'
+
+alias cpd='cap production deploy'
+alias cdd='cap development deploy'
+
+#-H "Content-Type:application/json" \
+#-X POST --data '{"account":{"email":"'"$email"'","screenName":"'"$screenName"'","type":"'"$theType"'","passwordSettings":{"password":"'"$password"'","passwordConfirm":"'"$password"'"}},"firstName":"'"$firstName"'","lastName":"'"$lastName"'","middleName":"'"$middleName"'","locale":"'"$locale"'","registrationSiteId":"'"$registrationSiteId"'","receiveEmail":"'"$receiveEmail"'","dateOfBirth":"'"$dob"'","mobileNumber":"'"$mobileNumber"'","gender":"'"$gender"'","fuelActivationDate":"'"$fuelActivationDate"'","postalCode":"'"$postalCode"'","country":"'"$country"'","city":"'"$city"'","state":"'"$state"'","bio":"'"$bio"'","jpFirstNameKana":"'"$jpFirstNameKana"'","jpLastNameKana":"'"$jpLastNameKana"'","height":"'"$height"'","weight":"'"$weight"'","distanceUnit":"MILES","weightUnit":"POUNDS","heightUnit":"FT/INCHES"}' "https://xxx:xxxxx@xxxx-www.xxxxx.com/xxxxx/xxxx/xxxx"
+getjson() {
+# -s: silent mode
+  local responce=$(curl -s -H "Accept: application/json" $@)
+  echo $responce | node -e \
+  "\
+   s=process.openStdin();\
+   d=[];\
+   s.on('data',function(c){\
+     d.push(c);\
+   });\
+   s.on('end',function(){\
+     console.log(JSON.stringify(JSON.parse(d.join('')),null,2));\
+   });\
+  "
+}
