@@ -78,7 +78,7 @@ let g:lightline = {
       \ 'separator':            { 'left': '', 'right': '' },
       \ 'subseparator':         { 'left': '', 'right': '' },
       \ 'tabline_separator':    { 'left': '', 'right': '' },
-      \ 'tabline_subseparator': { 'left': '', 'right': '' },
+      \ 'tabline_subseparator': { 'left': '', 'right': '' },
       \ 'mode_map': {
       \   'n' : 'N',
       \   'i' : 'I',
@@ -94,7 +94,7 @@ let g:lightline = {
       \ }
       \ }
 " ⋮
-"
+"
 fu! s:git()
   if s:regularbuf() && exists("*fugitive#head") && fugitive#head() != ''
     let head = fugitive#head()
@@ -181,20 +181,24 @@ fu! s:readonly()
 endfu
 
 fu! s:fname(...)
-  let name = a:0 ? a:1 : expand('%')
-  let fname = expand('%:t')
+  let name = a:0 ? a:1 : expand('%:.')
+  " since fnamemodify can't properly handle this case
+  let name = substitute(name, '\%(fugitive://\)\?'.$PWD.'/', '', '')
+  let name = substitute(name, $HOME, '~', '')
+  " let fname = expand('%:t')
+  let fname = expand('%')
   return fname == 'ControlP' ? get(g:lightline, 'ctrlp_item', '_') :
-        \ fname == '__Tagbar__' ? g:lightline.fname :
+        \ fname == '__Tagbar__' ? get(g:lightline, 'fname', '') :
         \ fname =~ '__Gundo\|NERD_tree' ? '' :
         \ &ft == 'vimfiler' ? vimfiler#get_status_string() :
         \ &ft == 'unite' ? unite#get_status_string() :
         \ &ft == 'vimshell' ? vimshell#get_status_string() :
         \ ('' != s:readonly() ? s:readonly() . ' ' : '') .
-        \ ('' != fname ? name : '[No Name]')
+        \ (len(fname) ? name : '[No Name]')
 endfu
 
 fu! s:fnameactive()
-  let rel = substitute(expand('%:h'), '\%(fugitive://\)\?'.$PWD.'/', '', '')
+  let rel = expand('%:h')
   let rel = '.' ==# rel ? '': rel.'/'
   " TODO improve hightlights (filename - bright, relpath - pale)
   let name = '%#LightLineRight_active_1#%{"'.rel.'"}%#LightLineLeft_active_1#%{"'.expand('%:t').'"}'
