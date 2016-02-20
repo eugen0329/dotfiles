@@ -149,8 +149,10 @@ let g:gitgutter_sign_added =    ' ˖'
 let g:gitgutter_sign_removed =  ' -'
 " let g:gitgutter_sign_modified = ' ∼'
 " let g:gitgutter_sign_modified_removed = ' ≁'
-let g:gitgutter_sign_modified = ' ∆'
-let g:gitgutter_sign_modified_removed = ' ∆'
+" let g:gitgutter_sign_modified = ' ∆'
+" let g:gitgutter_sign_modified_removed = ' ∆'
+let g:gitgutter_sign_modified = ' ▵'
+let g:gitgutter_sign_modified_removed = ' ▵'
 
 " ,OverCommandLine
 let g:over_command_line_prompt = ':'
@@ -200,12 +202,13 @@ let g:UltiSnipsEditSplit="horizontal"
 
 " ,ctrlp
 let g:ctrlp_reuse_window = 'netrw\|help\|quickfix\|NERD_tree_2\|NERD_tree_3'
-let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
+" let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
 " E - jump to the window
 let g:ctrlp_switch_buffer = 'Et'
 let g:ctrlp_use_caching = 0
 let g:ctrlp_user_command = 'ag %s -U -l --nocolor -g ""'
-let g:ctrlp_root_markers = ['Gemfile', '.git', '.meteor', 'Rakefile', 'package.json', 'bower.json', 'index.html', 'main.c', 'main.cpp']
+let g:ctrlp_root_markers = ['Gemfile', 'Makefile', '.git', '.meteor', 'Rakefile', 'package.json', 'bower.json', 'main.c', 'main.cpp']
+" let g:ctrlp_root_markers = ['Gemfile', 'Makefile', '.git', '.meteor', 'Rakefile', 'package.json', 'bower.json', 'index.html', 'main.c', 'main.cpp']
 
 " let g:ctrlp_lazy_update = 350
 let g:ctrlp_clear_cache_on_exit = 0
