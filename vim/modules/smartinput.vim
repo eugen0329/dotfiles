@@ -21,11 +21,15 @@ let s:rules =
       \   "''": [
       \     {     'at': '\%#[@a-zA-Z0-9"]',        'char': "'",       'input': "'", },
       \   ],
+      \   "html": [
+      \     {     'at': '>\s*\%#\s*</\w',        'char': "<Enter>",       'input': "<Enter><Esc>O", },
+      \   ],
       \   '[]': [
       \     {     'at': '\%#[@a-zA-Z0-9"'''']',    'char': '[',       'input': '[', },
       \   ],
       \   '""': [
-      \     {     'at': '\%#[@a-zA-Z0-9'''']',     'char': '"',       'input': '"', },
+      \     {     'at': '\%#[@a-zA-Z0-9''''{]',     'char': '"',       'input': '"', },
+      \     {     'at': '[@a-zA-Z0-9''''}]\%#[^"]',     'char': '"',       'input': '"', },
       \   ],
       \   '{}': [
       \     {     'at': '\%#[@a-zA-Z0-9"'''']',    'char': '{',       'input': '{<Left><Right>', },
@@ -39,7 +43,10 @@ let s:rules =
       \   ],
       \   'vim': [],
       \   'css': [
-      \     {     'at': '\w\+\%#\%($\|[^;]\)', 'char': ':', 'input': ':<Space>;<Left>', 'syntax': ['cssDefinition'] },
+      \     {     'at': '\w\+\%#\%($\|[^;]\)', 'char': ':', 'input': ':<Space>;<Left>', 'syntax': ['cssDefinition', 'scssDefinition'] },
+      \     {     'at': '\w\+\%#;', 'char': ':', 'input': ':<Space>', 'syntax': ['cssDefinition', 'scssDefinition'] },
+      \     {     'at': '\w\+:\%#\s;', 'char': '<Space>', 'input': '<Right>', 'syntax': ['cssDefinition', 'scssDefinition'] },
+      \     {     'at': '\w\+:\s\{2,}\%#;', 'char': '<BS>', 'input': '<Esc>cT:<Right>', 'syntax': ['cssDefinition', 'scssDefinition'] },
       \   ],
       \   'sh': [
       \     {     'at': '^\s*if\>.*\%#',            'char': '<CR>', 'input': '<CR>fi<Esc>O' },
@@ -73,6 +80,7 @@ let s:ftrules = [
       \   { 'filetypes': ['vim'], 'rules': ['vim'] },
       \   { 'filetypes': ['sh', 'zsh'], 'rules': ['sh'] },
       \   { 'filetypes': ['html', 'eruby', 'css', 'sass', 'scss', 'slim', 'haml'], 'rules': ['css'] },
+      \   { 'filetypes': ['html', 'eruby'], 'rules': ['html'] },
       \ ]
 
 for frule in s:ftrules
