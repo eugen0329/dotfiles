@@ -3,9 +3,13 @@ if &t_Co > 2 || has("gui_running") | syntax on | endif
 
 augroup FiletypeAutocommands
   au!
-  au FileType eruby,css,scss,sass setlocal iskeyword+=-
+  au FileType html,eruby,css,scss,sass setlocal iskeyword+=-
   au BufRead,BufNewFile *.cmake,CMakeLists.txt,*.cmake.in runtime! indent/cmake.vim
   au BufRead,BufNewFile *.cmake,CMakeLists.txt,*.cmake.in setf cmake
+  au FileType cmake setlocal commentstring=#\ %s
+
+  au FileType css,scss setlocal foldmethod=syntax
+
   au BufRead,BufNewFile *.ctest,*.ctest.in setf cmake
   au FileType vimrc setlocal foldmethod=marker ts=2 sw=2 sts=2
   au Filetype c,cpp setlocal ts=4 sw=4 sts=4 cindent foldmethod=syntax

@@ -27,8 +27,8 @@ endif
 " ,neocomplete
 
 
-let g:neocomplete#sources = {}
-let g:neocomplete#sources._ = ['rubymf', 'file', 'tag', 'file/include', 'dictionary', 'omni', 'syntax', 'member', 'buffer', 'ultisnips']
+" let g:neocomplete#sources = {}
+" let g:neocomplete#sources._ = ['rubymf', 'file', 'tag', 'file/include', 'dictionary', 'omni', 'syntax', 'member', 'buffer', 'ultisnips']
 " let g:neocomplete#sources._ = ['buffer', 'member', 'tag', 'dictionary', 'file', 'omni']
 " let g:neocomplete#sources.ruby = ['buffer', 'member', 'tag', 'dictionary', 'file', 'omni', 'UltiSnips']
 
