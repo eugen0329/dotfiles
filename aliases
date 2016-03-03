@@ -44,6 +44,7 @@ alias agc='git commit --amend'
 alias gp='git push'
 alias gpo='git push origin'
 alias gpom='git push origin master'
+alias gpuom='git push -u origin master'
 alias gs='git status -s'
 alias gcl='git clone'
 alias gpl='git pull --rebase'
@@ -78,6 +79,7 @@ alias rr="bundle exec rake routes"
 alias rdm="bundle exec rake db:migrate"
 alias rdc="bundle exec rake db:create"
 alias rdr="bundle exec rake db:rollback"
+alias rt="bundle exec rake -T"
 alias rn="bundle exec rails new"
 
 alias rgrm='bundle exec rails g rspec:model'
