@@ -24,7 +24,7 @@ Plug 'ryanoasis/vim-webdevicons'
   Plug 'mtscout6/vim-tagbar-css'
   Plug 'Shougo/unite-outline'
   Plug 'tsukkee/unite-tag'
-  Plug 'xolox/vim-easytags'
+  " Plug 'xolox/vim-easytags'
   Plug 'ruby-matchit'
   Plug 'tmhedberg/matchit'
 
@@ -36,7 +36,7 @@ Plug 'ryanoasis/vim-webdevicons'
 
   " ,search
   Plug 'ctrlpvim/ctrlp.vim'
-  Plug 'FelikZ/ctrlp-py-matcher'
+  " Plug 'FelikZ/ctrlp-py-matcher'
   Plug 'haya14busa/incsearch.vim'          " Incrementally highlight all pattern matches
   Plug 'haya14busa/incsearch-fuzzy.vim'    " Fuzzy search in 
   Plug 'haya14busa/vim-asterisk'           " *-improved
@@ -87,6 +87,9 @@ Plug     'p0deje/vim-ruby-interpolation'
 " Plug     'rhysd/unite-ruby-require.vim'
 " Plug     'tpope/vim-rvm'
 
+Plug 'vim-scripts/dbext.vim'
+
+
 " #Highlight
 " Plug     'nathanaelkane/vim-indent-guides' " 'Yggdroot/indentLine'
 Plug     'Yggdroot/indentLine' " 'Yggdroot/indentLine'
@@ -109,7 +112,7 @@ Plug 'vim-rails-snips'
 Plug     'osyo-manga/vim-over'
 Plug     'osyo-manga/vital-over'
 Plug     'cmdline-completion'
-Plug     'thinca/vim-prettyprint'
+" Plug     'thinca/vim-prettyprint'
 " Plug 'majkinetor/unite-cmdmatch', { 'depends':  'Shougo/unite.vim', 'mappings' : [['c', '<Plug>(unite_cmdmatch_complete)']] }
 " Plug 'junegunn/vim-pseudocl'
 
@@ -126,12 +129,13 @@ Plug 'reedes/vim-textobj-quote'
 Plug 'thinca/vim-textobj-between'
 Plug 'lucapette/vim-textobj-underscore'
 Plug 'Julian/vim-textobj-variable-segment'
+Plug 'kana/vim-textobj-entire'
 
 " #Editing assistants
 Plug 'tpope/vim-abolish'             " Working with word cases
 Plug 'tpope/vim-commentary'          " Comment/uncomment code
 Plug 'tpope/vim-surround'            " Manage code surroundings(quotes, parenthesis, brackets, *ml-tags etc.)
-Plug 'tpope/vim-speeddating'         " CTRL-A/CTRL-X to increment dates, times, and more
+" Plug 'tpope/vim-speeddating'         " CTRL-A/CTRL-X to increment dates, times, and more
 Plug 'sickill/vim-pasta'             " Smart paste
 " Plug 'svermeulen/vim-easyclip'
 Plug 'tpope/vim-repeat'
@@ -139,12 +143,13 @@ Plug 'AndrewRadev/splitjoin.vim'
 Plug 'AndrewRadev/switch.vim'        " Switch segments of text with predefined replacements
 Plug 'AndrewRadev/sideways.vim'      " Move an item in a delimiter-separated list left or right
 Plug 'godlygeek/tabular'             " Text align by regexp
+Plug 'junegunn/vim-easy-align'
 Plug 'tommcdo/vim-exchange'          " Swap two pieces of code
 Plug 't9md/vim-textmanip'            " Drag visual text blocks
 " Plug 'tpope/vim-endwise'             " Automatic closing code blocks
 Plug 'kana/vim-smartinput'          " Automatic closing of quotes, parenthesis, brackets
 Plug 'kana/vim-smartchr'          " Automatic closing of quotes, parenthesis, brackets
-Plug 'chrisbra/NrrwRgn'              " Edit selection in a newly created separate buffer
+" Plug 'chrisbra/NrrwRgn'              " Edit selection in a newly created separate buffer
 " Plug 'Raimondi/delimitMate'          " Automatic closing of quotes, parenthesis, brackets
 
 " #Format
@@ -189,21 +194,22 @@ Plug 'xolox/vim-notes', { 'depends': 'xolox/vim-misc' }
   Plug 'guileen/vim-node-dict'
 
   Plug     'othree/html5.vim'
-  Plug     'octol/vim-cpp-enhanced-highlight'
+  Plug     'othree/csscomplete.vim'
+  " Plug     'octol/vim-cpp-enhanced-highlight'
   Plug     'slim-template/vim-slim'
   Plug     'kchmck/vim-coffee-script'
   Plug     'cakebaker/scss-syntax.vim'
   Plug     'hail2u/vim-css3-syntax'
 
   Plug     'jelera/vim-javascript-syntax'
+  Plug 'othree/javascript-libraries-syntax.vim'
   " Plug     'pangloss/vim-javascript'
   Plug 'justinmk/vim-syntax-extra', {'for': ['flex', 'lex', 'bison']}
   Plug     'lmeijvogel/vim-yaml-helper'
 
-
 " #Syntax
 if has('nvim')
-  Plug     'benekastah/neomake'
+  "Plug     'benekastah/neomake'
 else
   Plug     'scrooloose/syntastic'
 endif
@@ -215,6 +221,7 @@ Plug     'Shougo/vimproc.vim', { 'do': 'make' }
 Plug     'Shougo/unite.vim'
 Plug     'Shougo/neomru.vim'         " Most recently used files/buffers
 " Plug     'mtth/scratch.vim'          " qf-like window
+Plug 'wesQ3/vim-windowswap'  " swap two windows
 Plug     'AndrewRadev/undoquit.vim'
 Plug     'tpope/vim-eunuch'                " *nix bash-like utils
 Plug     'vim-scripts/LargeFile'
@@ -222,7 +229,7 @@ Plug     'tpope/vim-dispatch'
 " Plug 'p0deje/vim-dispatch-vimshell'
 " Plug     'tpope/vim-scriptease'
 Plug     'thinca/vim-quickrun'
-Plug     'dyng/ctrlsf.vim'
+" Plug     'dyng/ctrlsf.vim'
 
 " Plug 'vim-scripts/Hints-for-C-Library-Functions'
 Plug     'AndrewRadev/linediff.vim'
@@ -246,9 +253,9 @@ Plug     'AndrewRadev/linediff.vim'
 Plug     'KabbAmine/vCoolor.vim'
 " Plug 'atweiden/vim-betterdigraphs'
 " Plug     'plasticboy/vim-markdown', { 'depends' : 'godlygeek/tabular'}
-Plug     'tpope/vim-markdown'
+" Plug     'tpope/vim-markdown'
 " Plug     'suan/vim-instant-markdown'  " Markdown live preview
-Plug     'jaxbot/browserlink.vim'       " live preview
+" Plug     'jaxbot/browserlink.vim'       " live preview
 
 " Plug 'kassio/neoterm'
 
@@ -283,18 +290,18 @@ Plug 'jordwalke/flatlandia'
 " Plug 'mbbill/desertEx'
 " Plug 'trusktr/seti.vim'
 
-Plug 'thinca/vim-ref'
-Plug 'lucapette/vim-ruby-doc'
-Plug 'tyru/open-browser.vim'
+" Plug 'thinca/vim-ref'
+" Plug 'lucapette/vim-ruby-doc'
+" Plug 'tyru/open-browser.vim'
 " Plug 'ap/vim-css-color'
 " Plug 'lornix/vim-scrollbar'
 " Plug 'severin-lemaignan/vim-minimap'
 
-Plug 'maksimr/vim-jsbeautify'
-Plug 'mattn/googletranslate-vim'
-Plug 'maksimr/vim-translator'
+" Plug 'maksimr/vim-jsbeautify'
+" Plug 'mattn/googletranslate-vim'
+" Plug 'maksimr/vim-translator'
 
-Plug 'kopischke/vim-stay'
-Plug 'tclem/vim-arduino'
+" Plug 'kopischke/vim-stay'
+" Plug 'tclem/vim-arduino'
 call plug#end()
 filetype plugin indent on

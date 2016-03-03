@@ -1,15 +1,16 @@
+" Helpers
+function! s:incsearch_fuzzy(...) abort
+  return extend(copy({'converters': [incsearch#config#fuzzy#converter(), incsearch#config#fuzzyspell#converter() ]}), get(a:, 1, {}))
+endfunction
 fu! s:alias(to, from)
   exe 'nmap '.a:from.' '.a:to
   exe 'nnoremap '.a:to.' <Nop>'
 endfu
-function! s:incsearch_fuzzy(...) abort
-  return extend(copy({
-  \   'converters': [
-  \     incsearch#config#fuzzy#converter(),
-  \     incsearch#config#fuzzyspell#converter()
-  \   ],
-  \ }), get(a:, 1, {}))
-endfunction
+fu! s:map_ctrl(map, keys, cmd)
+  let key_pos = len(a:keys)-2
+  exe a:map.' <silent> '.a:keys.' '.a:cmd
+  exe a:map.' <silent> '.a:keys[:key_pos].'<C-'.a:keys[key_pos+1].'> '.a:cmd
+endfu
 
 if has('nvim')
   call s:alias('[shftf2]', '<S-F2>')
@@ -36,7 +37,7 @@ cmap     <c-o> <Plug>(unite_cmdmatch_complete)
   nnoremap <silent> <Leader>ft :NERDTreeFind<CR>
   nnoremap <C-r>      :Unite -buffer-name=outline -start-insert outline<CR>
 
-  nnoremap <F9>       :call GenerateCtags()<CR>
+  " nnoremap <F9>       :call GenerateCtags()<CR>
   nnoremap <F2>       :TagbarToggle<CR>
   nnoremap <Leader>fb :CtrlPLine<CR>
   nnoremap <Leader>e  :call RailsCommands(g:rails_commands, g:rails_edit_mappings, 'CtrlP %s')<CR>
@@ -129,10 +130,32 @@ cmap     <c-o> <Plug>(unite_cmdmatch_complete)
   nnoremap g9 9gt
   nnoremap g0 10gt
 
-  map <C-j> <C-W>j
-  map <C-k> <C-W>k
-  map <C-h> <C-W>h
-  map <C-l> <C-W>l
+  " jump window
+  map <silent> <C-j> :winc j<CR>
+  map <silent> <C-k> :winc k<CR>
+  map <silent> <C-h> :winc h<CR>
+  map <silent> <C-l> :winc l<CR>
+
+  call submode#leave_with('layout', 'n', '', '<Esc>')
+  call submode#leave_with('layout', 'n', '', '<C-c>')
+  for s:set in [
+        \['n',      ':cal MoveToNextTab()<CR>'],
+        \['p',      ':cal MoveToPrevTab()<CR>'],
+        \['H',      ':winc H<CR>'],
+        \['L',      ':winc L<CR>'],
+        \['J',      ':winc J<CR>'],
+        \['K',      ':winc K<CR>'],
+        \['h',      ':cal WindowSwap#MarkWindowSwap()<Bar>winc h<Bar>cal WindowSwap#DoWindowSwap()<CR>'],
+        \['l',      ':cal WindowSwap#MarkWindowSwap()<Bar>winc l<Bar>cal WindowSwap#DoWindowSwap()<CR>'],
+        \['j',      ':cal WindowSwap#MarkWindowSwap()<Bar>winc j<Bar>cal WindowSwap#DoWindowSwap()<CR>'],
+        \['k',      ':cal WindowSwap#MarkWindowSwap()<bar>winc k<bar>cal WindowSwap#DoWindowSwap()<cr>'],
+        \['t', ':exe "tabm"tabpagenr()<CR>'],
+        \['T', ':exe "tabm"tabpagenr()-2<CR>']]
+    call submode#enter_with('layout', 'n', 's', '<C-w>'.s:set[0],        s:set[1])
+    call        submode#map('layout', 'n', 's', s:set[0],                s:set[1])
+    call submode#enter_with('layout', 'n', 's', '<C-w><C-'.s:set[0].'>', s:set[1])
+    call        submode#map('layout', 'n', 's', '<C-'.s:set[0].'>',      s:set[1])
+  endfor
 
   " ,MRU
   nnoremap <C-f> <Nop>
@@ -160,6 +183,8 @@ nnoremap <silent> <Leader>gl :Glog<CR>
 nnoremap <silent> <leader>gb :Gblame<CR>
 nnoremap <silent> <leader>gb :NERDTreeClose<Bar>Gblame<CR>
 nnoremap <silent> <Leader>gv :Gitv<CR>
+nnoremap <silent> <Leader>dp :diffput<CR>
+
 
 " #Editing
 vnoremap <Leader>ree :Rextract<space>
@@ -222,7 +247,7 @@ nmap <Leader>rrc :source $MYVIMRC<CR>
 cabbrev trw :call TrimWhiteSpace()
 nmap <silent> [shftf2] :call feedkeys(':Rename '.expand('%:t'), 'n')<CR>
 let g:vcoolor_map = '<F4>'
-let g:vcool_ins_rgb_map = '<F4>'
+" let g:vcool_ins_rgb_map = '<F4>'
 
 " #insert mode motions
 inoremap <C-d> <Delete>
@@ -332,3 +357,22 @@ let g:endwise_no_mappings = 1
 "
 "
 nmap gx <Plug>(openbrowser-open)
+
+inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
+function! s:align()
+  let p = '^\s*|\s.*\s|\s*$'
+  if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+    let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+    let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+    Tabularize/|/l1
+    normal! 0
+    call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+  endif
+endfunction
+
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
