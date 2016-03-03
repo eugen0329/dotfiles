@@ -123,4 +123,5 @@ hi link uniteCandidateInputKeyword Identifier
 hi link CtrlPMatch Identifier
 
 hi EndOfBuffer ctermbg=0 ctermfg=0
+hi ModeMsg ctermbg=27 ctermfg=255
 " let g:easytags_python_enabled = 1

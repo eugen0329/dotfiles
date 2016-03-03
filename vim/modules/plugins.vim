@@ -67,6 +67,7 @@ let g:switch_mapping = '-'
 
 " ,undoquit
 nnoremap <c-w>c :call undoquit#SaveWindowQuitHistory()<cr><c-w>c
+let g:windowswap_map_keys = 0
 
 " ,Delimmate
 let delimitMate_expand_space = 1
@@ -296,6 +297,8 @@ let g:javascript_conceal_prototype  = "¶"
 let g:javascript_conceal_static     = "•"
 let g:javascript_conceal_super      = "Ω"
 
+let g:used_javascript_libs = 'jquery,angularjs'
+
 
 " autocmd BufNewFile,BufRead fugitive* setlocal bufhidden=delete
 "
@@ -327,3 +330,5 @@ let g:easytags_file = 'tmp/tags'
 " let g:easytags_syntax_keyword = 'always'
 "
 let g:easytags_opts = ['--sort=yes', '--append=yes']
+let g:submode_always_show_submode = 1
+let g:submode_timeoutlen = 2500
