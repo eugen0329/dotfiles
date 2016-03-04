@@ -330,5 +330,6 @@ let g:easytags_file = 'tmp/tags'
 " let g:easytags_syntax_keyword = 'always'
 "
 let g:easytags_opts = ['--sort=yes', '--append=yes']
-let g:submode_always_show_submode = 1
+
+
 let g:submode_timeoutlen = 2500

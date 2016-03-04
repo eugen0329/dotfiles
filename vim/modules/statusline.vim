@@ -1,4 +1,4 @@
-fu s:SID()
+fu! s:SID()
   return matchstr(expand('<sfile>'), '\zs<SNR>\d\+_\zeSID$')
 endfun
 set laststatus=2
@@ -31,8 +31,8 @@ let g:lightline = {
       \ 'colorscheme': 'spacegray',
       \ 'active': {
       \   'left': [[ 'mode', 'paste' ], [ 'fnameactive', 'modified'], [ 'search_stat' ]],
-      \   'right': [['percent', 'lineinfo'], [ 'filetype', 'fticon'], 
-                  \ ['first_err', 'err', 'warn', 'git', 'rbver']]
+      \   'right': [['percent'], [ 'filetype', 'fticon'], 
+                  \ ['first_err', 'err', 'warn', 'git', 'rbver']],
       \ },
       \ 'inactive': {
       \   'left': [[], [ 'lpadding', 'filename', 'modified'], []],
@@ -56,16 +56,16 @@ let g:lightline = {
       \   'relpath':      s:SID."relpath",
       \   'abspath':      s:SID."abspath",
       \   'rvm':          s:SID.'rvmrbver',
-      \   'mode':         s:SID.'mode',
       \   'search_stat':  s:SID.'search_stat',
       \   'modified':     s:SID.'modified',
+      \   'mode':         s:SID.'mode',
+      \   'percent':    s:SID.'percent',
       \ },
       \ 'tab_component_function': {
       \   'fticon': s:SID.'fticon'
       \ },
       \ 'component_expand': {
       \   'fnameactive':     s:SID.'fnameactive',
-      \   'percent':    s:SID.'percent',
       \   'lineinfo':   s:SID.'lineinfo',
       \   'first_err':  s:SID.'first_err',
       \   'warn':       s:SID.'warn',
@@ -80,6 +80,7 @@ let g:lightline = {
       \ 'tabline_separator':    { 'left': '', 'right': '' },
       \ 'tabline_subseparator': { 'left': '', 'right': '' },
       \ 'mode_map': {
+      \   'layout' : '--- LAYOUT EDITING ---',
       \   'n' : 'N',
       \   'i' : 'I',
       \   'R' : 'R',
@@ -92,7 +93,7 @@ let g:lightline = {
       \   "\<C-s>": 'SB',
       \   '?': ' ',
       \ }
-      \ }
+    \ }
 " ⋮
 "
 fu! s:git()
@@ -148,20 +149,53 @@ fu! s:warn()
   return ''
 endfu
 
-fu! s:percent()
-  return s:regularbuf() ? '%3p%%' : ''
+let g:marginal = '⬛'
+let g:placeholder = ' '
+
+fu! s:percent() abort
+  let frs = ['▏', '▎', '▍', '▌', '▋', '▊', '▉', '█']
+  " let frs = ['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█']
+  " let frs = [ '▱', '▰' ]
+  " let frs = ['◔', '◑', '◕', '●']
+  " let frs = ['🞗', '🞘', '🞙', '◆']
+  " let frs = ['▭', '▬']
+  " let frs = ['□', '■']
+  " let frs = ['⬚', '□','▤', '▦', '■']
+  " let frs = ['⬚', '□','▨', '▩', '■']
+
+
+  let lcurr = line('.')
+  let llast = line('$')
+  let barsmax = 14
+  let length = barsmax " + strlen(llast) - 1
+
+  if !s:regularbuf()
+    return ''
+  elseif lcurr == 1
+    return repeat(g:placeholder, length)
+  elseif lcurr == llast
+    return repeat('▓', length)
+  endif
+
+  let percent =  line('.') * 1.0 / line('$')
+  let nbars =  float2nr(percent * barsmax)
+
+  let nfrs = float2nr(percent * barsmax * len(frs)) % len(frs)
+  let rpadding =  length - nbars - 1
+  " return  string([nbars, nfrs, rpadding])
+  return repeat(frs[-1], nbars) . frs[nfrs] . repeat(g:placeholder, rpadding)
+endfu
+
+fu! s:lineinfo()
+  return  s:regularbuf() ? '%l:%-v' : ''
 endfu
 
 fu! s:search_stat()
   return s:regularbuf() ? anzu#search_status() : ''
 endfu
 
-fu! s:lineinfo()
-  return  s:regularbuf() ? '%3l:%-3v' : ''
-endfu
-
 fu! s:regularbuf()
-  return expand('%:t') !~? '__Gundo\|NERD_tree\|__Tagbar__\|ControlP'
+  return expand('%:t') !~? '__Gundo\|NERD_tree\|__Tagbar__\|ControlP' && &ft !~# 'gitcommit\|unite'
 endfu
 
 fu! s:modified()
@@ -229,6 +263,10 @@ let g:tagbar_status_func = s:SID.'tagbar'
 
 fu! s:mode()
   let fname = expand('%:t')
+  let submode = submode#current()
+  if submode ==# 'layout'
+    call lightline#link('R')
+  endif
   return fname == '__Tagbar__' ? 'Tagbar' :
         \ fname == 'ControlP' ? 'CtrlP' :
         \ fname == '__Gundo__' ? 'Gundo' :
@@ -237,6 +275,7 @@ fu! s:mode()
         \ &ft == 'unite' ? 'Unite' :
         \ &ft == 'vimfiler' ? 'VimFiler' :
         \ &ft == 'vimshell' ? 'VimShell' :
+        \ len(submode) ? get(g:lightline.mode_map, submode, g:lightline.mode_map['?']) :
         \ winwidth(0) > 60 ? lightline#mode() : ''
 endfu
 
