@@ -15,20 +15,10 @@ else
 endif
 let s:SID = s:SID()
 
-let s:p =  g:lightline#colorscheme#spacegray#palette
-let s:rbicon   = [['', '', 203]]
-let s:erricon  = [['', '', 1  ]]
-let s:warnicon = [['', '', 3  ]]
-let s:middle   = get(s:p.normal, 'middle', [['', '', 248, 8]])
-
-exe 'hi RbIconM   ctermfg='.get(s:p.normal, 'rbicon'  , s:rbicon  )[0][2].' ctermbg='.s:middle[0][3]
-exe 'hi ErrIconM  ctermfg='.get(s:p.normal, 'erricon' , s:erricon )[0][2].' ctermbg='.s:middle[0][3]
-exe 'hi WarnIconM ctermfg='.get(s:p.normal, 'warnicon', s:warnicon)[0][2].' ctermbg='.s:middle[0][3]
-exe 'hi StatLnM   ctermfg='.s:middle[0][2]                               .' ctermbg='.s:middle[0][3]
 
 " \ 'fname':    '%-010.20t' 'relpath', 
 let g:lightline = {
-      \ 'colorscheme': 'spacegray',
+      \ 'colorscheme': 'spacegray3',
       \ 'active': {
       \   'left': [[ 'mode', 'paste' ], [ 'fnameactive', 'modified'], [ 'search_stat' ]],
       \   'right': [['percent'], [ 'filetype', 'fticon'], 
@@ -36,7 +26,7 @@ let g:lightline = {
       \ },
       \ 'inactive': {
       \   'left': [[], [ 'lpadding', 'filename', 'modified'], []],
-      \   'right': [[], ['filetype', 'padding']]
+      \   'right': [[], ['filetype', 'rpadding']]
       \ },
       \ 'tabline': {
       \   'left':  [[ 'tabs' ]],
@@ -47,7 +37,7 @@ let g:lightline = {
       \   'inactive': [ 'tabnum', 'filename', 'modified' ]
       \ },
       \ 'component': {
-      \ 'padding': '%{"             "}',
+      \ 'rpadding': '%{"'.repeat(' ', 14).'"}',
       \ 'lpadding': '%{" "}',
       \ },
       \ 'component_function': {
@@ -96,6 +86,23 @@ let g:lightline = {
     \ }
 " ⋮
 "
+"
+"
+"
+
+let s:p =  g:lightline#colorscheme#{g:lightline.colorscheme}#palette
+let s:rbicon   = [['', '', 203]]
+let s:erricon  = [['', '', 1  ]]
+let s:warnicon = [['', '', 3  ]]
+let s:middle   = get(s:p.normal, 'middle', [['', '', 248, 8]])
+exe 'hi RbIconM   ctermfg='.get(s:p.normal, 'rbicon'  , s:rbicon  )[0][2].' ctermbg='.s:middle[0][3]
+exe 'hi ErrIconM  ctermfg='.get(s:p.normal, 'erricon' , s:erricon )[0][2].' ctermbg='.s:middle[0][3]
+exe 'hi WarnIconM ctermfg='.get(s:p.normal, 'warnicon', s:warnicon)[0][2].' ctermbg='.s:middle[0][3]
+exe 'hi StatLnM   ctermfg='.s:middle[0][2]                               .' ctermbg='.s:middle[0][3]
+unlet s:middle
+
+
+
 fu! s:git()
   if s:regularbuf() && exists("*fugitive#head") && fugitive#head() != ''
     let head = fugitive#head()
@@ -151,10 +158,13 @@ endfu
 
 let g:marginal = '⬛'
 let g:placeholder = ' '
+let s:fmt = '▕%s▎'
+let s:fmt = '%s'
 
 fu! s:percent() abort
   let frs = ['▏', '▎', '▍', '▌', '▋', '▊', '▉', '█']
   " let frs = ['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█']
+  " let frs = ['▁▁', '▂▂', '▃▃', '▄▄', '▅▅', '▆▆', '▇▇', '██']
   " let frs = [ '▱', '▰' ]
   " let frs = ['◔', '◑', '◕', '●']
   " let frs = ['🞗', '🞘', '🞙', '◆']
@@ -167,23 +177,22 @@ fu! s:percent() abort
   let lcurr = line('.')
   let llast = line('$')
   let barsmax = 14
-  let length = barsmax " + strlen(llast) - 1
 
   if !s:regularbuf()
     return ''
   elseif lcurr == 1
-    return repeat(g:placeholder, length)
+    return printf(s:fmt,repeat(g:placeholder, barsmax))
   elseif lcurr == llast
-    return repeat('▓', length)
+    return printf(s:fmt, repeat('▓', barsmax))
   endif
 
   let percent =  line('.') * 1.0 / line('$')
   let nbars =  float2nr(percent * barsmax)
 
   let nfrs = float2nr(percent * barsmax * len(frs)) % len(frs)
-  let rpadding =  length - nbars - 1
+  let rpadding =  barsmax - nbars - 1
   " return  string([nbars, nfrs, rpadding])
-  return repeat(frs[-1], nbars) . frs[nfrs] . repeat(g:placeholder, rpadding)
+  return printf(s:fmt, repeat(frs[-1], nbars) . frs[nfrs] . repeat(g:placeholder, rpadding))
 endfu
 
 fu! s:lineinfo()
