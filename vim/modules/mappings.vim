@@ -134,10 +134,10 @@ cmap     <c-o> <Plug>(unite_cmdmatch_complete)
   map <silent> <C-j> :winc j<CR>
   map <silent> <C-k> :winc k<CR>
   map <silent> <C-h> :winc h<CR>
-  map <silent> <C-l> :winc l<CR>
+  map <silent> <C-l> :winc l<Bar>mode<CR>
 
-  call submode#leave_with('layout', 'n', '', '<Esc>')
-  call submode#leave_with('layout', 'n', '', '<C-c>')
+  " call submode#leave_with('layout', 'n', '', '<Esc>')
+  " call submode#leave_with('layout', 'n', '', '<C-c>')
   for s:set in [
         \['n',      ':cal MoveToNextTab()<CR>'],
         \['p',      ':cal MoveToPrevTab()<CR>'],
@@ -151,9 +151,9 @@ cmap     <c-o> <Plug>(unite_cmdmatch_complete)
         \['k',      ':cal WindowSwap#MarkWindowSwap()<bar>winc k<bar>cal WindowSwap#DoWindowSwap()<cr>'],
         \['t', ':exe "tabm"tabpagenr()<CR>'],
         \['T', ':exe "tabm"tabpagenr()-2<CR>']]
-    call submode#enter_with('layout', 'n', 's', '<C-w>'.s:set[0],        s:set[1])
+    call submode#enter_with('layout', 'n', 's', '<C-w>'.s:set[0],        s:set[1].':cal lightline#update()<CR>')
+    call submode#enter_with('layout', 'n', 's', '<C-w><C-'.s:set[0].'>', s:set[1].':cal lightline#update()<CR>')
     call        submode#map('layout', 'n', 's', s:set[0],                s:set[1])
-    call submode#enter_with('layout', 'n', 's', '<C-w><C-'.s:set[0].'>', s:set[1])
     call        submode#map('layout', 'n', 's', '<C-'.s:set[0].'>',      s:set[1])
   endfor
 
@@ -182,7 +182,8 @@ nnoremap <silent> <Leader>gc :Gcommit<CR>
 nnoremap <silent> <Leader>gl :Glog<CR>
 nnoremap <silent> <leader>gb :Gblame<CR>
 nnoremap <silent> <leader>gb :NERDTreeClose<Bar>Gblame<CR>
-nnoremap <silent> <Leader>gv :Gitv<CR>
+" nnoremap <silent> <Leader>gv :Gitv<CR>
+nnoremap <silent> <Leader>gv :GV<CR>
 nnoremap <silent> <Leader>dp :diffput<CR>
 
 
@@ -275,8 +276,8 @@ cnoreabbrev qqq qa!
 cnoreabbrev q Q
 cnoreabbrev qq Q!
 cnoreabbrev m Make
-cnoreabbrev a A
-cnoreabbrev r R
+" cnoreabbrev a A
+" cnoreabbrev r R
 cabbrev Tab Tabularize
 
 
@@ -357,19 +358,6 @@ let g:endwise_no_mappings = 1
 "
 "
 nmap gx <Plug>(openbrowser-open)
-
-inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
-function! s:align()
-  let p = '^\s*|\s.*\s|\s*$'
-  if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
-    let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
-    let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
-    Tabularize/|/l1
-    normal! 0
-    call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
-  endif
-endfunction
-
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)

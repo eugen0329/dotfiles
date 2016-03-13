@@ -1,3 +1,6 @@
+if !has("autocmd")
+  finish
+endif
 
 if &t_Co > 2 || has("gui_running") | syntax on | endif
 
@@ -7,6 +10,8 @@ augroup FiletypeAutocommands
   au BufRead,BufNewFile *.cmake,CMakeLists.txt,*.cmake.in runtime! indent/cmake.vim
   au BufRead,BufNewFile *.cmake,CMakeLists.txt,*.cmake.in setf cmake
   au FileType cmake setlocal commentstring=#\ %s
+
+  au FileType git,GV setlocal nolist nowrap nonumber
 
   au FileType css,scss setlocal foldmethod=syntax
 
@@ -82,19 +87,6 @@ augroup InitAutocommands
   endif
 augroup END
 
-augroup ChangeCurosrShape
-  au!
-  if 0 && executable('gconftool-2')
-    au InsertEnter * call system("gconftool-2 -s -t int /apps/guake/style/cursor_shape 1")
-    au InsertLeave * call system("gconftool-2 -s -t int /apps/guake/style/cursor_shape 0")
-    au WinLeave,FocusLost * call system("gconftool-2 -s -t int /apps/guake/style/cursor_shape 0")
-    au VimEnter,WinEnter,BufWinEnter * if mode() == 'i' |
-          \ call system("gconftool-2 -s -t int /apps/guake/style/cursor_shape 1") |
-          \ else |
-          \ call system("gconftool-2 -s -t int /apps/guake/style/cursor_shape 0") |
-          \ endif
-  endif
-augroup END
 
 
 augroup JavascriptFold
@@ -114,3 +106,40 @@ augroup END
 
 " autocmd VimEnter *
 "         \   call insert(g:dispatch_handlers, 'x11', 0)
+
+if executable('gnome-terminal-cursor-shape.sh')
+  augroup ChangeCurosrShape
+    au!
+    au InsertEnter *
+        \ if v:insertmode == 'i' |
+        \   silent execute "!gnome-terminal-cursor-shape.sh ibeam" |
+        \ elseif v:insertmode == 'r' |
+        \   silent execute "!gnome-terminal-cursor-shape.sh underline" |
+        \ endif
+    au FocusGained *
+          \ if mode() ==# 'i' |
+          \   silent execute "!gnome-terminal-cursor-shape.sh ibeam" |
+          \ endif
+    au VimLeave,FocusLost,InsertLeave * silent execute "!gnome-terminal-cursor-shape.sh block"
+    if has('nvim')
+      au User IncSearchEnter silent execute "!gnome-terminal-cursor-shape.sh underline"
+      au User IncSearchLeave
+            \ if mode() ==# 'i' |
+            \   silent execute "!gnome-terminal-cursor-shape.sh underline" |
+            \ else |
+            \   silent execute "!gnome-terminal-cursor-shape.sh block" |
+            \ endif
+    endif
+    " if 0 && executable('gconftool-2')
+    "   au InsertEnter * call system("gconftool-2 -s -t int /apps/guake/style/cursor_shape 1")
+    "   au InsertLeave * call system("gconftool-2 -s -t int /apps/guake/style/cursor_shape 0")
+    "   au WinLeave,FocusLost * call system("gconftool-2 -s -t int /apps/guake/style/cursor_shape 0")
+    "   au VimEnter,WinEnter,BufWinEnter * if mode() == 'i' |
+    "         \ call system("gconftool-2 -s -t int /apps/guake/style/cursor_shape 1") |
+    "         \ else |
+    "         \ call system("gconftool-2 -s -t int /apps/guake/style/cursor_shape 0") |
+    "         \ endif
+    " endif
+  augroup END
+endif
+

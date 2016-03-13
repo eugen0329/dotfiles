@@ -22,7 +22,7 @@ set ignorecase
 set hls
 set incsearch
 
-set showcmd  " show command you entering at the bottom
+set noshowcmd  " show command you entering at the bottom
 scriptencoding utf-8
 set encoding=utf-8
 
