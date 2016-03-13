@@ -146,12 +146,12 @@ let g:syntastic_style_warning_symbol = ' ○'
 " let g:gitgutter_sign_removed = ' ➖'
 " let g:gitgutter_sign_modified = ' ∆'
 " let g:gitgutter_sign_modified_removed = ' ≁'
-let g:gitgutter_sign_added =    ' ˖'
-let g:gitgutter_sign_removed =  ' -'
 " let g:gitgutter_sign_modified = ' ∼'
 " let g:gitgutter_sign_modified_removed = ' ≁'
 " let g:gitgutter_sign_modified = ' ∆'
 " let g:gitgutter_sign_modified_removed = ' ∆'
+let g:gitgutter_sign_added =    ' ˖'
+let g:gitgutter_sign_removed =  ' -'
 let g:gitgutter_sign_modified = ' ▵'
 let g:gitgutter_sign_modified_removed = ' ▵'
 
@@ -333,3 +333,8 @@ let g:easytags_opts = ['--sort=yes', '--append=yes']
 
 
 let g:submode_timeoutlen = 2500
+
+let g:eregex_default_enable = 0
+let g:incsearch#magic = '\v'
+
+let g:gitgutter_eager = 1
