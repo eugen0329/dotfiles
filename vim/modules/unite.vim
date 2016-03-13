@@ -21,14 +21,14 @@ augroup END
 function! s:unite_settings()
   resize 10
   setlocal winfixwidth
-  nmap      <buffer> Q <plug>(unite_exit)
-  nmap      <buffer> <esc> <plug>(unite_exit)
-  imap      <buffer> <esc> <plug>(unite_exit)
-  imap      <buffer> <C-j>   <Plug>(unite_select_next_line)
-  imap      <buffer> <C-k>   <Plug>(unite_select_previous_line)
-  imap      <buffer> <C-c>   <Esc>
-  inoremap  <silent><buffer><expr> <C-x>     unite#do_action('split')
-  inoremap  <silent><buffer><expr> <C-f>     unite#do_action('preview')
+  nmap      <silent><buffer> Q <plug>(unite_exit)
+  nmap      <silent><buffer> <esc> <plug>(unite_exit)
+  imap      <silent><buffer> <esc> <plug>(unite_exit)
+  imap      <silent><buffer> <C-j>   <Plug>(unite_select_next_line)
+  imap      <silent><buffer> <C-k>   <Plug>(unite_select_previous_line)
+  imap      <silent><buffer> <C-c>   <Esc>
+  inoremap <silent><buffer><expr> <C-x>     unite#do_action('split')
+  inoremap <silent><buffer><expr> <C-f>     unite#do_action('preview')
 endfu
 
 function! s:UniteBuffFilter(candidates, context)
@@ -78,11 +78,12 @@ function! my_open.func(candidates)
       break
     endif
   endfor
-  exe (nr >= 0 ? (nr.'wincmd w') : (tabpagewinnr(tabpagenr(), '$').'wincmd w | split'))
+  exe (nr >= 0 ? nr.'wincmd w' : tabpagewinnr(tabpagenr(), '$').'wincmd w | split')
   call unite#take_action('open', a:candidates)
 endfu
+
 " call unite#custom#action('file,buffer,conf', 'open', my_open)
-call unite#custom#action('outline,common,openable,cdable,file_base,file_vimfiler_base,file,buffer,tab,directory,word,jump_list,command,window,completion,source,uri,guicmd', 'open', my_open)
+" call unite#custom#action('outline,common,openable,cdable,file_base,file_vimfiler_base,file,buffer,tab,directory,word,jump_list,command,window,completion,source,uri,guicmd', 'open', my_open)
 " common,openable,cdable,file_base,file_vimfiler_base,file,buffer,tab,directory,word,jump_list,command,window,completion,source,uri,guicmd
 " call unite#custom#action('common,openable', 'open', my_open)
 unlet my_open
