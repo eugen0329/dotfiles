@@ -73,6 +73,7 @@ alias rg="bundle exec rails generate"
 alias rgs="bundle exec rails generate scaffold"
 alias rgmg="bundle exec rails generate migration"
 alias rgmo="bundle exec rails generate model"
+alias rgma="bundle exec rails generate mailer"
 alias rgc="bundle exec rails generate controller"
 alias rc="bundle exec rails console"
 alias rr="bundle exec rake routes"
@@ -113,6 +114,10 @@ alias sshpubcpy='xclip -sel clip < ~/.ssh/id_rsa.pub'
 
 alias cpd='cap production deploy'
 alias cdd='cap development deploy'
+alias csd='cap staging deploy'
+alias capp='cap production'
+alias cpt='cap production -T'
+alias ct='cap -T'
 
 #-H "Content-Type:application/json" \
 #-X POST --data '{"account":{"email":"'"$email"'","screenName":"'"$screenName"'","type":"'"$theType"'","passwordSettings":{"password":"'"$password"'","passwordConfirm":"'"$password"'"}},"firstName":"'"$firstName"'","lastName":"'"$lastName"'","middleName":"'"$middleName"'","locale":"'"$locale"'","registrationSiteId":"'"$registrationSiteId"'","receiveEmail":"'"$receiveEmail"'","dateOfBirth":"'"$dob"'","mobileNumber":"'"$mobileNumber"'","gender":"'"$gender"'","fuelActivationDate":"'"$fuelActivationDate"'","postalCode":"'"$postalCode"'","country":"'"$country"'","city":"'"$city"'","state":"'"$state"'","bio":"'"$bio"'","jpFirstNameKana":"'"$jpFirstNameKana"'","jpLastNameKana":"'"$jpLastNameKana"'","height":"'"$height"'","weight":"'"$weight"'","distanceUnit":"MILES","weightUnit":"POUNDS","heightUnit":"FT/INCHES"}' "https://xxx:xxxxx@xxxx-www.xxxxx.com/xxxxx/xxxx/xxxx"
@@ -131,3 +136,10 @@ getjson() {
    });\
   "
 }
+
+
+
+
+# alias userlist='awk -F: \'$0=$1 " uid="$3\' /etc/passwd'
+
+
