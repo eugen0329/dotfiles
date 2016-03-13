@@ -1,14 +1,14 @@
+nnoremap <SID>  <SID>
+let s:sid = maparg('<SID>', 'n')
+
+let s:cr = '<C-r>='.s:sid.'close_popup()<CR>'
+
 call smartinput#clear_rules()
 call smartinput#define_default_rules()
 call smartinput#map_to_trigger('i', '<Space>', '<Space>', '<Space>')
 call smartinput#map_to_trigger('i', '<BS>', '<BS>', '<BS>')
-call smartinput#map_to_trigger('i', '<Bar>', '<Bar>', '<Bar>')
+call smartinput#map_to_trigger('i', '<Bar>', '<Bar>', '<Bar><Esc>:call'.s:sid.'align()<Bar>echo""<CR>a')
 call smartinput#map_to_trigger('i', ':', ':', ':')
-" <Esc>I<CR>end<Esc>kI
-
-nnoremap <SID>  <SID>
-let s:cr = '<C-r>='.maparg('<SID>', 'n').'close_popup()<CR>'
-
 
 let s:rules =
       \ {
@@ -120,6 +120,24 @@ fu! s:close_popup()
   endif
 endfu
 
+let s:ftcomments = {
+      \   'ruby': '#',
+      \   'vim':  '"'
+      \ }
+
+function! s:align()
+  let p1 = '^\s*' . (has_key(s:ftcomments, &ft) ? s:ftcomments[&ft].'*':'') .'\s*|'
+  let p =  p1.'\s*.*\s*|\s*$'
+  let curline = getline('.')
+  let curcol = col('.')
+  if exists(':Tabularize') && curline =~# p1 && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+    let column = strlen(substitute(curline[0:curcol],'[^|]','','g'))
+    let position = strlen(matchstr(curline[0:curcol],'.*|\s*\zs.*'))
+    Tabularize/|/l1
+    normal! 0
+    call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+  endif
+endfunction
 
 call smartinput#define_rule({
 \   'at': '<%\%#',

@@ -63,13 +63,21 @@ Plug 'ryanoasis/vim-webdevicons'
   " Plug 'derekwyatt/vim-fswitch'
 
   " ,unused
+  "
+  " Plug 'othree/eregex.vim'
+  " Plug 'tpope/vim-scriptease'
+  Plug 'tmux-plugins/vim-tmux-focus-events'
   " Plug 'mileszs/ack.vim'
+  Plug 'jszakmeister/vim-togglecursor'
   Plug 'thinca/vim-qfreplace'
   Plug 'nelstrom/vim-qargs'
 
 
 " #Git
 Plug     'tpope/vim-fugitive'
+" Plug 'gregsexton/gitv'
+Plug 'junegunn/gv.vim'
+Plug 'rhysd/conflict-marker.vim'
 Plug     'tpope/vim-git'
 Plug     'tommcdo/vim-fugitive-blame-ext'
 Plug     'airblade/vim-gitgutter'
@@ -200,6 +208,7 @@ Plug 'xolox/vim-notes', { 'depends': 'xolox/vim-misc' }
   Plug     'kchmck/vim-coffee-script'
   Plug     'cakebaker/scss-syntax.vim'
   Plug     'hail2u/vim-css3-syntax'
+  Plug 'tmatilai/vim-monit'
 
   Plug     'jelera/vim-javascript-syntax'
   Plug 'othree/javascript-libraries-syntax.vim'
@@ -215,6 +224,8 @@ else
 endif
 
 " #Operating plugins
+Plug 'jordwalke/VimCloser' " Make Vim close tabs the way every other editor does - by switching to the next tab to the left.
+Plug 'tpope/vim-obsession'
 Plug     'kana/vim-submode'
 Plug     'xolox/vim-misc'
 Plug     'Shougo/vimproc.vim', { 'do': 'make' }
