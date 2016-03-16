@@ -13,6 +13,10 @@ alias ts="tmuxinator start"
 alias tsw="tmux choose-session"
 alias ctg='ctags -R --exclude=.git --exclude=log -f tmp/tags *'
 
+alias j=jump
+alias b=bookmark
+alias bd=deletemark
+
 # utils
 alias ya="yaourt"
 alias sp="sudo pacman"
@@ -64,7 +68,11 @@ alias gl="git log --date-order --date=iso --graph --full-history --all --pretty=
 alias gst="git stash"
 alias gsta="git stash apply"
 alias gstl="git stash apply"
+
 # ruby
+# Install bundler silently if not installed yet
+alias bundle='$({bundler --version &>/dev/null || gem install bundler &>/dev/null} && echo bundler)'
+alias gemuninstall='gem list --no-version |xargs gem uninstall -ax'
 alias be="bundle exec"
 alias bi="bundle install"
 alias ra="bundle exec rails"
@@ -118,6 +126,9 @@ alias csd='cap staging deploy'
 alias capp='cap production'
 alias cpt='cap production -T'
 alias ct='cap -T'
+
+alias rbl='rbenv local'
+alias rbg='rbenv global'
 
 #-H "Content-Type:application/json" \
 #-X POST --data '{"account":{"email":"'"$email"'","screenName":"'"$screenName"'","type":"'"$theType"'","passwordSettings":{"password":"'"$password"'","passwordConfirm":"'"$password"'"}},"firstName":"'"$firstName"'","lastName":"'"$lastName"'","middleName":"'"$middleName"'","locale":"'"$locale"'","registrationSiteId":"'"$registrationSiteId"'","receiveEmail":"'"$receiveEmail"'","dateOfBirth":"'"$dob"'","mobileNumber":"'"$mobileNumber"'","gender":"'"$gender"'","fuelActivationDate":"'"$fuelActivationDate"'","postalCode":"'"$postalCode"'","country":"'"$country"'","city":"'"$city"'","state":"'"$state"'","bio":"'"$bio"'","jpFirstNameKana":"'"$jpFirstNameKana"'","jpLastNameKana":"'"$jpLastNameKana"'","height":"'"$height"'","weight":"'"$weight"'","distanceUnit":"MILES","weightUnit":"POUNDS","heightUnit":"FT/INCHES"}' "https://xxx:xxxxx@xxxx-www.xxxxx.com/xxxxx/xxxx/xxxx"
