@@ -41,7 +41,6 @@ let g:lightline = {
       \ 'lpadding': '%{" "}',
       \ },
       \ 'component_function': {
-      \   'filename':     s:SID.'fname',
       \   'filetype':     s:SID."filetype",
       \   'relpath':      s:SID."relpath",
       \   'abspath':      s:SID."abspath",
@@ -50,6 +49,7 @@ let g:lightline = {
       \   'modified':     s:SID.'modified',
       \   'mode':         s:SID.'mode',
       \   'percent':    s:SID.'percent',
+      \   'filename':     s:SID.'fname',
       \ },
       \ 'tab_component_function': {
       \   'fticon': s:SID.'fticon'
@@ -89,8 +89,11 @@ let g:lightline = {
 "
 "
 "
-
-let s:p =  g:lightline#colorscheme#{g:lightline.colorscheme}#palette
+try
+  let s:p =  g:lightline#colorscheme#{g:lightline.colorscheme}#palette
+catch
+  finish
+endtry
 let s:rbicon   = [['', '', 203]]
 let s:erricon  = [['', '', 1  ]]
 let s:warnicon = [['', '', 3  ]]
@@ -224,7 +227,12 @@ fu! s:readonly()
 endfu
 
 fu! s:fname(...)
-  let name = a:0 ? a:1 : expand('%:.')
+  " let name = a:0 ? a:1 : escape(expand('%:.'), '}')
+  " let name = a:0 ? a:1 : get(g:lightline, 'fname', '')
+  " TODO
+  " let name = a:0 ? a:1 : substitute(expand("%:."), '}', '❵', 'g')
+  let name = expand("%:.")
+  " let name = a:0 && name  ? substitute(a:1, '}', '❵', 'g') : 
   " since fnamemodify can't properly handle this case
   let name = substitute(name, '\%(fugitive://\)\?'.$PWD.'/', '', '')
   let name = substitute(name, $HOME, '~', '')
@@ -233,6 +241,7 @@ fu! s:fname(...)
   return fname == 'ControlP' ? get(g:lightline, 'ctrlp_item', '_') :
         \ fname == '__Tagbar__' ? get(g:lightline, 'fname', '') :
         \ fname =~ '__Gundo\|NERD_tree' ? '' :
+        \ exists('w:quickfix_title') ? w:quickfix_title :
         \ &ft == 'vimfiler' ? vimfiler#get_status_string() :
         \ &ft == 'unite' ? unite#get_status_string() :
         \ &ft == 'vimshell' ? vimshell#get_status_string() :
@@ -281,6 +290,7 @@ fu! s:mode()
         \ fname == '__Gundo__' ? 'Gundo' :
         \ fname == '__Gundo_Preview__' ? 'Gundo Preview' :
         \ fname =~ 'NERD_tree' ? 'NERDTree' :
+        \ &ft == 'qf' ? ' ' :
         \ &ft == 'unite' ? 'Unite' :
         \ &ft == 'vimfiler' ? 'VimFiler' :
         \ &ft == 'vimshell' ? 'VimShell' :

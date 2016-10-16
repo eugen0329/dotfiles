@@ -112,7 +112,14 @@ hi UrlBody cterm=underline ctermfg=39
 
 " colorscheme base16-ocean
 "~/.vim/colors/spacegray-cterm3.vim
-colorscheme spacegray-cterm3
+
+if has('nvim')
+  colorscheme spacegray-cterm3
+else
+  colorscheme Tomorrow-Night-Eighties
+end
+hi EndOfBuffer ctermbg=0  ctermfg=0
+hi ModeMsg     ctermbg=27 ctermfg=255
 
 
 au ColorScheme * exe 'hi GitGutterChangeDelete ctermfg=39' .
@@ -125,6 +132,5 @@ hi link uniteInputLine Normal
 hi link uniteCandidateInputKeyword Identifier
 hi link CtrlPMatch Identifier
 
-hi EndOfBuffer ctermbg=0 ctermfg=0
-hi ModeMsg ctermbg=27 ctermfg=255
 " let g:easytags_python_enabled = 1
+"

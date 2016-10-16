@@ -7,7 +7,8 @@ call smartinput#clear_rules()
 call smartinput#define_default_rules()
 call smartinput#map_to_trigger('i', '<Space>', '<Space>', '<Space>')
 call smartinput#map_to_trigger('i', '<BS>', '<BS>', '<BS>')
-call smartinput#map_to_trigger('i', '<Bar>', '<Bar>', '<Bar><Esc>:call'.s:sid.'align()<Bar>echo""<CR>a')
+" call smartinput#map_to_trigger('i', '<Bar>', '<Bar>', '<Bar>')
+" call smartinput#map_to_trigger('i', '<Bar>', '<Bar>', '<Bar><Esc>:call'.s:sid.'align()<Bar>echo""<CR>a')
 call smartinput#map_to_trigger('i', ':', ':', ':')
 
 let s:rules =

@@ -127,3 +127,6 @@ set conceallevel=1
 
 set notagbsearch
 set viewoptions=cursor
+
+
+set previewheight=20

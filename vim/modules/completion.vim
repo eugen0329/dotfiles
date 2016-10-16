@@ -14,10 +14,10 @@ let g:neocomplete#sources#omni#min_keyword_length = 3
 
 
 " let g:monster#completion#rcodetools#backend = "async_rct_complete"
-let g:neocomplete#sources#omni#input_patterns = {
-      \ 'ruby': '[^. \t].\w|\h\w*::',
-      \ 'css': '^\s\+\k\+\|\w\+[):;]\?\s\+\k*\|[@!]'
-      \}
+" let g:neocomplete#sources#omni#input_patterns = {
+"       \ 'css': '^\s\+\k\+\|\w\+[):;]\?\s\+\k*\|[@!]'
+"       \}
+      " \ 'ruby': '[^. \t].\w|\h\w*::',
 
 if !exists('g:neocomplete#force_omni_input_patterns')
   let g:neocomplete#force_omni_input_patterns = {}
