@@ -1,3 +1,8 @@
+case "$(uname -s)" in
+Darwin*)    OS_KIND=Mac;;
+*) OS_KIND=Ubuntu;;
+esac
+
 [[ "$(ps -o comm= $PPID)" =~ "emacs" ]] && return
 
 alias tmux="TERM=screen-256color tmux"
@@ -28,7 +33,7 @@ source $ZSH/oh-my-zsh.sh
 setopt menu_complete
 
 source ~/aliases
-source $HOME/.zshenv
+#source $HOME/.zshenv
 
 cd() { builtin cd "$@"; [[ -n $TMUX ]] && tmux refresh-client -S }
 exit() { builtin exit "$@"; [[ -n $TMUX ]] && tmux refresh-client -S }

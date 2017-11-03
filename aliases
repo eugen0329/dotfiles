@@ -60,7 +60,11 @@ function _n { reply=($(ls /home/eugen/Dropbox/Notes)) }
 compctl -K _n n
 
 alias sudo="sudo -E"
-alias ls='ls --color=auto'
+if [ $OS_KIND -eq "Mac" ]; then
+  alias ls='ls -G'
+else
+  alias ls='ls --color=auto'
+fi
 alias si="sudo apt-get install"
 alias sr="sudo apt-get remove"
 
