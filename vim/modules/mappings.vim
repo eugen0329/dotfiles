@@ -20,6 +20,16 @@ else
   call s:alias('[shftf3]', '<Esc>[1;2R')
 endif
 
+
+
+function! s:noregexp(pattern) abort
+  return '\V' . escape(a:pattern, '\')
+endfunction
+
+function! s:config() abort
+  return {'converters': [function('s:noregexp')]}
+endfunction
+
 let g:mapleader = ','
 let g:user_emmet_leader_key = '<Leader>'
 
@@ -58,7 +68,10 @@ cmap     <c-o> <Plug>(unite_cmdmatch_complete)
   let g:vim_search_pulse_disable_auto_mappings = 1
   nnoremap               <Leader>fl   :Unite -buffer-name=search\ line -start-insert line<CR>
   nnoremap               <C-f>l       :Unite -buffer-name=search\ line -start-insert line<CR>
-  map                    /            <Plug>(incsearch-forward)
+
+
+  noremap <silent><expr> / incsearch#go(<SID>config())
+  " map                    /            <Plug>(incsearch-forward)
   map                    ?            <Plug>(incsearch-backward)
   map                    g/           <Plug>(incsearch-stay)
   map     <silent>       #            <Plug>(incsearch-nohl0)<Plug>(asterisk-z#)<Plug>(anzu-echo-search-status)<Plug>Pulse
@@ -162,7 +175,7 @@ cmap     <c-o> <Plug>(unite_cmdmatch_complete)
   " nmap <silent> <C-h> <Plug>scrollwinLeft
 
 
-  let g:tmux_navigator_no_mappings = 1
+  " let g:tmux_navigator_no_mappings = 1
 
   " call submode#leave_with('layout', 'n', '', '<Esc>')
   " call submode#leave_with('layout', 'n', '', '<C-c>')
@@ -291,7 +304,7 @@ nnoremap <silent> <Leader>fs :OverCommandLine<CR>%s/
 vnoremap <silent> <Leader>fs :OverCommandLine<CR>s/
 
 nmap <Leader>mc  :Unite -start-insert menu:conf<CR>
-nmap <Leader>rrc :source $MYVIMRC<CR>
+" nmap <Leader>rrc :source $MYVIMRC<CR>
 cabbrev trw :call TrimWhiteSpace()
 nmap <silent> [shftf2] :call feedkeys(':Rename '.expand('%:t'), 'n')<CR>
 let g:vcoolor_map = '<F4>'
@@ -427,4 +440,10 @@ augroup TmpWorkaroundWithEsearch
   au VimEnter * unmap <Leader>ff
 augroup END
 
-nmap <leader>rr <Plug>(quickrun)
+" nmap <leader>rr <Plug>(quickrun)
+
+nmap <leader>yn :let @+ = substitute(expand("%"), '^'.getcwd().'/', '', '')<CR>
+nmap <leader>yN :let @+ = expand("%:t")<CR>
+
+
+nmap <leader>rr :call RunCurrentSpecFile()<CR>

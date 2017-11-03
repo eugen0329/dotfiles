@@ -69,7 +69,9 @@ set list
 set listchars=tab:▷ ,trail:·
 " set smartcase
 set smarttab
-set smartindent
+
+" stop remove my tabs before comments!11
+set nosmartindent
 
 set scrolloff=1
 
@@ -130,3 +132,8 @@ set viewoptions=cursor
 
 
 set previewheight=20
+
+set confirm
+
+
+" set termguicolors

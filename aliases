@@ -13,6 +13,12 @@ alias ts="tmuxinator start"
 alias tsw="tmux choose-session"
 alias ctg='ctags -R --exclude=.git --exclude=log -f tmp/tags *'
 
+
+alias fmo='xdg-open .'
+alias o='xdg-open'
+
+alias oc="xdg-open coverage/index.html"
+
 alias j=jump
 alias b=bookmark
 alias bd=deletemark
@@ -21,6 +27,38 @@ alias bd=deletemark
 alias ya="yaourt"
 alias sp="sudo pacman"
 alias ssc="sudo systemctl"
+alias ssv='sudo service'
+
+
+ssr(){
+  sudo service "$@" restart
+}
+sst() {
+  sudo service "$@" start
+}
+ssp() {
+  sudo service "$@" stop
+}
+ssct() {
+  sudo service "$@" configtest
+}
+# compdef -e 'words[1]=(git pull origin); service=git; (( CURRENT+=2 )); _git' ggl
+compdef -e 'words[1]=(service); service=service; (( CURRENT+=2 )); _services' ssr
+compdef -e 'words[1]=(service); service=service; (( CURRENT+=2 )); _services' sst
+compdef -e 'words[1]=(service); service=service; (( CURRENT+=2 )); _services' ssp
+compdef -e 'words[1]=(service); service=service; (( CURRENT+=2 )); _services' ssct
+
+alias ns='netstat -tulpn'
+
+n(){
+local fname
+# fname=$(find ~/Dropbox/Notes/ -iname "*$1*" | sort -n -s | head -n1)
+fname=$(find ~/Dropbox/Notes/ -iname "*$1*" | awk '{ print length($0) " " $0; }' | sort -n | awk '$0=$2' | head -n1)
+v $fname
+}
+function _n { reply=($(ls /home/eugen/Dropbox/Notes)) }
+compctl -K _n n
+
 alias sudo="sudo -E"
 alias ls='ls --color=auto'
 alias si="sudo apt-get install"
@@ -40,15 +78,27 @@ alias -g G='|& egrep -i --color '
 # git
 alias gco='git checkout'
 alias gcom='git checkout master'
+unalias gga
+gga() {
+  git grep $@ $(git rev-list --all)
+}
+
+
+
+alias gbranches='git branch --sort=-committerdate'
+alias gcp='git cherry-pick'
+alias gcpc='git cherry-pick --continue'
 alias ga='git add'
 alias ga='git add -A'
 alias gc='git commit'
 alias gca='git commit --amend'
 alias agc='git commit --amend'
+alias gpfff='git push --force'
 alias gp='git push'
 alias gpo='git push origin'
 alias gpom='git push origin master'
 alias gpuom='git push -u origin master'
+alias gpuo='git push -u origin'
 alias gs='git status -s'
 alias gcl='git clone'
 alias gpl='git pull --rebase'
@@ -56,45 +106,128 @@ alias -g om='origin master'
 alias gra='git rebase --abort'
 alias grc='git rebase --continue'
 alias gri='git rebase -i'
+
+unalias grb
+grb() {
+  git rebase -i "@~$1"
+}
 alias gcm='git commit -m'
 alias agcm='git commit --amend -m'
 alias gcmi='git commit -m "Initial commit"'
+alias gcmt='git commit -m "Typo fix"'
 alias gcmm='git commit -m "Minor fix"'
+alias gcmc='git commit -m "Minor css fix"'
 alias gcmms='git commit -m "Minor fixes"'
+alias gcmmr='git commit -m "Minor refactoring"'
+alias gcmd='git commit -m "Remove debugger entry"'
 
 
 alias gl="git log --date-order --date=iso --graph --full-history --all --pretty=format:'%x08%x09%C(red)%h %C(cyan)%ad%x08%x08%x08%x08%x08%x08%x08%x08%x08%x08%x08%x08%x08%x08%x08 %C(bold blue)%<(10)%aN%C(reset) %C(reset)%<(70,trunc)%s%C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset) '"
 
 alias gst="git stash"
 alias gsta="git stash apply"
-alias gstl="git stash apply"
+alias gstl="git stash list"
 
 # ruby
 # Install bundler silently if not installed yet
-alias bundle='$({bundler --version &>/dev/null || gem install bundler &>/dev/null} && echo bundler)'
+# alias bundle='$({bundler --version &>/dev/null || gem install bundler &>/dev/null} && echo bundle)'
 alias gemuninstall='gem list --no-version |xargs gem uninstall -ax'
 alias be="bundle exec"
 alias bi="bundle install"
 alias ra="bundle exec rails"
 alias rs="bundle exec rails server"
-alias rg="bundle exec rails generate"
-alias rgs="bundle exec rails generate scaffold"
+
+alias fs='foreman start'
+alias fsd='foreman start -f Procfile.dev'
+
+alias rgp='rails generate paperclip'
+# alias rg="bundle exec rails generate"
+alias rgi="bundle exec rails generate i18n"
+alias rgsc="bundle exec rails generate scaffold"
 alias rgmg="bundle exec rails generate migration"
 alias rgmo="bundle exec rails generate model"
 alias rgma="bundle exec rails generate mailer"
-alias rgc="bundle exec rails generate controller"
+alias rgco="bundle exec rails generate controller"
+alias rgo="bundle exec rails generate observer"
+
+alias rgaa='bundle exec rails g active_admin:resource'
+
+alias drgp='bundle exec rails d paperclip'
+alias drg="bundle exec rails d"
+alias drgsc="bundle exec rails d scaffold"
+alias drgmg="bundle exec rails d migration"
+alias drgmo="bundle exec rails d model"
+alias drgma="bundle exec rails d mailer"
+alias drgco="bundle exec rails d controller"
+
+
 alias rc="bundle exec rails console"
-alias rr="bundle exec rake routes"
+alias rct="RAILS_ENV=test bundle exec rails console"
+
+alias rvmwritedots='rvm --create --ruby-version $RUBY_VERSION@$(rvm gemset name)'
+
+rp() {
+  local task_args
+  local concurrency
+
+  concurrency=3
+  task_args=($concurrency ${*[*]})
+  task_args=$(IFS=','; echo "${task_args[*]}")
+
+  DEFER_GC=0 PARALLEL_TEST_FIRST_IS_1=true RAILS_ENV=test rake "parallel:spec[$task_args]"
+}
+rpp() {
+  local task_args
+  local concurrency
+
+  concurrency=3
+  task_args=($concurrency ${*[*]})
+  task_args=$(IFS=','; echo "${task_args[*]}")
+
+  PARALLEL_TEST_FIRST_IS_1=true RAILS_ENV=test spring rake  "parallel:drop[$concurrency]" "parallel:create[$concurrency]" "parallel:prepare[$concurrency]"
+}
+
+rxp() {
+  local task_args
+  local concurrency
+
+  concurrency=3
+  task_args=($concurrency ${*[*]})
+  task_args=$(IFS=','; echo "${task_args[*]}")
+
+
+  # DEFER_GC=0 PARALLEL_TEST_FIRST_IS_1=true RAILS_ENV=test xvfb-run --server-args='-screen 0, 1024x768x24' -a spring rake "parallel:load_schema[$concurrency]" "parallel:spec[$task_args]"
+
+  DEFER_GC=0 PARALLEL_TEST_FIRST_IS_1=true RAILS_ENV=test xvfb-run --server-args='-screen 0, 1024x768x24' -a spring rake "parallel:load_schema[$concurrency]" "parallel:spec[3, spec/acceptance/registrations_spec.rb]"
+}
+
+
+alias rx="xvfb-run --server-args='-screen 0, 1024x768x24' -a spring rspec"
+alias rxf="xvfb-run --server-args='-screen 0, 1024x768x24' -a spring rspec --only-failures"
+alias frx="xvfb-run --server-args='-screen 0, 1024x768x24' -a spring rspec --only-failures"
+alias rf="rspec --only-failures"
+alias frr="rspec --only-failures"
+alias rr="SKIP=1 rspec"
+
+
+alias rrm="bundle exec rspec spec/models/"
+alias rra="bundle exec rspec spec/api/"
+alias rrc="bundle exec rspec spec/controllers/"
+alias rrq="bundle exec rspec spec/queries/"
+alias rrd="bundle exec rspec . --format documentation"
 alias rdm="bundle exec rake db:migrate"
+alias rds="bundle exec rake db:seed"
 alias rdc="bundle exec rake db:create"
 alias rdr="bundle exec rake db:rollback"
 alias rt="bundle exec rake -T"
 alias rn="bundle exec rails new"
 
-alias rgrm='bundle exec rails g rspec:model'
-alias rgrc='bundle exec rails g rspec:controller'
+alias rg='rails g'
+
+alias rgrmo='bundle exec rails g rspec:model'
+alias rgrco='bundle exec rails g rspec:controller'
 alias rgrh='bundle exec rails g rspec:helper'
-alias rgrv='bundle exec rails g rspec:helper'
+alias rgf='bundle exec rails g factory_girl:model'
 
 alias zr="zeus rake"
 alias zrr="zeus rake routes"
@@ -114,26 +247,69 @@ alias evc="v ~/.vim/modules/ncompletion.vim"
 alias ez="v ~/.zshrc"
 alias ep="v ~/.pryrc"
 alias ea="v ~/aliases"
+alias esc="v ~/.ssh/config"
+
+alias cw='compass watch'
+
+#Vagrant
+alias vs='vagrant ssh'
+alias vu='vagrant up'
+alias vh='vagrant halt'
+alias vl='vagrant box list'
+alias vdest='vagrant destroy --force'
+alias vre='vagrant reload'
+alias vp='vagrant provision'
+alias vr='vagrant up && vagrant ssh'   # vagrant run = up + ssh
+alias vrr='vagrant reload && vagrant ssh'  # vagrant rerun = reload + ssh
+alias vubuntu='vagrant init ubuntu/trusty64'
+
+
+#docker
+alias dps='docker ps '
+alias dr='docker run '
+alias dc='docker-compose'
+alias dcu='docker-compose up'
+alias dcr='docker-compose run'
+alias dcb='docker-compose build'
+
+alias docker_containers_stop_all='docker stop $(docker ps -a -q)'
+
 
 # list of the builtin compiler macros for gcc, llvm-gcc, and clang using
 alias clangdefines='echo | clang -dM -E -'
 
-alias sshpubcpy='xclip -sel clip < ~/.ssh/id_rsa.pub'
+# alias sshpubcpy='xclip -sel clip < ~/.ssh/id_rsa.pub'
+alias sshpubcpy='xsel --clipboard < ~/.ssh/id_rsa.pub'
 
+alias cqd='cap qa deploy'
 alias cpd='cap production deploy'
 alias cdd='cap development deploy'
 alias csd='cap staging deploy'
+alias csbd='cap sandbox deploy'
 alias capp='cap production'
+alias caps='cap staging'
+alias cappc='cap production rails:console'
+alias cappur='cap production unicorn:restart'
+alias capd='cap development'
+alias cpur='cap production unicorn:restart'
 alias cpt='cap production -T'
 alias ct='cap -T'
 
 alias rbl='rbenv local'
 alias rbg='rbenv global'
 
+# alias sigkill='kill -9'
+alias killk='kill -KILL'
+function psg() { ps aux | egrep -i "$1" | grep -v grep | grep --color "$1" }
+
+
+function show-source() { cat "$(which $1)" }
+
 #-H "Content-Type:application/json" \
 #-X POST --data '{"account":{"email":"'"$email"'","screenName":"'"$screenName"'","type":"'"$theType"'","passwordSettings":{"password":"'"$password"'","passwordConfirm":"'"$password"'"}},"firstName":"'"$firstName"'","lastName":"'"$lastName"'","middleName":"'"$middleName"'","locale":"'"$locale"'","registrationSiteId":"'"$registrationSiteId"'","receiveEmail":"'"$receiveEmail"'","dateOfBirth":"'"$dob"'","mobileNumber":"'"$mobileNumber"'","gender":"'"$gender"'","fuelActivationDate":"'"$fuelActivationDate"'","postalCode":"'"$postalCode"'","country":"'"$country"'","city":"'"$city"'","state":"'"$state"'","bio":"'"$bio"'","jpFirstNameKana":"'"$jpFirstNameKana"'","jpLastNameKana":"'"$jpLastNameKana"'","height":"'"$height"'","weight":"'"$weight"'","distanceUnit":"MILES","weightUnit":"POUNDS","heightUnit":"FT/INCHES"}' "https://xxx:xxxxx@xxxx-www.xxxxx.com/xxxxx/xxxx/xxxx"
+
 getjson() {
-# -s: silent mode
+  # -s: silent mode
   local responce=$(curl -s -H "Accept: application/json" $@)
   echo $responce | node -e \
   "\
@@ -149,8 +325,141 @@ getjson() {
 }
 
 
+postjson() {
+  curl \
+    -H "Accept: application/json" \
+    -H "Content-Type:application/json" \
+    -X POST --data $2 \
+    -i $1
+}
+
 
 
 # alias userlist='awk -F: \'$0=$1 " uid="$3\' /etc/passwd'
 
+alias l=ls
+alias la='ls -lah'
 
+
+
+alias rcp='bundle exec rails c production'
+alias rcs='bundle exec rails c staging'
+alias rcd='bundle exec rails c development'
+alias be='bundle exec'
+alias ber='bundle exec rake'
+alias ssc="sudo systemctl"
+alias ssv='sudo service'
+alias la='ls -lah'
+
+
+alias rgit='bundle exec rails g integration_test'
+# alias rp='pry-remote'
+
+rspec_setup() {
+  cat <<EOF >> Gemfile
+gem "rspec-rails", :group => [:test, :development]
+group :test do
+  gem "factory_girl_rails"
+  gem "capybara"
+  gem "guard-rspec"
+end
+EOF
+bundle exec rails g rspec:install
+
+mkdir spec/support spec/models spec/routing
+bundle exec guard init rspec
+}
+
+# slog() {
+#   local proj
+#   local stage
+
+#   if [ -n "$1" ]; then
+#     stage=$1
+#   else
+#     stage="production"
+#   fi
+
+#   if [ -n "$2" ]; then
+#     proj=$2
+#   else
+#     proj=$(basename $(pwd))
+#   fi
+
+#   ssh $proj "tail -f ~/$proj/$stage/current/log/*.log"
+# }
+
+# sconsole() {
+#   local proj
+#   local stage
+#   local open_console
+#   local ruby_str
+#   local rails_env
+#   local remote_rvm
+#   local rails_c
+
+#   if [ -n "$1" ]; then
+#     stage=$1
+#   else
+#     stage="production"
+#   fi
+
+#   if [ -n "$2" ]; then
+#     proj=$2
+#   else
+#     proj=$(basename $(pwd))
+#   fi
+
+#   rails_env="RAILS_ENV=$stage"
+#   rails_c="bundle exec rails c $stage"
+#   remote_rvm="~/.rvm/bin/rvm"
+#   ruby_str="$(cat .ruby-version)@$(cat .ruby-gemset)"
+#   open_console="$rails_env $remote_rvm $ruby_str do $rails_c"
+
+#   ssh  $proj -t "cd  ~/$proj/$stage/current/ && $open_console"
+# }
+
+
+custudies() {
+  curl -X GET -H "X-Authentication-Token: MAsXT1ev4zDduy26hGQ2" localhost:3000/api/v1/studies/$1
+}
+
+custudquest() {
+curl -X GET -H "X-Authentication-Token: MAsXT1ev4zDduy26hGQ2" localhost:3000/api/v1/studies/1/questions --data 'kind=study_kind'
+}
+cusessoincreate() {
+  curl -X POST --data 'email=admin@example.com&password=qwerasdf' localhost:3000/api/v1/sessions
+}
+
+__source_tmp_scripts_sh() {
+  which __$1 &>/dev/null || [ -f ./config/environment.rb ] && [ -d ./app ] && [ -f ./tmp/scripts.sh ] && source ./tmp/scripts.sh
+}
+
+# sconsole() {
+#   __source_tmp_scripts_sh sconsole
+#   __sconsole $@
+# }
+
+# slog() {
+#   __source_tmp_scripts_sh slog
+#   __slog $@
+# }
+
+# cd() {
+#   \cd $@
+#   [ -f ./config/environment.rb ] && [ -d ./app ] && [ -f ./tmp/scripts.sh ] && source ./tmp/scripts.sh
+# }
+#
+alias ss="spring stop"
+
+video2audio() {
+  ffmpeg -i "$1" -b:a 192K -vn "${1%.*}.mp3"
+}
+
+
+video2gif() {
+  # --ss - start time
+    # ffmpeg -v warning -ss 0  -i "$1" -vf scale=600:-1 -gifflags -transdiff -y "${1%.*}.gif"
+    ffmpeg -v warning -ss 0  -i "$1"  -gifflags -transdiff -y "${1%.*}.gif"
+ # ffmpeg -v warning -ss 45 -t 2 -i big_buck_bunny_1080p_h264.mov -vf scale=300:-1 -gifflags +transdiff -y bbb-trans.gif
+}
