@@ -60,7 +60,7 @@ function _n { reply=($(ls /home/eugen/Dropbox/Notes)) }
 compctl -K _n n
 
 alias sudo="sudo -E"
-if [ $OS_KIND = "Mac" ]; then
+if [[ $OS_KIND == "Mac" ]]; then
   alias ls='ls -G'
 else
   alias ls='ls --color=auto'
