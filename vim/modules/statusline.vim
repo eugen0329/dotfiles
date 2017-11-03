@@ -9,7 +9,7 @@ if has('nvim')
     let $GEM_HOME = a:data[0]
   endfu
   let $GEM_HOME = ''
-  call jobstart('env -i PATH="'.$PATH.'" ruby -rubygems -e "print Gem.dir"', {'on_stdout': function('s:read_gemhome')})
+  " call jobstart('env -i PATH="'.$PATH.'" ruby -rubygems -e "print Gem.dir"', {'on_stdout': function('s:read_gemhome')})
 else
   let $GEM_HOME = system('env -i PATH="'.$PATH.'" ruby -rubygems -e "print Gem.dir"')
 endif
