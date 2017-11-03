@@ -9,7 +9,7 @@ call plug#begin('~/.vim/bundle')
 
 " #UI
 Plug 'itchyny/lightline.vim'
-Plug 'vim-hud'
+Plug 'eugen0329/vim-hud'
 " Plug 'vim-airline/vim-airline'
 " Plug 'powerline/powerline'
 " Plug 'ryanoasis/vim-webdevicons'
@@ -32,7 +32,7 @@ Plug 'vim-hud'
   " Plug 'tsukkee/unite-tag'
   " Plug 'rhysd/unite-ruby-require.vim'
   " Plug 'xolox/vim-easytags'
-  Plug 'ruby-matchit'
+  Plug 'vim-scripts/ruby-matchit'
   Plug 'tmhedberg/matchit'
 
   if !has('nvim')
@@ -142,12 +142,12 @@ Plug 'MattesGroeger/vim-bookmarks'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'mattn/emmet-vim' ", {'for': ['html', 'eruby', 'slim', 'css', 'sass', 'scss']}
-Plug 'vim-rails-snips'
+" Plug 'vim-rails-snips'
 
 " #Cmdline
 Plug     'osyo-manga/vim-over'
 Plug     'osyo-manga/vital-over'
-Plug     'cmdline-completion'
+Plug     'vim-scripts/cmdline-completion'
 " Plug     'thinca/vim-prettyprint'
 " Plug 'majkinetor/unite-cmdmatch', { 'depends':  'Shougo/unite.vim', 'mappings' : [['c', '<Plug>(unite_cmdmatch_complete)']] }
 " Plug 'junegunn/vim-pseudocl'
@@ -198,7 +198,7 @@ Plug 'rhysd/vim-clang-format', {'on': 'ClangFormat' }
 " #Note taking
 " Plug 'xolox/vim-notes', { 'depends': 'xolox/vim-misc' }
 Plug 'jceb/vim-orgmode'
-Plug 'utl.vim'
+Plug 'vim-scripts/utl.vim'
 
 
 " #Languages support
@@ -342,7 +342,7 @@ Plug     'suan/vim-instant-markdown'  " Markdown live preview
 Plug 'flazz/vim-colorschemes'
 Plug 'wesgibbs/vim-irblack'
 " Plug 'altercation/vim-colors-solarized'
-Plug 'xterm-color-table.vim'
+Plug 'vim-scripts/xterm-color-table.vim'
 Plug 'kristijanhusak/vim-hybrid-material'
 Plug 'jdkanani/vim-material-theme'
 " Plug 'jordwalke/VimCleanColors'
@@ -398,7 +398,7 @@ Plug 'vim-scripts/dbext.vim'
 
 " Plug 'metakirby5/codi.vim'
 
-Plug     'vim-links'
+Plug     'vim-scripts/vim-links'
 " Plug 'thinca/vim-themis'         " Project-wide search
 call plug#end()
 filetype plugin indent on
