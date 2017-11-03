@@ -114,7 +114,11 @@ hi UrlBody cterm=underline ctermfg=39
 "~/.vim/colors/spacegray-cterm3.vim
 
 if has('nvim')
-  colorscheme spacegray-cterm3
+  if has('unix')
+    colorscheme spacegray
+  else
+    colorscheme spacegray-cterm3
+  endif
 else
   colorscheme Tomorrow-Night-Eighties
 end
