@@ -467,3 +467,5 @@ video2gif() {
     ffmpeg -v warning -ss 0  -i "$1"  -gifflags -transdiff -y "${1%.*}.gif"
  # ffmpeg -v warning -ss 45 -t 2 -i big_buck_bunny_1080p_h264.mov -vf scale=300:-1 -gifflags +transdiff -y bbb-trans.gif
 }
+
+alias et='v ~/.tmux.conf'
