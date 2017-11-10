@@ -66,6 +66,7 @@ augroup FiletypeAutocommands
   au FileType notes setlocal foldmethod=indent
   au filetype qf nnoremap <buffer>o <CR>
   " au filetype ruby au BufWritePost <buffer> call GenerateCtags()
+  " au bufenter * call SetCtags()
 
   " au BufReadPre ControlP  cclose | lclose
   " au BufReadPre,BufEnter ControlP  let g:a = 1
@@ -75,7 +76,7 @@ augroup FiletypeAutocommands
   " au BufLeave * let g:a = expand('%')
 
   " autocmd! BufWritePost * Neomake
-  autocmd BufWritePost * call atags#generate()
+  " autocmd BufWritePost * GenCtags
 augroup END
 
 augroup UrlBodyHighlight

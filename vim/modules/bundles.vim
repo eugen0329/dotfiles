@@ -401,7 +401,9 @@ Plug 'vim-scripts/dbext.vim'
 " Plug 'metakirby5/codi.vim'
 
 Plug     'vim-scripts/vim-links'
-Plug 'fntlnz/atags.vim'
+Plug 'prabirshrestha/async.vim'
+" Plug 'gorkunov/smartgf.vim'
+" Plug 'jsfaint/gen_tags.vim'
 " Plug 'thinca/vim-themis'         " Project-wide search
 call plug#end()
 filetype plugin indent on

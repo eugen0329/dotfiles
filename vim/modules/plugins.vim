@@ -589,7 +589,37 @@ let g:table_mode_realign_map = '<Leader>Tr'
 "     \"rm tags.tmp"
 "     \]
 
-let g:atags_build_commands_list = ["ripper-tags -R --exclude=vendor"]
+let g:filetype_tag_generate_commands = {
+  \ 'ruby': "ripper-tags -R --exclude=vendor",
+  \}
+" let g:atags_build_commands_list = ["ripper-tags -R --exclude=vendor"]
+
+function! s:err_handler(job_id, data, event_type)
+  let msg = "? An error occurred generating ctags: " . join(a:data)
+  echom msg
+  let g:ctags_in_progress = 0
+endfunction
+
+function! s:exit_handler(job_id, data, event_type)
+  echom "tags generated"
+  let g:ctags_in_progress = 0
+endfunction
+
+let g:ctags_in_progress = 0
+fu! RegenerateTags() abort
+  if g:ctags_in_progress
+    return
+  endif
+  let g:ctags_in_progress = 1
+  let argv = get(g:filetype_tag_generate_commands, &filetype, 'ctags .')
+  call async#job#start(argv, {
+        \ 'on_stderr': function('s:err_handler'),
+        \ 'on_exit': function('s:exit_handler'),
+        \ })
+endfu
+
+autocmd BufWritePost * call RegenerateTags()
+
 " 
 if executable('ripper-tags')
   let g:tagbar_type_ruby = {
