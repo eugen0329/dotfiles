@@ -115,7 +115,9 @@ hi UrlBody cterm=underline ctermfg=39
 
 if has('nvim')
   if has('macunix')
-    colorscheme spacegray
+    " colorscheme spacegray
+    colorscheme onedark
+    hi EndOfBuffer    ctermfg=0 ctermbg=235
   else
     colorscheme spacegray-cterm3
   endif
@@ -138,12 +140,19 @@ hi link CtrlPMatch Identifier
 
 " let g:easytags_python_enabled = 1
 
+if has('macunix') && colors_name == 'onedark'
+
+  hi EndOfBuffer    ctermfg=0 ctermbg=235
+  au ColorScheme * exe 'hi EndOfBuffer    ctermfg=0 ctermbg=235'
+endif
 augroup collumnLimit
   autocmd!
   " au FileType vim,ruby,c,cpp,eruby,html  exe 'setlocal colorcolumn='.colLim
   " au VimEnter * hi ColorColumn cterm=bold ctermfg=161 ctermbg=none
   " au VimEnter * hi ColorColumn ctermbg=5
   au VimEnter * hi ColorColumn ctermbg=238
+
+  " colorscheme spacegray
   " au VimEnter * hi ColorColumn ctermbg=160
   " au VimEnter * hi ColorColumn cterm=bold ctermbg=8
 augroup END

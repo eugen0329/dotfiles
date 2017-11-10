@@ -230,7 +230,12 @@ let g:UltiSnipsEditSplit="horizontal"
 " E - jump to the window
 let g:ctrlp_switch_buffer = 'Et'
 let g:ctrlp_use_caching = 0
-let g:ctrlp_user_command = 'ag %s -U -l --nocolor -g ""'
+" let g:ctrlp_user_command = 'ag %s -U -l --nocolor -g ""'
+
+let g:ctrlp_user_command =
+    \ 'ag %s --files-with-matches -g "" --ignore "\.git$\|\.hg$\|\.svn$"'
+
+
 " let g:ctrlp_root_markers = ['Gemfile', 'Makefile', '.git', '.meteor', 'Rakefile', 'package.json', 'bower.json', 'main.c', 'main.cpp']
 let g:ctrlp_root_markers = ['Gemfile', 'Makefile', '.git', '.meteor', 'Rakefile', 'main.c', 'main.cpp']
 " let g:ctrlp_root_markers = ['Gemfile', 'Makefile', '.git', '.meteor', 'Rakefile', 'package.json', 'bower.json', 'index.html', 'main.c', 'main.cpp']
@@ -577,3 +582,27 @@ let  g:esearch#adapter#git#options = '-C 3'
 " tablemode
 let g:table_mode_map_prefix = '<Leader>T'
 let g:table_mode_realign_map = '<Leader>Tr'
+
+" let g:atags_build_commands_list = [
+"     \"ctags -R -f tags.tmp",
+"     \"awk 'length($0) < 400' tags.tmp > tmp/tags",
+"     \"rm tags.tmp"
+"     \]
+
+let g:atags_build_commands_list = ["ripper-tags -R --exclude=vendor"]
+" 
+if executable('ripper-tags')
+  let g:tagbar_type_ruby = {
+      \ 'kinds'      : ['m:modules',
+                      \ 'c:classes',
+                      \ 'C:constants',
+                      \ 'F:singleton methods',
+                      \ 'f:methods',
+                      \ 'a:aliases'],
+      \ 'kind2scope' : { 'c' : 'class',
+                       \ 'm' : 'class' },
+      \ 'scope2kind' : { 'class' : 'c' },
+      \ 'ctagsbin'   : 'ripper-tags',
+      \ 'ctagsargs'  : ['-f', '-']
+      \ }
+endif

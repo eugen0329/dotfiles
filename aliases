@@ -137,7 +137,9 @@ alias gstl="git stash list"
 # alias bundle='$({bundler --version &>/dev/null || gem install bundler &>/dev/null} && echo bundle)'
 alias gemuninstall='gem list --no-version |xargs gem uninstall -ax'
 alias be="bundle exec"
-alias bi="bundle install"
+# install gems and regenerate ctags
+alias bi="bundle install && gem install gem-ripper-tags ripper-tags && gem ripper_tags"
+
 alias ra="bundle exec rails"
 alias rs="bundle exec rails server"
 

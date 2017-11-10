@@ -332,6 +332,8 @@ Plug     'suan/vim-instant-markdown'  " Markdown live preview
 " Plug 'kassio/neoterm'
 
 " #Colors
+Plug 'joshdick/onedark.vim'
+
 " Plug 'KabbAmine/yowish.vim'
 " Plug     'jonathanfilip/vim-lucius'
 " Plug 'voronianski/oceanic-next-color-scheme'
@@ -399,6 +401,7 @@ Plug 'vim-scripts/dbext.vim'
 " Plug 'metakirby5/codi.vim'
 
 Plug     'vim-scripts/vim-links'
+Plug 'fntlnz/atags.vim'
 " Plug 'thinca/vim-themis'         " Project-wide search
 call plug#end()
 filetype plugin indent on

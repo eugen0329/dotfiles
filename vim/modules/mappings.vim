@@ -447,3 +447,27 @@ nmap <leader>yN :let @+ = expand("%:t")<CR>
 
 
 nmap <leader>rr :call RunCurrentSpecFile()<CR>
+
+fu! TryTag() abort
+  try
+    exec "tag " . expand('<cword>')
+  catch /E433:/ " no tags file
+    unsilent echo "Can't find file or tag"
+  catch /E426:/ " no tag  found
+    unsilent echo "Can't find file or tag"
+  endtry
+endfu
+
+fu! SmartGF() abort
+  if exists('rails#cfile')
+    try
+      exec 'find ' . rails#cfile
+    catch /E345:/ " E345: Can't find file in path
+      TryTag()
+    endtry
+  else
+    call TryTag()
+  endif
+endfu
+
+nmap <silent> gf :call SmartGF()<CR>
