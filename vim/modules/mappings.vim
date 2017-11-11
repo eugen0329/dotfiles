@@ -448,7 +448,7 @@ nmap <leader>yN :let @+ = expand("%:t")<CR>
 
 nmap <leader>rr :call RunCurrentSpecFile()<CR>
 
-fu! TryTag() abort
+fu! TryCTag() abort
   try
     exec "tag " . expand('<cword>')
   catch /E433:/ " no tags file
@@ -458,16 +458,26 @@ fu! TryTag() abort
   endtry
 endfu
 
-fu! SmartGF() abort
-  if exists('rails#cfile')
-    try
-      exec 'find ' . rails#cfile
-    catch /E345:/ " E345: Can't find file in path
-      TryTag()
-    endtry
-  else
-    call TryTag()
+fu! TryRailsCFile() abort
+  if !exists('rails#cfile')
+    return 0
   endif
+
+  try
+    exec 'find ' . rails#cfile
+    return 1
+  catch /E345:/ " E345: Can't find file in path
+    return 0
+  endtry
 endfu
+
+fu! SmartGF() abort
+  for strategy in g:smartgf_strategies
+    if strategy()
+      return
+    endif
+  endfor
+endfu
+let g:smartgf_strategies = [function('TryRailsCFile'), function('TryCTag')]
 
 nmap <silent> gf :call SmartGF()<CR>
