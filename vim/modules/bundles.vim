@@ -213,6 +213,7 @@ Plug 'vim-scripts/utl.vim'
   else
     Plug 'Shougo/neocomplete.vim'
   endif
+  Plug 'jalvesaq/Nvim-R'
   Plug 'Shougo/neoinclude.vim'
   Plug 'Shougo/neco-syntax'
   Plug 'ujihisa/neco-look'
