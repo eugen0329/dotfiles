@@ -22,12 +22,12 @@ endif
 
 
 
-function! s:noregexp(pattern) abort
+function! s:incsearch_noregex_converter(pattern) abort
   return '\V' . escape(a:pattern, '\')
 endfunction
 
-function! s:config() abort
-  return {'converters': [function('s:noregexp')]}
+function! s:incsearch_config() abort
+  return {'converters': [function('s:incsearch_noregex_converter')]}
 endfunction
 
 let g:mapleader = ','
@@ -70,7 +70,7 @@ cmap     <c-o> <Plug>(unite_cmdmatch_complete)
   nnoremap               <C-f>l       :Unite -buffer-name=search\ line -start-insert line<CR>
 
 
-  noremap <silent><expr> / incsearch#go(<SID>config())
+  noremap <silent><expr> / incsearch#go(<SID>incsearch_config())
   " map                    /            <Plug>(incsearch-forward)
   map                    ?            <Plug>(incsearch-backward)
   map                    g/           <Plug>(incsearch-stay)
@@ -459,25 +459,35 @@ fu! TryCTag() abort
 endfu
 
 fu! TryRailsCFile() abort
-  if !exists('rails#cfile')
+  if !exists('*rails#cfile')
     return 0
   endif
 
   try
-    exec 'find ' . rails#cfile
+    exec 'find ' . rails#cfile()
     return 1
   catch /E345:/ " E345: Can't find file in path
     return 0
   endtry
 endfu
 
+fu! TryPlainGF() abort
+  try
+    norm! gf
+    return 1
+  catch /E447:/ " Can't find file "" in path
+    return 0
+  endtry
+endfu
+
 fu! SmartGF() abort
-  for strategy in g:smartgf_strategies
-    if strategy()
+  for Strategy in g:smartgf_strategies
+    if Strategy()
       return
     endif
   endfor
 endfu
-let g:smartgf_strategies = [function('TryRailsCFile'), function('TryCTag')]
+let g:smartgf_strategies = [function('TryRailsCFile'), function('TryCTag'), function('TryPlainGF')]
 
 nmap <silent> gf :call SmartGF()<CR>
+" nmap gf :call SmartGF()<CR>

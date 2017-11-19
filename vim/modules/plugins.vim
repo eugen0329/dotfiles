@@ -607,7 +607,7 @@ endfunction
 
 let g:ctags_in_progress = 0
 fu! RegenerateTags() abort
-  if g:ctags_in_progress
+  if g:ctags_in_progress || &ft != 'ruby'
     return
   endif
   let g:ctags_in_progress = 1
@@ -636,3 +636,6 @@ if executable('ripper-tags')
       \ 'ctagsargs'  : ['-f', '-']
       \ }
 endif
+
+" nvim-r
+let g:R_assign = 0 " dont't replace _ with <-
