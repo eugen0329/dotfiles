@@ -51,10 +51,14 @@ compdef -e 'words[1]=(service); service=service; (( CURRENT+=2 )); _services' ss
 alias ns='netstat -tulpn'
 
 n(){
-local fname
-# fname=$(find ~/Dropbox/Notes/ -iname "*$1*" | sort -n -s | head -n1)
-fname=$(find ~/Dropbox/Notes/ -iname "*$1*" | awk '{ print length($0) " " $0; }' | sort -n | awk '$0=$2' | head -n1)
-v $fname
+  local fname
+  # fname=$(find ~/Dropbox/Notes/ -iname "*$1*" | sort -n -s | head -n1)
+  fname=$(find ~/Notes/ -iname "*$1*" | awk '{ print length($0) " " $0; }' | sort -n | awk '$0=$2' | head -n1)
+  if [ -n  "$fname" ] ; then
+    v $fname
+  else
+    v "~/Notes/$1"
+  fi
 }
 function _n { reply=($(ls /home/eugen/Dropbox/Notes)) }
 compctl -K _n n
