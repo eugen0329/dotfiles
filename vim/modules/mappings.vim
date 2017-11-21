@@ -451,10 +451,11 @@ nmap <leader>rr :call RunCurrentSpecFile()<CR>
 fu! TryCTag() abort
   try
     exec "tag " . expand('<cword>')
+    return 1
   catch /E433:/ " no tags file
-    unsilent echo "Can't find file or tag"
+    return 0
   catch /E426:/ " no tag  found
-    unsilent echo "Can't find file or tag"
+    return 0
   endtry
 endfu
 
@@ -467,6 +468,8 @@ fu! TryRailsCFile() abort
     exec 'find ' . rails#cfile()
     return 1
   catch /E345:/ " E345: Can't find file in path
+    return 0
+  catch /Not in a Rails app/
     return 0
   endtry
 endfu
@@ -486,6 +489,7 @@ fu! SmartGF() abort
       return
     endif
   endfor
+  unsilent echo "Can't find file or tag"
 endfu
 let g:smartgf_strategies = [function('TryRailsCFile'), function('TryCTag'), function('TryPlainGF')]
 
