@@ -189,7 +189,7 @@ cmap     <c-o> <Plug>(unite_cmdmatch_complete)
         \['h',      ':cal WindowSwap#MarkWindowSwap()<Bar>winc h<Bar>cal WindowSwap#DoWindowSwap()<CR>'],
         \['l',      ':cal WindowSwap#MarkWindowSwap()<Bar>winc l<Bar>cal WindowSwap#DoWindowSwap()<CR>'],
         \['j',      ':cal WindowSwap#MarkWindowSwap()<Bar>winc j<Bar>cal WindowSwap#DoWindowSwap()<CR>'],
-        \['k',      ':cal WindowSwap#MarkWindowSwap()<bar>winc k<bar>cal WindowSwap#DoWindowSwap()<cr>'],
+        \['k',      ':cal WindowSwap#MarkWindowSwap(h<bar>winc k<bar>cal WindowSwap#DoWindowSwap()<cr>'],
         \['t', ':exe "tabm"tabpagenr()<CR>'],
         \['T', ':exe "tabm"tabpagenr()-2<CR>']]
     call submode#enter_with('layout', 'n', 's', '<C-w>'.s:set[0],        s:set[1].':cal lightline#update()<CR>')
@@ -474,11 +474,35 @@ fu! TryRailsCFile() abort
   endtry
 endfu
 
+
+let s:openers =  ['xdg-open', 'open', 'gnome-open', 'kde-open']
+fu! TryURI() abort
+  let cfile = expand("<cfile>")
+  " https://github.com/itchyny/vim-highlighturl/blob/master/autoload/highlighturl.vim
+  let pattern = '\v\c%(%(h?ttps?|ftp|file|ssh|git)://|[a-z]+\@[a-z]+.[a-z]+:)%('
+        \.'%([&:#*@~%_\-=?!+;/.0-9A-Za-z]*%(%([.,][&:#*@~%_\-=?!+;/0-9A-Za-z]+)+|:\d+))?'
+        \.'%(\([&:#*@~%_\-=?!+;/.0-9A-Za-z]*\))?%(\[[&:#*@~%_\-=?!+;/.0-9A-Za-z]*\])?'
+        \.'%(\{%([&:#*@~%_\-=?!+;/.0-9A-Za-z]*|\{[&:#*@~%_\-=?!+;/.0-9A-Za-z]*\})\})?'
+        \.')*[-/0-9A-Za-z]*'
+
+  if match(cfile, pattern) >= 0
+    for opener in s:openers
+      if executable(opener)
+        call system(opener . ' ' . cfile)
+        return 1
+      endif
+    endfor
+  endif
+
+  return 0
+endfu
+
 fu! TryPlainGF() abort
   try
     norm! gf
     return 1
-  catch /E447:/ " Can't find file "" in path
+  catch /E447:/
+   " Can't find file "" in path
     return 0
   endtry
 endfu
@@ -491,7 +515,6 @@ fu! SmartGF() abort
   endfor
   unsilent echo "Can't find file or tag"
 endfu
-let g:smartgf_strategies = [function('TryRailsCFile'), function('TryCTag'), function('TryPlainGF')]
+let g:smartgf_strategies = [function('TryURI'), function('TryRailsCFile'), function('TryCTag'), function('TryPlainGF')]
 
 nmap <silent> gf :call SmartGF()<CR>
-" nmap gf :call SmartGF()<CR>
