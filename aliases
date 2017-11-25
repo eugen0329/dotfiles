@@ -15,7 +15,11 @@ alias ctg='ctags -R --exclude=.git --exclude=log -f tmp/tags *'
 
 
 alias fmo='xdg-open .'
-alias o='xdg-open'
+if which xdg-open &>/dev/null ; then
+  alias o='xdg-open'
+else
+  alias o='open'
+fi
 
 alias oc="xdg-open coverage/index.html"
 
