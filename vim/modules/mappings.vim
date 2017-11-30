@@ -450,8 +450,15 @@ nmap <leader>rr :call RunCurrentSpecFile()<CR>
 
 fu! TryCTag() abort
   try
-    exec "tag " . expand('<cword>')
+    let cword = expand('<cword>')
+    if empty(cword)
+      return 0
+    endif
+
+    exec "tag " . cword
     return 1
+  catch /E73:/ " tag stack is empty
+    return 0
   catch /E433:/ " no tags file
     return 0
   catch /E426:/ " no tag  found
@@ -474,25 +481,41 @@ fu! TryRailsCFile() abort
   endtry
 endfu
 
-
 let s:openers =  ['xdg-open', 'open', 'gnome-open', 'kde-open']
 fu! TryURI() abort
-  let cfile = expand("<cfile>")
-  " https://github.com/itchyny/vim-highlighturl/blob/master/autoload/highlighturl.vim
+  " https://github.com/itchyny/vim-highlighturl/blob/master/autoload/highlighturl.vim 
   let pattern = '\v\c%(%(h?ttps?|ftp|file|ssh|git)://|[a-z]+\@[a-z]+.[a-z]+:)%('
         \.'%([&:#*@~%_\-=?!+;/.0-9A-Za-z]*%(%([.,][&:#*@~%_\-=?!+;/0-9A-Za-z]+)+|:\d+))?'
         \.'%(\([&:#*@~%_\-=?!+;/.0-9A-Za-z]*\))?%(\[[&:#*@~%_\-=?!+;/.0-9A-Za-z]*\])?'
         \.'%(\{%([&:#*@~%_\-=?!+;/.0-9A-Za-z]*|\{[&:#*@~%_\-=?!+;/.0-9A-Za-z]*\})\})?'
         \.')*[-/0-9A-Za-z]*'
 
-  if match(cfile, pattern) >= 0
-    for opener in s:openers
-      if executable(opener)
-        call system(opener . ' ' . cfile)
-        return 1
-      endif
-    endfor
-  endif
+  " This hack is required to capture uri with params after question mark
+  """""""""""""""""""""""
+  let curcol = col('.')
+  let line = getline('.')
+  let endpos = 0
+  while 1
+    " Find next uri start position. Is required to capture file ignoring some
+    " chars in ahead like native gf do
+    let startpos = match(line, expand("<cfile>"), endpos)
+    " Find next uri including uri params end position
+    let endpos =  matchend(line, pattern, startpos)
+    if endpos ==# -1 | return 0 | endif
+
+    if curcol <= endpos
+      let cfile = matchstr(line, pattern, startpos)
+      break
+    endif
+  endwhile
+  """""""""""""""""""""""
+
+  for opener in s:openers
+    if executable(opener)
+      call system(opener . ' ' . cfile)
+      return 1
+    endif
+  endfor
 
   return 0
 endfu
@@ -501,8 +524,10 @@ fu! TryPlainGF() abort
   try
     norm! gf
     return 1
-  catch /E447:/
-   " Can't find file "" in path
+
+  catch /E446:/ " No file name under cursor
+    return 0
+  catch /E447:/ " Can't find file "" in path
     return 0
   endtry
 endfu
@@ -517,4 +542,5 @@ fu! SmartGF() abort
 endfu
 let g:smartgf_strategies = [function('TryURI'), function('TryRailsCFile'), function('TryCTag'), function('TryPlainGF')]
 
-nmap <silent> gf :call SmartGF()<CR>
+nmap <silent> gf :<C-u>call SmartGF()<CR>
+xmap <silent> gf :<C-u>call SmartGF()<CR>gv
