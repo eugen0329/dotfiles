@@ -68,7 +68,7 @@ Plug 'eugen0329/vim-hud'
   " Plug 'derekwyatt/vim-protodef'
   Plug 'tpope/vim-rails', { 'for': 'ruby' }
   Plug 'moll/vim-node'
-  Plug 'artur-shaik/vim-javacomplete2'
+  " Plug 'artur-shaik/vim-javacomplete2'
 
   Plug 'mkomitee/vim-gf-python', { 'for': 'python' }
   Plug 'Vimjas/vim-python-pep8-indent', { 'for': 'python' }
