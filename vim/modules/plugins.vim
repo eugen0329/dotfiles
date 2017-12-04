@@ -53,25 +53,7 @@ let g:notes_suffix = '.txt'
 au VimEnter * hi ExchangeRegion cterm=bold ctermfg=7 ctermbg=240
 
 " ,webdev icons
-" let g:webdevicons_enable = 1
-" let g:webdevicons_enable_nerdtree = 0
-" " let g:webdevicons_enable_nerdtree = 1
-" " let g:WebDevIconsNerdTreeGitPluginForceVAlign = 1
-" let g:webdevicons_enable_airline_tabline = 0
-" let g:webdevicons_enable_airline_statusline = 0
-
-" let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols = {}
-" let g:WebDevIconsUnicodeDecorateFileNodesExactSymbols = {}
-" let g:WebDevIconsUnicodeDecorateFileNodesExactSymbols['Gemfile'] = ''
-" let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['rb'] = ''
-" let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['erb'] = ''
-
-" let g:WebDevIconsUnicodeDecorateFolderNodes = 0
-" " let g:DevIconsEnableFoldersOpenClose = 1
-" " let g:WebDevIconsNerdTreeAfterGlyphPadding = ' '
-
-let g:NERDTreeDirArrowExpandable = ''
-let g:NERDTreeDirArrowCollapsible = ''
+let NERDTreeDirArrows = 0
 
 let NERDTreeIgnore = []
 let NERDTreeIgnore += ['__pycache__', '.ropeproject']
@@ -612,10 +594,12 @@ fu! RegenerateTags() abort
   endif
   let g:ctags_in_progress = 1
   let argv = get(g:filetype_tag_generate_commands, &filetype, 'ctags .')
-  call async#job#start(argv, {
+
+  let job_id = jobstart(argv, {
         \ 'on_stderr': function('s:err_handler'),
         \ 'on_exit': function('s:exit_handler'),
         \ })
+  call jobclose(job_id, 'stdin')
 endfu
 
 autocmd BufWritePost * call RegenerateTags()
