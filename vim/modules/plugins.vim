@@ -53,13 +53,12 @@ let g:notes_suffix = '.txt'
 au VimEnter * hi ExchangeRegion cterm=bold ctermfg=7 ctermbg=240
 
 " ,webdev icons
-let NERDTreeDirArrows = 0
+let g:NERDTreeDirArrowExpandable = ' '
+let g:NERDTreeDirArrowCollapsible = ' '
 
 let NERDTreeIgnore = []
 let NERDTreeIgnore += ['__pycache__', '.ropeproject']
 
-" let g:WebDevIconsNerdTreeAfterGlyphPadding = ''
-" let g:WebDevIconsUnicodeDecorateFileNodesDefaultSymbol = '🗋'
 " hi YellowFG ctermfg=3
 
 
