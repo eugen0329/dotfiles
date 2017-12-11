@@ -135,7 +135,9 @@ set previewheight=20
 
 set confirm
 set tags+=./tmp/tags
-set tagcase=match
+if has('nvim')
+  set tagcase=match
+endif
 
 " set background=dark
 
