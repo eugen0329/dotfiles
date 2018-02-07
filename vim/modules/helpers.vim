@@ -201,10 +201,6 @@ endfu
 
 au BufWritePost * if &ft ==# 'ruby' | call GenerateCtags() |endif
 
-fu! SetCtags()
-
-endfu
-
 fu! RemoveFugitiveIndexFiles(l1, l2)
   for l in range(a:l1, a:l2)
     let filename = matchstr(getline(l),'^#\t\zs.\+\ze$')

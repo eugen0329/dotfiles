@@ -66,7 +66,6 @@ augroup FiletypeAutocommands
   au FileType notes setlocal foldmethod=indent
   au filetype qf nnoremap <buffer>o <CR>
   " au filetype ruby au BufWritePost <buffer> call GenerateCtags()
-  " au bufenter * call SetCtags()
 
   " au BufReadPre ControlP  cclose | lclose
   " au BufReadPre,BufEnter ControlP  let g:a = 1
@@ -184,3 +183,10 @@ endif
 
 
 let maplocalleader = ","
+augroup Mkdir
+  autocmd!
+  autocmd BufWritePre *
+    \ if !isdirectory(expand("<afile>:p:h")) |
+        \ call mkdir(expand("<afile>:p:h"), "p") |
+    \ endif
+augroup END
