@@ -1,3 +1,4 @@
+finish
 let g:deoplete#enable_at_startup = 1
 " set completeopt+=noinsert
 let deoplete#max_list = 20

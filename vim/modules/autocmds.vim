@@ -33,7 +33,7 @@ augroup FiletypeAutocommands
   au FileType coffee setlocal foldmethod=indent
 
   au BufRead,BufNewFile *.ctest,*.ctest.in setf cmake
-  au FileType vimrc setlocal foldmethod=marker ts=2 sw=2 sts=2
+  au FileType vimrc setlocal foldmethod=syntax ts=2 sw=2 sts=2
   au Filetype c,cpp setlocal ts=4 sw=4 sts=4 cindent foldmethod=syntax
   au Filetype ruby setlocal expandtab ts=2 sw=2 sts=2  foldmethod=syntax makeprg=ruby
   au Filetype ruby let ruby_fold = 1
