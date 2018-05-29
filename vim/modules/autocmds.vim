@@ -40,7 +40,9 @@ augroup FiletypeAutocommands
   au Filetype lex,yacc setlocal cindent ts=4 sw=4 sts=4
   au Filetype html,css setlocal expandtab foldmethod=syntax ts=2 sw=2 sts=2
   au Filetype html,css setlocal autoindent
-  au Filetype ruby,eruby setlocal foldmethod=indent  iskeyword-=.
+
+  au Filetype eruby setlocal foldmethod=indent
+  au Filetype ruby,eruby setlocal iskeyword-=.
   au Filetype eruby let b:delimitMate_matchpairs = '(:),[:],{:},<:>'
   " Disable automatical wrap
 

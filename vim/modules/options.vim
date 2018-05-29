@@ -139,6 +139,10 @@ if has('nvim')
   set tagcase=match
 endif
 
+if has('nvim')
+  " let g:ruby_host_prog = 'rvm system do neovim-ruby-host'
+endif
+
 " set background=dark
 
 " setbackground termguicolors

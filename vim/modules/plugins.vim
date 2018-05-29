@@ -218,7 +218,7 @@ let g:ctrlp_user_command =
 
 
 " let g:ctrlp_root_markers = ['Gemfile', 'Makefile', '.git', '.meteor', 'Rakefile', 'package.json', 'bower.json', 'main.c', 'main.cpp']
-let g:ctrlp_root_markers = ['Gemfile', 'Makefile', '.git', '.meteor', 'Rakefile', 'main.c', 'main.cpp']
+let g:ctrlp_root_markers = ['Gemfile', 'Makefile', '.git', '.meteor', 'Rakefile', 'main.c', 'main.cpp', 'package.json']
 " let g:ctrlp_root_markers = ['Gemfile', 'Makefile', '.git', '.meteor', 'Rakefile', 'package.json', 'bower.json', 'index.html', 'main.c', 'main.cpp']
 
 " let g:ctrlp_lazy_update = 350
@@ -495,7 +495,7 @@ let g:esearch#substitute#swapchoice = 'q'
 let g:ruby_refactoring_map_keys = 0
 
 
-" let g:esearch = { 'backend': 'nvim', 'adapter': 'ag' }
+let g:esearch = { 'backend': 'nvim', 'adapter': 'ag' }
 " let g:esearch = { 'backend': 'nvim', 'adapter': 'ag' }
 " let g:esearch = { 'adapter': 'ag', 'ignore_batches': 0}
 " let g:esearch = { 'backend': 'nvim', 'adapter': 'ag', 'out': 'qflist' }
@@ -550,15 +550,15 @@ let g:rspec_command = 'call Send_to_Tmux("rspec {spec}\n")'
 let g:tslime_always_current_session = 1
 
 
+" \ 'batch_size': 3000,
 let g:esearch = {
             \ 'adapter':    'ag',
-            \ 'backend':    'nvim',
             \ 'out':        'win',
-            \ 'batch_size': 3000,
+            \ 'backend':        'vimproc',
             \ 'use':        ['visual', 'hlsearch'],
             \}
 " let g:esearch#out#win#open = "if has_key(b:, 'esearch') | call esearch#backend#{b:esearch.backend}#abort(bufnr('%')) | end | enew"
-let  g:esearch#adapter#git#options = '-C 3'
+" let  g:esearch#adapter#git#options = '-C 3'
 
 " tablemode
 let g:table_mode_map_prefix = '<Leader>T'
@@ -622,3 +622,7 @@ endif
 
 " nvim-r
 let g:R_assign = 0 " dont't replace _ with <-
+
+" \ 'adapter':    'git',
+" let g:esearch = { 'backend':    'vim8',  'adapter': 'ack'}
+" let g:esearch = { 'backend':    'nvim',  'adapter': 'ack'}

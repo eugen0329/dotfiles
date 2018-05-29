@@ -63,7 +63,9 @@ cmap     <c-o> <Plug>(unite_cmdmatch_complete)
   nnoremap <leader>rv :CtrlPViews<CR>
   call   esearch#map('<C-f><C-f>','esearch')
   call   esearch#map('<C-f>f',    'esearch')
-  call   esearch#map('<Leader>ff','esearch')
+  call   esearch#map('<C-f>w',    'esearch-word-under-cursor')
+  call   esearch#map('<C-f><C-w>','esearch-word-under-cursor')
+  " call   esearch#map('<Leader>ff','esearch')
 
   let g:vim_search_pulse_disable_auto_mappings = 1
   nnoremap               <Leader>fl   :Unite -buffer-name=search\ line -start-insert line<CR>
@@ -540,7 +542,7 @@ fu! SmartGF() abort
   endfor
   unsilent echo "Can't find file or tag"
 endfu
-let g:smartgf_strategies = [function('TryURI'), function('TryRailsCFile'), function('TryCTag'), function('TryPlainGF')]
+let g:smartgf_strategies = [function('TryURI'), function('TryPlainGF'), function('TryRailsCFile'), function('TryCTag')]
 
 nmap <silent> gf :<C-u>call SmartGF()<CR>
 xmap <silent> gf :<C-u>call SmartGF()<CR>gv
