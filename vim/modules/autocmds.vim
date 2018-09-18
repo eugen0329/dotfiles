@@ -25,6 +25,7 @@ augroup FiletypeAutocommands
   au FileType go setlocal nolist
   au FileType css,scss setlocal foldmethod=syntax
   au FileType python setlocal ts=4 sw=4 sts=4 foldmethod=indent
+  au FileType Jenkinsfile setlocal ts=4 sw=4 sts=4 foldmethod=syntax
 
   autocmd! BufWritePost *.py Neomake
   let g:neomake_python_enabled_makers = ['flake8']
