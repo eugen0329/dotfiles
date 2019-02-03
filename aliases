@@ -14,15 +14,24 @@ alias tsw="tmux choose-session"
 alias ctg='ctags -R --exclude=.git --exclude=log -f tmp/tags *'
 alias Cd=cd
 
+alias doc2txt='libreoffice --headless --convert-to "txt:Text (encoded):UTF8"'
+
 
 alias fmo='xdg-open .'
+
 if which xdg-open &>/dev/null ; then
-  alias o='xdg-open'
-  alias oc="xdg-open coverage/index.html"
-else
-  alias o='open'
-  alias oc="open coverage/index.html"
+  # alias open='xdg-open'
+  open() {
+    if [ "$#" -eq 0 ]; then
+      xdg-open .
+    else
+      xdg-open $@
+    fi
+  }
 fi
+
+alias o='open'
+alias oc="open coverage/index.html"
 
 
 alias j=jump
@@ -59,8 +68,8 @@ alias ns='netstat -tulpn'
 n(){
   local fname
   # fname=$(find ~/Dropbox/Notes/ -iname "*$1*" | sort -n -s | head -n1)
-  fname=$(find ~/Notes/ -iname "*$1*" -type f | awk '{ print length($0) " " $0; }' | sort -n | awk '$0=$2' | head -n1)
-  if [ -n  "$fname" ] ; then
+  fname=$(find ~/Notes/ -iname "*$1*" -not -type d | awk '{ print length($0) " " $0; }' | sort -n | awk '$0=$2' | head -n1)
+  if [ -n  "$fname" -o -L  "$fname" ] ; then
     v $fname
   else
     v "$HOME/Notes/$1.md"
@@ -150,7 +159,7 @@ alias be="bundle exec"
 # install gems and regenerate ctags
 alias bi="bundle install && gem install gem-ripper-tags ripper-tags && gem ripper_tags"
 
-alias ra="bundle exec rails"
+alias ra="bundle exec rubocop --auto-correct"
 alias rs="bundle exec rails server"
 
 alias fs='foreman start'
@@ -238,7 +247,7 @@ alias rdr="bundle exec rake db:rollback"
 alias rt="bundle exec rake -T"
 alias rn="bundle exec rails new"
 
-alias rg='rails g'
+# alias rg='rails g'
 
 alias rgrmo='bundle exec rails g rspec:model'
 alias rgrco='bundle exec rails g rspec:controller'
@@ -481,3 +490,16 @@ video2gif() {
 }
 
 alias et='v ~/.tmux.conf'
+
+alias bp='make && sudo make uninstall && sudo make install && /usr/local/pgsql/bin/pg_ctl -D /usr/local/pgsql/data -l /home/eugen/pglog restart && /usr/local/pgsql/bin/psql -d disser_development -f heh.sql'
+alias br='/usr/local/pgsql/bin/psql -d disser_development -f heh.sql'
+
+alias psql='/usr/local/pgsql/bin/psql -d disser_development'
+
+alias vimbench='cd /tmp && vim --startuptime timeCost.txt timeCost.txt && cd -'
+
+removepdfwatermark() {
+  pdftk $1 output uncompressed.pdf uncompress
+  sed -e "s/$2/ /" uncompressed.pdf > unwatermarked.pdf
+  pdftk unwatermarked.pdf output fixed.pdf compress
+}

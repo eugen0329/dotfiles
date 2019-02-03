@@ -5,8 +5,9 @@ let g:vcoolor_lowercase = 1
 let g:vcoolor_custom_picker = 'yad --title "Vim colorsel" --color-selection --show-palette --color '
 
 
-" ,instantmarkdown
+" ,instant
 let g:instant_markdown_autostart = 0
+" markdown
 let g:vim_markdown_conceal = 1
 
 let g:markdown_fenced_languages = ['sql']
@@ -55,6 +56,9 @@ au VimEnter * hi ExchangeRegion cterm=bold ctermfg=7 ctermbg=240
 " ,webdev icons
 let g:NERDTreeDirArrowExpandable = ' '
 let g:NERDTreeDirArrowCollapsible = ' '
+" https://github.com/scrooloose/nerdtree/issues/928
+let g:NERDTreeNodeDelimiter = "\u00a0"
+
 
 let NERDTreeIgnore = []
 let NERDTreeIgnore += ['__pycache__', '.ropeproject']
@@ -218,7 +222,7 @@ let g:ctrlp_user_command =
 
 
 " let g:ctrlp_root_markers = ['Gemfile', 'Makefile', '.git', '.meteor', 'Rakefile', 'package.json', 'bower.json', 'main.c', 'main.cpp']
-let g:ctrlp_root_markers = ['Gemfile', 'Makefile', '.git', '.meteor', 'Rakefile', 'main.c', 'main.cpp', 'package.json']
+let g:ctrlp_root_markers = ['Gemfile', '.git', '.meteor', 'Rakefile', 'main.c', 'main.cpp', 'package.json']
 " let g:ctrlp_root_markers = ['Gemfile', 'Makefile', '.git', '.meteor', 'Rakefile', 'package.json', 'bower.json', 'index.html', 'main.c', 'main.cpp']
 
 " let g:ctrlp_lazy_update = 350
@@ -495,15 +499,6 @@ let g:esearch#substitute#swapchoice = 'q'
 let g:ruby_refactoring_map_keys = 0
 
 
-let g:esearch = { 'backend': 'nvim', 'adapter': 'ag' }
-" let g:esearch = { 'backend': 'nvim', 'adapter': 'ag' }
-" let g:esearch = { 'adapter': 'ag', 'ignore_batches': 0}
-" let g:esearch = { 'backend': 'nvim', 'adapter': 'ag', 'out': 'qflist' }
-" let g:esearch = { 'backend': 'vimproc', 'adapter': 'ag', 'wordchars': 'a-z,A-Z,_,0-9' }
-" let g:esearch = { 'backend': 'vimproc', 'adapter': 'ag' }
-"
-"
-
 
       " \   'backend':    'nvim',
 let g:test = []
@@ -551,12 +546,6 @@ let g:tslime_always_current_session = 1
 
 
 " \ 'batch_size': 3000,
-let g:esearch = {
-            \ 'adapter':    'ag',
-            \ 'out':        'win',
-            \ 'backend':        'vimproc',
-            \ 'use':        ['visual', 'hlsearch'],
-            \}
 " let g:esearch#out#win#open = "if has_key(b:, 'esearch') | call esearch#backend#{b:esearch.backend}#abort(bufnr('%')) | end | enew"
 " let  g:esearch#adapter#git#options = '-C 3'
 
@@ -624,5 +613,17 @@ endif
 let g:R_assign = 0 " dont't replace _ with <-
 
 " \ 'adapter':    'git',
-" let g:esearch = { 'backend':    'vim8',  'adapter': 'ack'}
-" let g:esearch = { 'backend':    'nvim',  'adapter': 'ack'}
+let g:esearch = { 'adapter': 'ag'}
+" let g:esearch = { 'backend':    'vim8',  'adapter': 'ag'}
+" let g:esearch = {
+" \ 'adapter' : 'ag',
+" \ 'out': 'qflist',
+" \ 'use': ['visual', 'last', 'hlsearch']
+" \}
+call   esearch#map('<C-f><C-f>','esearch')
+call   esearch#map('<C-f>f',    'esearch')
+call   esearch#map('<C-f>w',    'esearch-word-under-cursor')
+call   esearch#map('<C-f><C-w>','esearch-word-under-cursor')
+
+
+let g:livepreview_engine = 'pdflatex -interaction=nonstopmode '

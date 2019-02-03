@@ -66,7 +66,8 @@ set timeoutlen=1000 ttimeoutlen=40
 
 set list
 " set listchars=tab:▷ ,trail:·,nbsp:⍽
-set listchars=tab:▷ ,trail:·
+" set listchars=tab:▷ ,trail:·
+set listchars=trail:·,tab:\ \ 
 " set smartcase
 set smarttab
 
@@ -100,6 +101,10 @@ if v:version > 703 || v:version == 703 && has('patch541')
 " Delete comment character when joining commented lines
   set formatoptions+=j
 endif
+" insert comment while hitting ENTER in insert mode
+set formatoptions+=r
+" insert comment while hitting O or o
+set formatoptions+=o
 
 set splitbelow
 set splitright
@@ -135,6 +140,7 @@ set previewheight=20
 
 set confirm
 set tags+=./tmp/tags
+set tags+=./.tags
 if has('nvim')
   set tagcase=match
 endif

@@ -122,7 +122,7 @@ if has('nvim')
     colorscheme spacegray-cterm3
   endif
 else
-  colorscheme Tomorrow-Night-Eighties
+  " colorscheme Tomorrow-Night-Eighties
 end
 hi EndOfBuffer ctermbg=0  ctermfg=0
 hi ModeMsg     ctermbg=27 ctermfg=255
@@ -163,3 +163,4 @@ hi link jsxTag  jsxTagName
 hi link jsxAttrib Type
 
 au BufEnter * match ColorColumn '\%80c.'
+colorscheme 1989

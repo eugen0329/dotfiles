@@ -161,6 +161,9 @@ if has('nvim')
   " call s:extend_makers()
 else
   fu! CheckSyntax()
+    if !exists(':SyntasticCheck')
+      return
+    endif
     exe 'SyntasticCheck'
     let loclist = g:SyntasticLoclist.current()
     let w:s_errors     = loclist.errors()

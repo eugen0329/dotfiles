@@ -61,11 +61,7 @@ cmap     <c-o> <Plug>(unite_cmdmatch_complete)
   nnoremap <leader>rm :CtrlPModels<CR>
   nnoremap <leader>rs :CtrlPSpecs<CR>
   nnoremap <leader>rv :CtrlPViews<CR>
-  call   esearch#map('<C-f><C-f>','esearch')
-  call   esearch#map('<C-f>f',    'esearch')
-  call   esearch#map('<C-f>w',    'esearch-word-under-cursor')
-  call   esearch#map('<C-f><C-w>','esearch-word-under-cursor')
-  " call   esearch#map('<Leader>ff','esearch')
+
 
   let g:vim_search_pulse_disable_auto_mappings = 1
   nnoremap               <Leader>fl   :Unite -buffer-name=search\ line -start-insert line<CR>
@@ -344,7 +340,7 @@ cabbrev Tab Tabularize
 
 
 command! -bang -nargs=0 Q call ExitFugitive('q<bang>')
-cabbrev ga   Git add
+" cabbrev ga   Git add
 cabbrev gcm  Git commit -m
 cabbrev gcam Git commit --amend -m
 cabbrev gco  Git checkout
@@ -402,16 +398,19 @@ nnoremap <silent> <S-q> :call Quit()<CR>
 noremap  <silent>  <C-q> :call CloseSomething()<CR>
 nnoremap <silent> z<S-m> :call g:FoldEverything()<CR>
 
-map ё `| map й q| map ц w| map у e| map к r| map е t| map н y| map г u| map ш i| map щ o| map з p| map х [| map ъ ]
-map ф a| map ы s| map в d| map а f| map п g| map р h| map о j| map л k| map д l| map ж ;| map э '| map я z| map ч x
-map с c| map м v| map и b| map т n| map ь m| map б ,| map ю .| map Ё ~| map Й Q| map Ц W| map У E| map К R| map Е T
-map Н Y| map Г U| map Ш I| map Щ O| map З P| map Х {| map Ъ }| map Ф A| map Ы S| map В D| map А F| map П G| map Р H
-map О J| map Л K| map Д L| map Ж :| map Э "| map Я Z| map Ч X| map С C| map М V| map И B| map Т N| map Ь M| map Б <
-map Ю >
+" map ё `| map й q| map ц w| map у e| map к r| map е t| map н y| map г u| map ш i| map щ o| map з p| map х [| map ъ ]
+" map ф a| map ы s| map в d| map а f| map п g| map р h| map о j| map л k| map д l| map ж ;| map э '| map я z| map ч x
+" map с c| map м v| map и b| map т n| map ь m| map б ,| map ю .| map Ё ~| map Й Q| map Ц W| map У E| map К R| map Е T
+" map Н Y| map Г U| map Ш I| map Щ O| map З P| map Х {| map Ъ }| map Ф A| map Ы S| map В D| map А F| map П G| map Р H
+" map О J| map Л K| map Д L| map Ж :| map Э "| map Я Z| map Ч X| map С C| map М V| map И B| map Т N| map Ь M| map Б <
+" map Ю >
 
+" map q: <nop>
 
 " set langmap=ёйцукенгшщзхъфывапролджэячсмитьбю;`qwertyuiop[]asdfghjkl\;'zxcvbnm\,.,ЙЦУКЕHГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ;QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>
-" setlocal spell spelllang=ru_yo,en_us
+set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz
+" set langmap=ёйцукенгшщзхъфывапролджэячсмитьбю;`qwertyuiop[]asdfghjkl\;'zxcvbnm\,.,ЙЦУКЕHГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ;QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>
+set spelllang=ru_yo,en_us
 
 
 let g:endwise_no_mappings = 1
@@ -437,10 +436,10 @@ nmap ga <Plug>(EasyAlign)
 nmap <F9> :Make! %<CR>
 nmap <F6> :Make  %<CR>
 
-augroup TmpWorkaroundWithEsearch
-  au!
-  au VimEnter * unmap <Leader>ff
-augroup END
+" augroup TmpWorkaroundWithEsearch
+"   au!
+"   au VimEnter * unmap <Leader>ff
+" augroup END
 
 " nmap <leader>rr <Plug>(quickrun)
 
@@ -514,7 +513,7 @@ fu! TryURI() abort
 
   for opener in s:openers
     if executable(opener)
-      call system(opener . ' ' . cfile)
+      call system(opener . ' ' . shellescape(cfile))
       return 1
     endif
   endfor
@@ -542,7 +541,99 @@ fu! SmartGF() abort
   endfor
   unsilent echo "Can't find file or tag"
 endfu
-let g:smartgf_strategies = [function('TryURI'), function('TryPlainGF'), function('TryRailsCFile'), function('TryCTag')]
+
+fu! TryFootnote() abort
+  let pattern='\(\[\d\+\]\)'
+
+  let curcol = col('.')
+  let line = getline('.')
+  let endpos = 0
+
+  let footnote = MatchUnderCursor(pattern)
+  if empty(footnote)
+    let footnote = matchstr(line, pattern, col('.')-1)
+    if empty(footnote) | return 0 | endif
+  endif
+
+  " search links section start from the end of an open buffer
+  let last_line = line('$')
+  let ln = last_line
+  while ln > 0
+    let line = getline(ln)
+
+    if line ==# '---'
+      let ln += 1
+      break
+    endif
+    let ln -= 1
+  endwhile
+
+  if ln ==# 0
+    return 0
+  endif
+
+  let links = []
+  let last_line = line('$')
+  while ln <= last_line
+    call add(links, getline(ln))
+    let ln += 1
+  endwhile
+
+
+  let link_pos = ''
+  for l in links
+    let n = matchstr(l, '^\(\[\d\+\]\)')
+    if n ==# footnote
+      let link = substitute(l, '^\(\[\d\+\]\) \(.*\)', '\2', '')
+
+      for opener in s:openers
+        if executable(opener)
+          call system(opener . ' ' . shellescape(link))
+          return 1
+        endif
+      endfor
+    endif
+  endfor
+endfu
+
+
+function! MatchUnderCursor(pat)
+  let line = getline(".")
+  let lastend = 0
+  while lastend >= 0
+    let beg = match(line,'\C'.a:pat,lastend)
+    let end = matchend(line,'\C'.a:pat,lastend)
+    if beg < col(".") && end >= col(".")
+      return matchstr(line,'\C'.a:pat,lastend)
+    endif
+    let lastend = end
+  endwhile
+  return ""
+endfunction
+
+
+
+fu! TryPythonCFile() abort
+  " call pymode#rope#goto_definition()
+  return 0
+endfu
+
+let g:smartgf_strategies = [function('TryURI'), function('TryPlainGF'), function('TryPythonCFile'), function('TryRailsCFile'), function('TryCTag'), function('TryFootnote')]
 
 nmap <silent> gf :<C-u>call SmartGF()<CR>
 xmap <silent> gf :<C-u>call SmartGF()<CR>gv
+
+
+function! s:isAtStartOfLine(mapping)
+  let text_before_cursor = getline('.')[0 : col('.')-1]
+  let mapping_pattern = '\V' . escape(a:mapping, '\')
+  let comment_pattern = '\V' . escape(substitute(&l:commentstring, '%s.*$', '', ''), '\')
+  return (text_before_cursor =~? '^' . ('\v(' . comment_pattern . '\v)?') . '\s*\v' . mapping_pattern . '\v$')
+endfunction
+
+inoreabbrev <expr> <bar><bar>
+          \ <SID>isAtStartOfLine('\|\|') ?
+          \ '<c-o>:TableModeEnable<cr><bar><space><bar><left><left>' : '<bar><bar>'
+inoreabbrev <expr> __
+          \ <SID>isAtStartOfLine('__') ?
+          \ '<c-o>:silent! TableModeDisable<cr>' : '__'

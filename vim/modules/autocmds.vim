@@ -1,7 +1,6 @@
 if !has("autocmd")
   finish
 endif
-
 if &t_Co > 2 || has("gui_running") | syntax on | endif
 
 augroup FiletypeAutocommands
@@ -13,6 +12,7 @@ augroup FiletypeAutocommands
   au FileType cfg setlocal commentstring=#\ %s
 
   au FileType slim let &commentstring = '/ %s'
+  au FileType vhdl let &commentstring = '-- %s'
 
   au BufRead,BufNewFile *.vspec setlocal filetype=vim
   au BufRead,BufNewFile *.vspec nnoremap <buffer> <leader>rt :!vspec . %<CR>
@@ -27,8 +27,8 @@ augroup FiletypeAutocommands
   au FileType python setlocal ts=4 sw=4 sts=4 foldmethod=indent
   au FileType Jenkinsfile setlocal ts=4 sw=4 sts=4 foldmethod=syntax
 
-  autocmd! BufWritePost *.py Neomake
-  let g:neomake_python_enabled_makers = ['flake8']
+  " autocmd! BufWritePost *.py Neomake
+  " let g:neomake_python_enabled_makers = ['flake8']
 
 
   au FileType coffee setlocal foldmethod=indent
@@ -52,7 +52,7 @@ augroup FiletypeAutocommands
 
 
   au FileType * setlocal conceallevel=0
-  au FileType markdown setlocal conceallevel=2
+  au FileType markdown setlocal conceallevel=2 
 
   au BufRead,BufNewFile *.slim set ft=slim
 
