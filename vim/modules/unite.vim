@@ -129,3 +129,12 @@ let g:unite_source_menu_menus.conf.command_candidates = [
 " \ 'start_insert': 1,
 " \ 'immediately': 1,
 " \ })
+"
+hi link BookmarkUnitePath Directory
+call unite#custom#profile('source/vim_bookmarks', 'context', {
+  \   'winheight': 10,
+  \   'direction': 'botright',
+  \   'start_insert': 1,
+  \   'keep_focus': 0,
+  \   'no_quit': 0,
+  \ })

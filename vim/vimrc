@@ -1,36 +1,410 @@
-fu! s:load(module)
+fu! Load(module)
   exec 'source ' fnameescape(expand('~/.vim/modules/' . a:module . '.vim'))
 endfu
 
-call s:load('bundles')
+" call Load('bundles')
+
+set runtimepath+=~/.cache/dein/repos/github.com/Shougo/dein.vim
+if dein#load_state('~/.cache/dein')
+  call dein#begin('~/.cache/dein')
+
+  " #UI
+  call dein#add('itchyny/lightline.vim')
+
+  " tree
+  """""""""""""""
+  call dein#add('scrooloose/nerdtree',               { 'on_cmd': ['NERDTreeTabsToggle', 'NERDTreeFind', 'NERDTreeClose'] })
+  call dein#add('jistr/vim-nerdtree-tabs',           { 'lazy': 1, 'depends': 'nerdtree',  'on_source': 'nerdtree'})
+  call dein#add('eugen0329/vim-nerdtree-smart-open', { 'lazy': 1, 'depends': 'nerdtree',  'on_source': 'nerdtree'})
+  " call dein#add('Xuyuanp/nerdtree-git-plugin')
+  " call dein#add('justinmk/vim-gtfo')
+  " call dein#add('voronkovich/ctrlp-nerdtree.vim')
+
+  " if !has('nvim')
+  " call dein#add('google/vim-maktaba')
+  " call dein#add('google/vim-coverage')
+  " call dein#add('google/vim-glaive')
+  " endif
+
+  " Motion
+  """""""""""
+  call dein#add('Lokaltog/vim-easymotion', {'on_event': 'CursorMoved'})          " highlight jumb target
+  " augroup load_em
+  "   au!
+  "   au CursorMoved call plug#load(vim-easymotion)
+  "         \| au! load_em
+  " augroup END
+
+  call dein#add('rhysd/clever-f.vim')                " f{char} improved
+  " call dein#add('kana/vim-smartword')
+  call dein#add('bkad/CamelCaseMotion')
+
+  " Git
+  """""""""""""""
+  " call dein#add('tpope/vim-fugitive', {'on_func': 'FugitiveDetect', 'on_cmd': ['Glog', 'Gstatus', 'Gdiff'], 'augroup': 'fugitive'})
+  call dein#add('tpope/vim-fugitive', {'on_cmd': ['Glog', 'Gstatus', 'Gdiff', 'Gtabedit'], 'augroup': 'fugitive'})
+  call dein#add('junegunn/gv.vim', {'on_cmd': 'GV', 'depends': 'vim-fugitive'})
+  call dein#add('rhysd/conflict-marker.vim')
+  call dein#add('tpope/vim-git')
+  call dein#add('tommcdo/vim-fugitive-blame-ext')
+  call dein#add('airblade/vim-gitgutter')
+
+  " call dein#add('mg979/vim-visual-multi')
 
 
-if has('nvim')
-  call s:load('ncompletion')
-else
-  call s:load('completion')
+  " augroup load_git_plugins
+  "   au!
+  "   au User Fugitive call dein#source('gv.vim', 'conflict-marker.vim', 'vim-git', 'vim-fugitive-blame-ext', 'vim-gitgutter')
+  "         \| au! load_git_plugins
+  " augroup END
+
+
+  " UI
+  """""""""""""""""""
+  call dein#add(    'nathanaelkane/vim-indent-guides', {'on_cmd': 'IndentGuidesToggle'}) " 'Yggdroot/indentLine')
+  call dein#add('Valloric/MatchTagAlways', { 'on_ft': ['erb', 'html', 'xml'] })
+
+
+  " Snippets
+  """""""""""""""
+
+
+  call dein#add('honza/vim-snippets')
+  call dein#add('mattn/emmet-vim', {'on_ft': ['html', 'eruby', 'slim', 'css', 'sass', 'scss']})
+
+  " #Cmdline
+  call dein#add(    'osyo-manga/vim-over')
+  call dein#add(    'osyo-manga/vital-over')
+  call dein#add(    'vim-scripts/cmdline-completion')
+  " call dein#add(    'thinca/vim-prettyprint')
+  " call dein#add('junegunn/vim-pseudocl')
+
+  " Textobjects
+  """""""""""""""""""""""""""
+  " , {'on_cmd': '<Plug>(expand_region_expand)'})
+  call dein#add('kana/vim-textobj-user') " User defined textobjects
+  call dein#add('terryma/vim-expand-region') " Easier way to select textobjects
+  call dein#add('whatyouhide/vim-textobj-xmlattr', { 'on_ft': ['html', 'xml'] })
+  call dein#add('nelstrom/vim-textobj-rubyblock', { 'on_ft': 'ruby' })
+  call dein#add('kana/vim-textobj-line')
+  call dein#add('mattn/vim-textobj-url')
+  call dein#add('glts/vim-textobj-comment')
+  call dein#add('reedes/vim-textobj-quote')
+  call dein#add('thinca/vim-textobj-between')
+  " call dein#add('lucapette/vim-textobj-underscore')
+  call dein#add('Julian/vim-textobj-variable-segment')
+  call dein#add('kana/vim-textobj-entire')
+
+  " #Editing assistants
+  " call dein#add('terryma/vim-multiple-cursors')
+  call dein#add('vim-utils/vim-vertical-move') " Move 'up' or 'down' without changing the cursor column. Cursor *always* stays in the same column.
+  call dein#add('tpope/vim-abolish') " Working with word cases
+  call dein#add('tpope/vim-commentary') " Comment/uncomment code
+  call dein#add('tpope/vim-surround') " Manage code surroundings(quotes, parenthesis, brackets, *ml-tags etc.)
+  call dein#add('tpope/vim-speeddating', {'on_ft': 'org'}) " CTRL-A/CTRL-X to increment dates, times, and more
+  call dein#add('sickill/vim-pasta') " Smart paste
+  " call dein#add('svermeulen/vim-easyclip')
+  call dein#add('tpope/vim-repeat')
+  call dein#add('AndrewRadev/splitjoin.vim')
+  call dein#add('AndrewRadev/switch.vim') " Switch segments of text with predefined replacements
+  call dein#add('AndrewRadev/sideways.vim', {'on_cmd': ['SidewaysLeft', 'SidewaysRight']}) " Move an item in a delimiter-separated list left or right
+  call dein#add('godlygeek/tabular') " Text align by regexp
+  call dein#add('junegunn/vim-easy-align')
+  call dein#add('tommcdo/vim-exchange') " Swap two pieces of code
+  call dein#add('t9md/vim-textmanip') " Drag visual text blocks
+  " call dein#add('tpope/vim-endwise'             " Automatic closing code blocks
+  call dein#add('SirVer/ultisnips', { 'on_i': 1 })
+  call dein#add('kana/vim-smartinput' , { 'on_i': 1, 'hook_post_source': "call Load('smartinput')"})         " Automatic closing of quotes, parenthesis, brackets
+  call dein#add('kana/vim-smartchr') " Automatic closing of quotes, parenthesis, brackets
+  " call dein#add('chrisbra/NrrwRgn') " Edit selection in a newly created separate buffer
+  " call dein#add('Raimondi/delimitMate') " Automatic closing of quotes, parenthesis, brackets
+
+  " #Format
+  call dein#add('Chiel92/vim-autoformat', {'on_cmd': 'Autoformat'  })
+  call dein#add('rhysd/vim-clang-format', {'on_cmd': 'ClangFormat' })
+  " call dein#add('maksimr/vim-jsbeautify')
+
+  " #Note taking
+  " call dein#add('xolox/vim-notes', { 'depends': 'xolox/vim-misc' })
+  " call dein#add('vim-scripts/utl.vim')
+
+
+  " # Languages support
+
+
+  " call dein#add(    'octol/vim-cpp-enhanced-highlight')
+
+  " #Syntax
+  if has('nvim')
+    " call dein#add(    'benekastah/neomake')
+  else
+    " call dein#add(    'scrooloose/syntastic')
+  endif
+
+
+
+  " Fuzzy menus
+  """""""""""""""
+  call dein#add(    'Shougo/neomru.vim')     " Most recently used files/buffers
+  call dein#add('majutsushi/tagbar', {'on_cmd': 'TagbarToggle'})
+
+  call dein#add( 'Shougo/unite.vim', {'on_cmd': 'Unite', 'hook_post_source': "call Load('unite')", 'depends': ['vimproc.vim']})
+  " call dein#add('Shougo/unite-outline')
+  
+  " call dein#add('Shougo/unite-outline', {'lazy': 1, 'depends': 'unite'})
+  call dein#add('Shougo/unite-outline', {'on_source': 'unite.vim'})
+
+  call dein#add( 'eugen0329/unite-cmdmatch', { 'depends': 'unite.vim', 'on_source': 'unite.vim', 'on_map': {'c': '<Plug>(unite_cmdmatch_complete)' }})
+  call dein#add('ctrlpvim/ctrlp.vim')
+  " call dein#add('junegunn/fzf', { 'dir': '~/.fzf', 'build': './install --all' })
+
+
+  " Tools
+  """""""""""""""
+  call dein#add('MattesGroeger/vim-bookmarks')
+  call dein#add('jgdavey/tslime.vim') " Send command from vim to a running tmux session
+  call dein#add('tpope/vim-projectionist')
+  call dein#add('AndrewRadev/linediff.vim')
+  call dein#add('eugen0329/vim-hud')
+  call dein#add('KabbAmine/vCoolor.vim', {'on_cmd': 'VCoolor'})
+  call dein#add('Konfekt/FastFold') " Speed up Vim by updating folds only when called-for.
+  " call dein#add('sk1418/HowMuch') " A Vim plugin to calculate visual selected expressions
+  call dein#add('tpope/vim-rsi')
+  call dein#add('dhruvasagar/vim-table-mode', {'on_cmd': 'TableModeEnable'})
+  call dein#add('jordwalke/VimCloser') " Make Vim close tabs the way every other editor does - by switching to the next tab to the left.
+  call dein#add('tpope/vim-obsession')
+  call dein#add(    'kana/vim-submode')
+  call dein#add(    'xolox/vim-misc')
+  call dein#add(    'Shougo/vimproc.vim', { 'build': 'make' })
+  call dein#add('wesQ3/vim-windowswap')  " swap two windows
+  call dein#add(    'AndrewRadev/undoquit.vim')
+  call dein#add(    'tpope/vim-eunuch', {'on_cmd': 'Rename'})                " unix bash-like utils
+  call dein#add(    'vim-scripts/LargeFile')
+
+  " call dein#add(    'tpope/vim-dispatch')
+  " call dein#add(    'radenling/vim-dispatch-neovim')
+  " )
+  call dein#add(    'christoomey/vim-tmux-navigator')
+  " call dein#add('t9md/vim-choosewin'            " easymotion-like choosing window
+  call dein#add(    'kopischke/vim-fetch')           " gf with lnum:col included
+  if has('nvim')
+    call dein#add('itchyny/vim-parenmatch')
+  endif
+
+  " Languages
+  """""""""""""""
+  " elixir
+  call dein#add('elixir-lang/vim-elixir')
+  call dein#add('c-brenn/phoenix.vim')
+  " call dein#add('avdgaag/vim-phoenix')
+  " call dein#add('slashmili/alchemist.vm')
+  " python
+  call dein#add('mkomitee/vim-gf-python', { 'on_ft': 'python' })
+  call dein#add('Vimjas/vim-python-pep8-indent', { 'on_ft': 'python' })
+  call dein#add('python-mode/python-mode', { 'branch': 'develop', 'on_ft': 'python' })
+  " ruby
+  call dein#add('tpope/vim-bundler', { 'on_ft': ['Gemfile', 'Rakefile', 'ruby'] })
+  call dein#add('vim-ruby/vim-ruby')
+  call dein#add('tpope/vim-rails', { 'on_ft': 'ruby' })
+  " call dein#add('vim-rails-snips')
+  call dein#add(    'sandeepravi/refactor-rails.vim', { 'on_ft': 'ruby' })
+  call dein#add('vim-scripts/ruby-matchit', { 'on_ft': 'ruby' })
+  call dein#add('tmhedberg/matchit')
+  call dein#add('tpope/vim-rbenv')
+  call dein#add('tpope/vim-rake')
+  call dein#add('thoughtbot/vim-rspec')
+  call dein#add('xmisao/rubyjump.vim', { 'on_ft': 'ruby' }) " Quick jump to method, class, module defenitions in buffers
+  " markdown
+  call dein#add('shime/vim-livedown') " Markdown live preview
+  call dein#add('plasticboy/vim-markdown', { 'depends' : 'godlygeek/tabular'})
+  " org
+  call dein#add('jceb/vim-orgmode')
+  " go
+  call dein#add('fatih/vim-go', { 'on_ft' : ['go'] })
+  " html
+  call dein#add(    'othree/html5.vim')
+  " css
+  call dein#add(    'cakebaker/scss-syntax.vim')
+  call dein#add(    'hail2u/vim-css3-syntax')
+  " R-lang
+  call dein#add('jalvesaq/Nvim-R')
+  " viml
+  call dein#add('tpope/vim-scriptease')
+  call dein#add('kana/vim-vspec')      " Project-wide search
+  " terraform
+  call dein#add('hashivim/vim-terraform')
+  " latex
+  call dein#add('lervag/vimtex')
+  call dein#add('xuhdev/vim-latex-live-preview', { 'on_ft': 'tex' })
+  " slim
+  call dein#add(    'slim-template/vim-slim')
+  "coffeescript
+  call dein#add(    'kchmck/vim-coffee-script')
+  call dein#add('JarrodCTaylor/vim-js2coffee')
+  " monit
+  call dein#add('tmatilai/vim-monit')
+  " javascript
+  call dein#add(    'jelera/vim-javascript-syntax')
+  call dein#add(    'othree/javascript-libraries-syntax.vim')
+  call dein#add('digitaltoad/vim-pug')
+  call dein#add('mxw/vim-jsx-improve')
+  call dein#add('moll/vim-node')
+  " yaml, ansible
+  call dein#add('chase/vim-ansible-yaml', {'on_ft': 'yaml'})
+  call dein#add('munen/find_yaml_key', {'on_ft': 'yaml'})
+  call dein#add('lmeijvogel/vim-yaml-helper', {'on_ft': 'yaml'})
+  " flex/bison
+  call dein#add('justinmk/vim-syntax-extra', {'on_ft': ['flex', 'lex', 'bison']})
+  " thrift
+  call dein#add('solarnz/thrift.vim')
+
+  " Databases
+  """""""""""""""""""""""
+  " call dein#add('vim-scripts/dbext.vim' " Provides database access to many dbms (Oracle, Sybase, Microsoft, MySQL, DBI,..)
+  call dein#add('lifepillar/pgsql.vim')
+  call dein#add('rafcamlet/show-me-db')
+
+  " Dictionaries
+  """""""""""""""
+  call dein#add('asins/vim-dict')
+  call dein#add('tracyone/dict')
+  call dein#add('guileen/vim-node-dict')
+
+  " Search
+  """""""""""""""""""""""
+  call dein#add('eugen0329/vim-esearch') " Project-wide search
+  call dein#add('haya14busa/incsearch.vim') " Incrementally highlight all pattern matches
+  call dein#add('haya14busa/incsearch-fuzzy.vim') " Fuzzy search in 
+  call dein#add('haya14busa/vim-asterisk') " *-improved
+  call dein#add('osyo-manga/vim-anzu') " Search position info
+
+  " Autocomplete
+  """""""""""""""""""
+  if has('nvim')
+    call dein#add('Shougo/deoplete.nvim', { 'on_i':1, 'build': ':UpdateRemotePlugins', 'hook_post_source': "call Load('ncompletion')"})
+  else
+    call dein#add('Shougo/deoplete.nvim', {'on_i':1})
+    call dein#add('roxma/nvim-yarp', {'on_i':1})
+    call dein#add('roxma/vim-hug-neovim-rpc', {'on_i':1})
+  endif
+  call dein#add('Shougo/context_filetype.vim')
+  " call dein#add('zchee/deoplete-jedi', {'on_i':1})
+  call dein#add('Shougo/echodoc', {'on_i':1})
+  call dein#add('Shougo/neoinclude.vim', {'on_i':1})
+  call dein#add('Shougo/neco-syntax', {'on_i':1})
+  call dein#add('ujihisa/neco-look', {'on_i':1})
+  call dein#add('vim-scripts/LanguageTool', {'on_i':1})
+  call dein#add('wellle/tmux-complete.vim', {'on_i':1})
+  call dein#add('Shougo/neco-vim'                   , {'on_i':1})  " vimscript completion
+  call dein#add('carlitux/deoplete-ternjs', {'on_i':1})
+  call dein#add(    'othree/csscomplete.vim', {'on_i':1})
+
+  " Colorschemes
+  """""""""""""""
+  call dein#add('joshdick/onedark.vim')
+
+  " call dein#add('KabbAmine/yowish.vim')
+  " call dein#add(    'jonathanfilip/vim-lucius')
+  " call dein#add('voronianski/oceanic-next-color-scheme')
+  " call dein#add('vim-scripts/lilypink')
+  " call dein#add(    'gmoe/vim-espresso')
+  " call dein#add('zeis/vim-kolor')
+  " call dein#add('nanotech/jellybeans.vim')
+  call dein#add('flazz/vim-colorschemes')
+  call dein#add('wesgibbs/vim-irblack')
+  " call dein#add('altercation/vim-colors-solarized')
+  call dein#add('vim-scripts/xterm-color-table.vim', {'lazy': 1, 'on_cmd': 'XtermColorTable'})
+  call dein#add('kristijanhusak/vim-hybrid-material')
+  call dein#add('jdkanani/vim-material-theme')
+  " call dein#add('jordwalke/VimCleanColors')
+  " call dein#add('cschlueter/vim-wombat')
+  " call dein#add('vim-scripts/Mustang2')
+  " call dein#add('croaker/mustang-vim')
+  " call dein#add('desertink.vim')
+  " call dein#add('joedicastro/vim-molokai256')
+  call dein#add('jordwalke/flatlandia')
+  " call dein#add('vivkin/flatland.vim')
+  " call dein#add('abra/vim-abra')
+  " call dein#add('ajh17/Spacegray.vim')
+  " call dein#add('cdmedia/itg_flat_vim')
+  " call dein#add('chriskempson/base16-vim')
+  " call dein#add('desert-warm-256')
+  " call dein#add('edkolev/tmuxline.vim')
+  " call dein#add('gosukiwi/vim-atom-dark')
+  " call dein#add('mbbill/desertEx')
+  " call dein#add('trusktr/seti.vim')
+
+  " call dein#add('thinca/vim-ref')
+  " call dein#add('lucapette/vim-ruby-doc')
+  " call dein#add('tyru/open-browser.vim')
+  " call dein#add('ap/vim-css-color')
+  " call dein#add('lornix/vim-scrollbar')
+  " call dein#add('severin-lemaignan/vim-minimap')
+
+  " call dein#add('maksimr/vim-jsbeautify')
+  " call dein#add('mattn/googletranslate-vim')
+  " call dein#add('maksimr/vim-translator')
+
+  " call dein#add('kopischke/vim-stay')
+  " call dein#add('tclem/vim-arduino')
+  call dein#add('gcavallanti/vim-noscrollbar')        " Project-wide search
+  " call dein#add('vim-scrollbar-win') " Project-wide search
+  " call dein#add('junegunn/vim-oblique')   " Project-wide search
+  " call dein#add('junegunn/vim-pseudocl')
+  " call dein#add('blueyed/vim-diminactive'         " Project-wide search
+
+
+
+  " call dein#add('lambdalisue/vim-diffa')
+  " call dein#add('lambdalisue/vim-gita')
+  " call dein#add('lambdalisue/gina.vim')
+  " https://github.com/NLKNguyen/pipe-mysql.vim
+  " call dein#add(    'thinca/vim-quickrun')
+  " call dein#add('krisajenkins/vim-pipe')
+
+  " call dein#add('metakirby5/codi.vim')
+
+  call dein#add(    'vim-scripts/vim-links')
+  call dein#add('prabirshrestha/async.vim')
+  " call dein#add('gorkunov/smartgf.vim')
+  " call dein#add('jsfaint/gen_tags.vim')
+  " call dein#add('thinca/vim-themis'         " Project-wide search
+  " call plug#end()
+
+  call dein#end()
+  call dein#save_state()
 endif
+filetype plugin indent on
 
-call s:load('options')
-call s:load('autocmds')
-call s:load('statusline')
-call s:load('unite')
-
-call s:load('plugins')
-call s:load('mappings')
-
-call s:load('helpers')
-call s:load('misc')
-
-call s:load('colors')
+" m'¡
 
 
-augroup load_plugins_on_insert
-  au!
-  au InsertEnter * call plug#load('ultisnips', 'vim-smartinput')
-        \| call s:load('smartinput')
-        \| au! load_plugins_on_insert
-augroup END
+
+" if has('nvim')
+" else
+"   call Load('completion')
+" endif
+
+call Load('options')
+call Load('autocmds')
+call Load('statusline')
+
+
+call Load('plugins')
+call Load('mappings')
+
+call Load('helpers')
+call Load('misc')
+
+call Load('colors')
+
+
+" augroup load_plugins_on_insert
+"   au!
+"   au InsertEnter * call plug#load('ultisnips', 'vim-smartinput')
+"         \| call Load('smartinput')
+"         \| au! load_plugins_on_insert
+" augroup END
 
 if has('gui_running')
   set background=light
@@ -49,9 +423,9 @@ endif
 
 "   if class_pos > 0 || id_pos > 0
 "     if class_pos < id_pos
-"       execute ":vim '#".expand('<cword>')."' **/*.css"
+"       execute ":vim '#".expand('<cword>')."' **/*.css')
 "     elseif class_pos > id_pos
-"       execute ":vim '.".expand('<cword>')."' **/*.css"
+"       execute ":vim '.".expand('<cword>')."' **/*.css')
 "     endif
 "   endif
 " endfunction

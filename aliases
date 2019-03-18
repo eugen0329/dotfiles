@@ -496,7 +496,7 @@ alias br='/usr/local/pgsql/bin/psql -d disser_development -f heh.sql'
 
 alias psql='/usr/local/pgsql/bin/psql -d disser_development'
 
-alias vimbench='cd /tmp && vim --startuptime timeCost.txt timeCost.txt && cd -'
+alias vimbench='cd /tmp && v --startuptime timeCost.txt timeCost.txt && cd -'
 
 removepdfwatermark() {
   pdftk $1 output uncompressed.pdf uncompress

@@ -21,7 +21,6 @@ nnoremap <S-h> :SidewaysLeft<CR>
 nnoremap <S-l> :SidewaysRight<CR>
 
 " ,Bookmarks
-hi link BookmarkUnitePath Directory
 let g:bookmark_save_per_working_dir = 1
 
 
@@ -39,13 +38,6 @@ hi link ParenMatch  MatchParen
 
 hi BookmarkSign cterm=bold ctermbg=7 ctermfg=39
 hi BookmarkAnnotationSign  ctermbg=7 ctermfg=83
-call unite#custom#profile('source/vim_bookmarks', 'context', {
-  \   'winheight': 10,
-  \   'direction': 'botright',
-  \   'start_insert': 1,
-  \   'keep_focus': 0,
-  \   'no_quit': 0,
-  \ })
 
 " ,notes
 let g:notes_suffix = '.txt'

@@ -66,6 +66,8 @@ augroup FiletypeAutocommands
   au BufNewFile,BufRead *.slim set iskeyword-=. foldmethod=indent
   au BufRead,BufNewFile *.scss set filetype=scss
   au FileType qf setlocal nolist
+
+  au FileType make setlocal list listchars=tab:▷ ,trail:·
   au FileType notes setlocal foldmethod=indent
   au filetype qf nnoremap <buffer>o <CR>
   " au filetype ruby au BufWritePost <buffer> call GenerateCtags()
@@ -104,7 +106,7 @@ augroup InitAutocommands
 
   au BufDelete * let g:deleted_buffer = bufname('%')
   au BufEnter  * call KeepTree()
-  au BufEnter *  if !exists('b:created') | call fugitive#detect(getcwd()) | endif
+  " au BufEnter *  if !exists('b:created') | call FugitiveDetect(getcwd()) | endif
   au BufEnter *  let b:created = 1
   " au VimEnter  * if argc() == 0  | NERDTree | end
   au BufReadCmd  index{,.lock} xnoremap <buffer> <silent> d :<C-U>exe RemoveFugitiveIndexFiles(line("'<"),line("'>"))<CR>

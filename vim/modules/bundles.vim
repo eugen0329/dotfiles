@@ -9,9 +9,6 @@ call plug#begin('~/.vim/bundle')
 
 " #UI
 Plug 'itchyny/lightline.vim'
-" Plug 'vim-airline/vim-airline'
-" Plug 'powerline/powerline'
-" Plug 'ryanoasis/vim-webdevicons'
 
 " tree
 """""""""""""""
@@ -76,7 +73,6 @@ Plug     'osyo-manga/vim-over'
 Plug     'osyo-manga/vital-over'
 Plug     'vim-scripts/cmdline-completion'
 " Plug     'thinca/vim-prettyprint'
-" Plug 'majkinetor/unite-cmdmatch', { 'depends':  'Shougo/unite.vim', 'mappings' : [['c', '<Plug>(unite_cmdmatch_complete)']] }
 " Plug 'junegunn/vim-pseudocl'
 
 " Textobjects
@@ -146,10 +142,10 @@ endif
 " Fuzzy menus
 """""""""""""""
 Plug     'Shougo/neomru.vim'         " Most recently used files/buffers
-Plug  'Shougo/unite.vim'
-Plug 'majutsushi/tagbar' ", {'on':'TagbarToggle'}
-Plug 'Shougo/unite-outline'
-Plug 'MaryHal/unite-unicode'
+Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
+Plug  'Shougo/unite.vim', {'on': 'Unite' }
+Plug 'Shougo/unite-outline', {'on': 'Unite'}
+Plug 'MaryHal/unite-unicode', {'on': 'Unite'}
 Plug 'ctrlpvim/ctrlp.vim'
 " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
