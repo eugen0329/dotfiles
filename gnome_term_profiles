@@ -1,0 +1,39 @@
+[:00b1f659-ddff-4a95-8229-53716debc5d1]
+foreground-color='rgb(192,197,206)'
+visible-name='spacegraysave'
+palette=['rgb(42,46,52)', 'rgb(191,97,106)', 'rgb(153,204,153)', 'rgb(235,203,139)', 'rgb(143,161,179)', 'rgb(173,127,168)', 'rgb(150,181,180)', 'rgb(49,53,60)', 'rgb(101,115,126)', 'rgb(191,97,106)', 'rgb(153,204,153)', 'rgb(252,233,79)', 'rgb(101,115,126)', 'rgb(173,127,168)', 'rgb(52,226,226)', 'rgb(238,238,236)']
+use-custom-command=false
+use-theme-colors=false
+use-transparent-background=false
+bold-color-same-as-fg=false
+background-color='rgb(47,52,63)'
+
+[:635bfe5b-fbc4-4279-b302-58e7ac4578ec]
+foreground-color='rgb(192,197,206)'
+visible-name='spacegray'
+palette=['rgb(42,46,52)', 'rgb(191,97,106)', 'rgb(153,204,153)', 'rgb(235,203,139)', 'rgb(143,161,179)', 'rgb(173,127,168)', 'rgb(150,181,180)', 'rgb(52,55,66)', 'rgb(101,115,126)', 'rgb(191,97,106)', 'rgb(153,204,153)', 'rgb(252,233,79)', 'rgb(118,135,150)', 'rgb(173,127,168)', 'rgb(52,226,226)', 'rgb(238,238,236)']
+use-custom-command=false
+use-theme-colors=false
+use-transparent-background=false
+bold-color-same-as-fg=true
+background-color='rgb(42,46,52)'
+
+[:b1dcc9dd-5262-4d8d-a863-c897e6d979b9]
+background-color='rgb(0,0,0)'
+use-theme-colors=false
+use-custom-command=false
+foreground-color='rgb(170,170,170)'
+
+[/]
+list=['b1dcc9dd-5262-4d8d-a863-c897e6d979b9', '635bfe5b-fbc4-4279-b302-58e7ac4578ec', '00b1f659-ddff-4a95-8229-53716debc5d1', '9aa98375-f852-4b86-84a9-c3e653771aca']
+default='635bfe5b-fbc4-4279-b302-58e7ac4578ec'
+
+[:9aa98375-f852-4b86-84a9-c3e653771aca]
+foreground-color='rgb(192,197,206)'
+visible-name='spacegraynorm'
+palette=['rgb(42,46,52)', 'rgb(191,97,106)', 'rgb(153,204,153)', 'rgb(235,203,139)', 'rgb(143,161,179)', 'rgb(173,127,168)', 'rgb(150,181,180)', 'rgb(52,55,66)', 'rgb(101,115,126)', 'rgb(191,97,106)', 'rgb(153,204,153)', 'rgb(252,233,79)', 'rgb(118,135,150)', 'rgb(173,127,168)', 'rgb(52,226,226)', 'rgb(238,238,236)']
+use-custom-command=false
+use-theme-colors=false
+use-transparent-background=false
+bold-color-same-as-fg=true
+background-color='rgb(42,46,52)'
